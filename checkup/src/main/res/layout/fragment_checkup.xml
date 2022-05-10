@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/secondaryLight">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimation"
+            android:layout_width="wrap_content"
+            android:layout_height="354dp"
+            android:layout_marginBottom="95dp"
+            android:elevation="15dp"
+            app:layout_constraintBottom_toBottomOf="@id/viewAnimationPosition"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/viewAnimationPosition"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="false"
+            app:lottie_rawRes="@raw/animation_checkup_main_page" />
+
+        <FrameLayout
+            android:id="@+id/viewAnimationPosition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="100dp"
+            app:layout_constraintBottom_toTopOf="@id/cardViewContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageViewQuestionDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="51dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/art_checkup_description"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/cardViewContainer"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/frameLayoutCenterDescription"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewQuestionDescription"
+            app:layout_constraintStart_toStartOf="@id/imageViewQuestionDescription"
+            app:layout_constraintTop_toTopOf="@id/imageViewQuestionDescription" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewContainer"
+            style="@style/CardViewTopCornerRadius"
+            android:layout_width="match_parent"
+            android:layout_height="481dp"
+            android:paddingBottom="50dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true">
+
+                <TextView
+                    android:id="@+id/textViewTitle"
+                    style="@style/TextViewPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="41dp"
+                    android:layout_marginTop="22dp"
+                    android:fontFamily="@font/regular"
+                    android:text="@string/select_your_checkup"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="40dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textViewTitle">
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/radioButtonRegularCheckup"
+                        style="@style/TextViewSecondaryLight.CheckupType.Body1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="21dp"
+                        android:button="@drawable/selector_radio_button_check_up"
+                        android:fontFamily="@font/regular"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/regular_checkup" />
+
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/radioButtonWhiteningTest"
+                        style="@style/TextViewSecondaryLight.CheckupType.Body1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@drawable/selector_radio_button_check_up"
+                        android:fontFamily="@font/regular"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/teeth_whitening" />
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/radioButtonToothache"
+                        style="@style/TextViewSecondaryLight.CheckupType.Body1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@drawable/selector_radio_button_check_up"
+                        android:fontFamily="@font/regular"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/toothache_amp_tooth_sensitivity" />
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/radioButtonGeneralProblem"
+                        style="@style/TextViewSecondaryLight.CheckupType.Body1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@drawable/selector_radio_button_check_up"
+                        android:fontFamily="@font/regular"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/problems_with_previous_treatment" />
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/radioButtonXray"
+                        style="@style/TextViewSecondaryLight.CheckupType.Body1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@drawable/selector_radio_button_check_up"
+                        android:fontFamily="@font/regular"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/x_rays" />
+
+                    <androidx.appcompat.widget.AppCompatRadioButton
+                        android:id="@+id/radioButtonTreatmentIssue"
+                        style="@style/TextViewSecondaryLight.CheckupType.Body1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@drawable/selector_radio_button_check_up"
+                        android:fontFamily="@font/regular"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/others" />
+                </RadioGroup>
+
+                <ImageButton
+                    android:id="@+id/imageButtonGo"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="22dp"
+                    android:alpha="0"
+                    android:background="@drawable/circle_secondary"
+                    android:clickable="false"
+                    android:elevation="10dp"
+                    android:src="@drawable/ic_round_arrow_forward_24"
+                    app:layout_constraintEnd_toEndOf="@id/radioGroup"
+                    app:layout_constraintTop_toBottomOf="@id/radioGroup" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="22dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="@id/radioGroup"
+                    app:layout_constraintTop_toBottomOf="@id/radioGroup" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonCheckup"
+                    style="@style/ButtonInactive.Body2"
+                    android:layout_width="100dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="22dp"
+                    android:fontFamily="@font/medium"
+                    android:text="@string/check_up"
+                    android:textAllCaps="false"
+                    app:cornerRadius="24dp"
+                    app:layout_constraintEnd_toEndOf="@id/radioGroup"
+                    app:layout_constraintTop_toBottomOf="@id/radioGroup" />
+
+                <FrameLayout
+                    android:id="@+id/targetDoCheckup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="52dp"
+                    android:layout_marginBottom="25dp"
+                    app:layout_constraintBottom_toTopOf="@id/buttonCheckup"
+                    app:layout_constraintEnd_toEndOf="@id/radioGroup" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <TextView
+            android:id="@+id/textViewDescriptionRegularCheckup"
+            style="@style/TextViewPrimary.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="41dp"
+            android:layout_marginBottom="67dp"
+            android:fontFamily="@font/regular"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp"
+            android:text="@string/checkup_desciption_one"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewQuestionDescription"
+            app:layout_constraintEnd_toEndOf="@id/imageViewQuestionDescription"
+            app:layout_constraintTop_toTopOf="@id/imageViewQuestionDescription" />
+
+
+        <TextView
+            android:id="@+id/textViewDescriptionTeethWhitening"
+            style="@style/TextViewPrimary.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="41dp"
+            android:layout_marginBottom="67dp"
+            android:fontFamily="@font/regular"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp"
+            android:text="@string/checkup_description_two"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewQuestionDescription"
+            app:layout_constraintEnd_toEndOf="@id/imageViewQuestionDescription"
+            app:layout_constraintTop_toTopOf="@id/imageViewQuestionDescription" />
+
+        <TextView
+            android:id="@+id/textViewDescriptionToothSensitivity"
+            style="@style/TextViewPrimary.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="41dp"
+            android:layout_marginBottom="63dp"
+            android:fontFamily="@font/regular"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp"
+            android:text="@string/checkup_description_three"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewQuestionDescription"
+            app:layout_constraintEnd_toEndOf="@id/imageViewQuestionDescription"
+            app:layout_constraintTop_toTopOf="@id/imageViewQuestionDescription" />
+
+        <TextView
+            android:id="@+id/textViewDescriptionProblemsTreatment"
+            style="@style/TextViewPrimary.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="52dp"
+            android:fontFamily="@font/regular"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp"
+            android:text="@string/checkup_description_foure"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewQuestionDescription"
+            app:layout_constraintEnd_toEndOf="@id/imageViewQuestionDescription"
+            app:layout_constraintTop_toTopOf="@id/imageViewQuestionDescription" />
+
+        <TextView
+            android:id="@+id/textViewDescriptionXRay"
+            style="@style/TextViewPrimary.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="52dp"
+            android:fontFamily="@font/regular"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp"
+            android:text="@string/x_ray_description"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewQuestionDescription"
+            app:layout_constraintEnd_toEndOf="@id/imageViewQuestionDescription"
+            app:layout_constraintTop_toTopOf="@id/imageViewQuestionDescription" />
+
+        <TextView
+            android:id="@+id/textViewDescriptionOthers"
+            style="@style/TextViewPrimary.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="52dp"
+            android:fontFamily="@font/regular"
+            android:gravity="center"
+            android:lineSpacingExtra="3dp"
+            android:text="@string/checkup_description_five"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewQuestionDescription"
+            app:layout_constraintEnd_toEndOf="@id/imageViewQuestionDescription"
+            app:layout_constraintTop_toTopOf="@id/imageViewQuestionDescription" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

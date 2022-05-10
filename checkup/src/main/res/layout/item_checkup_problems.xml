@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootLayout"
+    android:layout_width="117dp"
+    android:layout_height="46dp"
+    android:layout_marginEnd="7dp"
+    android:layout_marginBottom="7dp">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardViewToothProblem"
+        style="@style/CardViewCheckupProblemsUnchecked"
+        android:layout_width="117dp"
+        android:layout_height="46dp"
+        android:stateListAnimator="@animator/selector_checkup_problem_elevation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageViewProblemIcon"
+                android:layout_width="22dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="13dp"
+                android:src="@drawable/ic_cap"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textViewProblemTitle"
+                style="@style/TextViewGreen500.CaptionXSmall.Selector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:fontFamily="@font/medium"
+                android:text="@string/tooth_sensitivity"
+                app:layout_constraintBottom_toBottomOf="@id/imageViewProblemIcon"
+                app:layout_constraintLeft_toRightOf="@id/imageViewProblemIcon"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                android:id="@+id/textViewProblemCount"
+                style="@style/TextViewSecondaryLight.CaptionSmall.Selector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:enabled="false"
+                android:fontFamily="@font/medium"
+                android:text="@string/tooth_problem_count"
+                app:layout_constraintBottom_toTopOf="@id/textViewProblemTitle"
+                app:layout_constraintLeft_toLeftOf="@id/textViewProblemTitle"
+                app:layout_constraintRight_toRightOf="@id/textViewProblemTitle"
+                app:layout_constraintTop_toTopOf="@id/imageViewProblemIcon" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

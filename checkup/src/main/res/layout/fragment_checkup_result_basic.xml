@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.straiberry.android.checkup.common.custom.view.ShareCheckupResultView
+            android:id="@+id/shareCheckupResult"
+            android:layout_width="585dp"
+            android:layout_height="585dp"
+            android:clickable="false"
+            android:focusable="false"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            style="@style/PageBackground.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieAnimation"
+                android:layout_width="289dp"
+                android:layout_height="271dp"
+                android:layout_marginBottom="-10dp"
+                app:layout_constraintBottom_toTopOf="@id/cardViewContainer"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="false"
+                app:lottie_rawRes="@raw/animation_checkup_result_basic"
+                app:lottie_speed="2" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardViewContainer"
+                style="@style/CardViewTopCornerRadius"
+                android:layout_width="match_parent"
+                android:layout_height="448dp"
+                app:cardElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutCheckupDetailsParent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <TextView
+                        android:id="@+id/textViewCheckupResultTitle"
+                        style="@style/TextViewSecondaryLight.Subtitle1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="37dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="64dp"
+                        android:fontFamily="@font/regular"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layoutWhiteningScore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="25dp"
+                        app:layout_constraintBottom_toBottomOf="@id/frameLayoutLine72"
+                        app:layout_constraintEnd_toStartOf="@id/frameLayoutLine72"
+                        app:layout_constraintTop_toTopOf="@id/frameLayoutLine72">
+
+                        <ImageView
+                            android:id="@+id/imageViewTeeth"
+                            android:layout_width="51dp"
+                            android:layout_height="40dp"
+                            android:layout_marginBottom="10dp"
+                            android:src="@drawable/ic_whitening"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textViewWhiteningScore"
+                            style="@style/TextViewSecondaryLight.Primary.H4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            app:layout_constraintBottom_toTopOf="@id/textViewWhiteningScoreTitle"
+                            app:layout_constraintLeft_toLeftOf="@id/textViewWhiteningScoreTitle"
+                            app:layout_constraintRight_toRightOf="@id/textViewWhiteningScoreTitle" />
+
+                        <TextView
+                            android:id="@+id/textViewWhiteningScoreTitle"
+                            style="@style/TextViewGreen500.Caption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/regular"
+                            android:text="@string/whitening"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toRightOf="@id/imageViewTeeth" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <FrameLayout
+                        android:id="@+id/frameLayoutLine72"
+                        android:layout_width="0.5dp"
+                        android:layout_height="72dp"
+                        android:layout_marginTop="8dp"
+                        android:alpha="0.6"
+                        android:background="@color/linkWithoutButton"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/textViewCheckupResultTitle" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layoutOralHygieneScore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="180dp"
+                        android:layout_marginTop="15dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/textViewCheckupResultTitle">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cardViewOralHygieneScore"
+                            style="@style/CardViewScoreStatus"
+                            android:layout_width="73dp"
+                            android:layout_height="36dp"
+                            android:layout_marginTop="17dp"
+                            android:layout_marginBottom="10dp"
+                            app:cardCornerRadius="19dp"
+                            app:cardElevation="4dp"
+                            app:layout_constraintBottom_toTopOf="@id/textViewOralHygieneTitle"
+                            app:layout_constraintLeft_toLeftOf="@id/textViewOralHygieneTitle"
+                            app:layout_constraintRight_toRightOf="@id/textViewOralHygieneTitle">
+
+                            <TextView
+                                android:id="@+id/textViewOralHygieneScore"
+                                style="@style/TextViewSecondaryLight.H8"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/light" />
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <ImageView
+                            android:id="@+id/imageViewOral"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_marginBottom="5dp"
+                            android:src="@drawable/ic_oral"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textViewOralHygieneTitle"
+                            style="@style/TextViewGreen500.Caption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/regular"
+                            android:text="@string/oral_hygiene"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toRightOf="@id/imageViewOral" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layoutOralHygieneScoreCenter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:visibility="invisible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/textViewCheckupResultTitle">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cardViewOralHygieneScoreCenter"
+                            style="@style/CardViewScoreStatus"
+                            android:layout_width="73dp"
+                            android:layout_height="36dp"
+                            android:layout_marginTop="17dp"
+                            android:layout_marginBottom="10dp"
+                            app:cardCornerRadius="19dp"
+                            app:cardElevation="4dp"
+                            app:layout_constraintBottom_toTopOf="@id/textViewOralHygieneTitleCenter"
+                            app:layout_constraintLeft_toLeftOf="@id/textViewOralHygieneTitleCenter"
+                            app:layout_constraintRight_toRightOf="@id/textViewOralHygieneTitleCenter">
+
+                            <TextView
+                                android:id="@+id/textViewOralHygieneScoreCenter"
+                                style="@style/TextViewSecondaryLight.H8"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/light" />
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <ImageView
+                            android:id="@+id/imageViewOralCenter"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_marginBottom="5dp"
+                            android:src="@drawable/ic_oral"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textViewOralHygieneTitleCenter"
+                            style="@style/TextViewGreen500.Caption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/regular"
+                            android:text="@string/oral_hygiene"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toRightOf="@id/imageViewOralCenter" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <FrameLayout
+                        android:id="@+id/frameLayoutLine361"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginStart="26dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="26dp"
+                        android:alpha="0.4"
+                        android:background="@color/linkWithoutButton"
+                        app:layout_constraintTop_toBottomOf="@id/layoutOralHygieneScoreCenter" />
+
+                    <ImageView
+                        android:id="@+id/imageViewTips"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="14dp"
+                        android:src="@drawable/ic_bulb"
+                        app:layout_constraintStart_toStartOf="@id/frameLayoutLine361"
+                        app:layout_constraintTop_toBottomOf="@id/frameLayoutLine361" />
+
+                    <TextView
+                        android:id="@+id/textViewTips"
+                        style="@style/TextViewBodyText.Caption"
+                        android:layout_width="239dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/your_oral_hygiene_is_very_good_but_better_brushing_everyday"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/frameLayoutLine361" />
+
+                    <FrameLayout
+                        android:id="@+id/frameLayoutLineTwo361"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginStart="26dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="26dp"
+                        android:alpha="0.4"
+                        android:background="@color/linkWithoutButton"
+                        app:layout_constraintTop_toBottomOf="@id/textViewTips" />
+
+                    <TextView
+                        android:id="@+id/textViewShareTitle"
+                        style="@style/TextViewGreen500.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="9dp"
+                        android:text="@string/share"
+                        app:layout_constraintStart_toStartOf="@id/frameLayoutLineTwo361"
+                        app:layout_constraintTop_toBottomOf="@id/frameLayoutLineTwo361" />
+
+                    <TextView
+                        android:id="@+id/textViewShareSubtitle"
+                        style="@style/TextViewSecondaryLight.White.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="17dp"
+                        android:text="@string/share_with_your_friends_or_dentist_to_let_them_know_your_result"
+                        app:layout_constraintStart_toStartOf="@id/textViewShareTitle"
+                        app:layout_constraintTop_toBottomOf="@id/textViewShareTitle" />
+
+                    <ImageButton
+                        android:id="@+id/imageButtonShare"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_share"
+                        app:layout_constraintEnd_toEndOf="@id/frameLayoutLineTwo361"
+                        app:layout_constraintTop_toBottomOf="@id/frameLayoutLineTwo361" />
+
+                    <FrameLayout
+                        android:id="@+id/frameLayoutLineThree361"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginStart="26dp"
+                        android:layout_marginTop="13dp"
+                        android:layout_marginEnd="26dp"
+                        android:alpha="0.4"
+                        android:background="@color/linkWithoutButton"
+                        app:layout_constraintTop_toBottomOf="@id/textViewShareSubtitle" />
+
+                    <TextView
+                        android:id="@+id/textViewCheckupCountProblem"
+                        style="@style/TextViewBodyText.Subtitle1"
+                        android:layout_width="237dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="19dp"
+                        android:fontFamily="@font/regular"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/frameLayoutLineThree361" />
+
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/buttonMore"
+                        style="@style/ButtonActivePrimary"
+                        android:layout_width="270dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="17dp"
+                        android:fontFamily="@font/regular"
+                        android:text="@string/more_details"
+                        app:cornerRadius="31dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/textViewCheckupCountProblem" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

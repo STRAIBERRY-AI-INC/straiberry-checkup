@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:animateLayoutChanges="true"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewAnswerOne"
+            style="@style/CardViewUnchecked"
+            android:layout_width="286dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="22dp"
+            app:cardCornerRadius="33dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:rippleColor="@android:color/transparent">
+
+            <ImageView
+                android:id="@+id/imageViewAnswerOneCheckbox"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="30dp"
+                android:background="@android:color/transparent"
+                android:clickable="false"
+                android:src="@drawable/state_question_choice_check_box" />
+
+            <TextView
+                android:id="@+id/textViewAnswerOneTitle"
+                style="@style/TextViewGray500.Body1.Selector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="63dp"
+                android:fontFamily="@font/regular"
+                android:text="@string/sharp_or_electric" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewAnswerTwo"
+            style="@style/CardViewUnchecked"
+            android:layout_width="286dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="17dp"
+            app:cardCornerRadius="33dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardViewAnswerOne"
+            app:rippleColor="@android:color/transparent">
+
+            <ImageView
+                android:id="@+id/imageViewAnswerTwoCheckbox"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="30dp"
+                android:background="@android:color/transparent"
+                android:clickable="false"
+                android:src="@drawable/state_question_choice_check_box" />
+
+            <TextView
+                android:id="@+id/textViewAnswerTwoTitle"
+                style="@style/TextViewGray500.Body1.Selector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="63dp"
+                android:fontFamily="@font/regular"
+                android:text="@string/dull_aching" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewAnswerThree"
+            style="@style/CardViewUnchecked"
+            android:layout_width="286dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="17dp"
+            app:cardCornerRadius="33dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardViewAnswerTwo"
+            app:rippleColor="@android:color/transparent">
+
+            <ImageView
+                android:id="@+id/imageViewAnswerThreeCheckbox"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="30dp"
+                android:background="@android:color/transparent"
+                android:clickable="false"
+                android:src="@drawable/state_question_choice_check_box" />
+
+            <TextView
+                android:id="@+id/textViewAnswerThreeTitle"
+                style="@style/TextViewGray500.Body1.Selector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="63dp"
+                android:fontFamily="@font/regular"
+                android:text="@string/throbbing" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewAnswerFour"
+            style="@style/CardViewUnchecked"
+            android:layout_width="286dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="17dp"
+            app:cardCornerRadius="33dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardViewAnswerThree"
+            app:rippleColor="@android:color/transparent">
+
+            <ImageView
+                android:id="@+id/imageViewAnswerFourCheckbox"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="30dp"
+                android:background="@android:color/transparent"
+                android:clickable="false"
+                android:src="@drawable/state_question_choice_check_box" />
+
+            <TextView
+                android:id="@+id/textViewAnswerFourTitle"
+                style="@style/TextViewGray500.Body1.Selector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="63dp"
+                android:fontFamily="@font/regular"
+                android:text="@string/constant" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewAnswerFive"
+            style="@style/CardViewUnchecked"
+            android:layout_width="286dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="17dp"
+            app:cardCornerRadius="33dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardViewAnswerFour"
+            app:rippleColor="@android:color/transparent">
+
+            <ImageView
+                android:id="@+id/imageViewAnswerFiveCheckbox"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="30dp"
+                android:background="@android:color/transparent"
+                android:clickable="false"
+                android:src="@drawable/state_question_choice_check_box" />
+
+            <TextView
+                android:id="@+id/textViewAnswerFiveTitle"
+                style="@style/TextViewGray500.Body1.Selector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="63dp"
+                android:fontFamily="@font/regular"
+                android:text="@string/wake_me_up_at_night" />
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="whiteOpacity">#CCFFFFFF</color>
+    <color name="white200">#8CFFFFFF</color>
+    <color name="white300">#F9F9F9</color>
+    <color name="gray50">#C4C4C4</color>
+    <color name="gray400">#8D8D8D91</color>
+    <color name="gray300">#D3D3D3</color>
+    <color name="gray500">#8D8D8D</color>
+    <color name="gray200">#A1A1A1</color>
+    <color name="gray800">#B2B2B2</color>
+    <color name="gray200Opacity60">#9AA1A1A1</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="blue100">#FFDCFFFC</color>
+
+    // Dark colors
+    <color name="secondaryDark">#0A112D</color>
+    <color name="gray300Dark">#23365A</color>
+    <color name="gray400Dark">#233559</color>
+    <color name="gray200Dark">#4F6076</color>
+    <color name="gray500Dark">#1E2948</color>
+    <color name="white200Dark">#EBEBEB</color>
+    <color name="white300Dark">#E9FFFD</color>
+    <color name="black500">#1F2F5A</color>
+
+    <color name="pageBackgroundStartColor">#FFFFFFFF</color>
+    <color name="pageBackgroundEndColor">#FFDCFFFC</color>
+    <color name="textColor">#FFFFFFFF</color>
+    <color name="textColorGray">#757575</color>
+    <color name="warnTextColor">@color/secondaryLight</color>
+    <color name="appNameTextColor">@color/secondaryLight</color>
+    <color name="editTextBackgroundColor">@color/white</color>
+    <color name="strokeColor">#5dc2b9</color>
+    <color name="strokeColorFocused">#015DAB</color>
+    <color name="editTextTextColor">#757575</color>
+    <color name="editTextEyeColor">#8D8D8D</color>
+    <color name="cardViewBackground">#FFFFFFFF</color>
+    <color name="pageBackgroundColorPrimary">@color/primary</color>
+    <color name="suggestionCardViewBackground">@color/secondaryLight</color>
+    <color name="coverBackground">@color/white</color>
+    <color name="titleTextColor">@color/white</color>
+
+    <color name="gray100">#EBEBEB</color>
+    <color name="gray400WithOpacity14">#12707070</color>
+    <color name="gray400WithOpacity5">#05707070</color>
+    <color name="gray700">#707070</color>
+    <color name="gray700WithOpacity5">#0D707070</color>
+    <color name="gray600">#C3C3C3</color>
+
+    Main Colors
+    <color name="primary">#5DC2B9</color>
+    <color name="primaryOpacity95">#E65DC2B9</color>
+    <color name="primaryLight300">#3AEEDD</color>
+    <color name="primaryLight300Opacity62">#9E3AEEDD</color>
+    <color name="primaryLight">#81CFC8</color>
+    <color name="primaryLight200">#DCFFFC</color>
+    <color name="secondary">#0A63AE</color>
+    <color name="secondaryLight">#015DAB</color>
+    <color name="secondaryLight200">#4599E1</color>
+    <color name="secondaryLightWithOpacity30">#664357BA</color>
+    <color name="secondary200">#7B90FB</color>
+    <color name="secondary500">#1B107E</color>
+    Dark
+    <color name="backgroundDark">#1E2753</color>
+    <color name="headlinesLabel">#DCFFFC</color>
+    <color name="bodyText">#6F7072</color>
+    <color name="bodyText500">#686565</color>
+    <color name="bodyText500Opacity35">#59686565</color>
+    <color name="bodyText400">#F6F6F6</color>
+    <color name="lightText">#949699</color>
+    <color name="lightText200">#B7B7B7</color>
+    <color name="lightText400">#757575</color>
+    <color name="lightText600">#5E5E5E</color>
+    <color name="lightText100">#515151</color>
+    <color name="yellow">#FFC600</color>
+
+    Light
+    <color name="background">#B7B7B7</color>
+    <color name="pageBackground">#F8FFFE</color>
+    <color name="lightBorder">#EFF2F5</color>
+    <color name="border">#5DC2B9</color>
+    <color name="borderOpacity95">#F25DC2B9</color>
+    <color name="linkWithoutButton">#ADB6E1</color>
+    <color name="linkWithoutButton200">#4357BA75</color>
+
+    Alert
+    <color name="success">#4CB774</color>
+    <color name="error">#FF4B4B</color>
+    <color name="warning">#F5C85C</color>
+    Chart
+    <color name="orange500">#FF6A44</color>
+    <color name="orange">#FF7551</color>
+    <color name="green200">#5CE5CE</color>
+    <color name="green500">#27CCB0</color>
+    <color name="green700">#0FB79A</color>
+    <color name="yellow200">#FFE487</color>
+
+    <array name="BrushingChartColor">
+        <item>@color/secondaryLight</item>
+        <item>@color/orange</item>
+        <item>@color/green200</item>
+        <item>@color/green500</item>
+        <item>@color/green200</item>
+        <item>@color/yellow200</item>
+        <item>@color/secondary200</item>
+    </array>
+
+    <array name="BrushingChartFilterColor">
+        <item>@color/green200</item>
+        <item>@color/yellow200</item>
+        <item>@color/secondaryLight</item>
+        <item>@color/green500</item>
+        <item>@color/orange</item>
+        <item>@color/green200</item>
+    </array>
+
+    <color name="mtrl_textinput_default_box_stroke_color">#5DC2B9</color>
+
+</resources>

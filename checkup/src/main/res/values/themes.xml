@@ -1,0 +1,386 @@
+<resources>
+    <!-- Base application theme. -->
+
+    // Bottom sheet
+
+    // Views
+
+    <style name="Divider">
+        <item name="android:background">@color/primaryLight200</item>
+    </style>
+    // Text
+
+    <style name="TextViewSecondaryLight" parent="TextAppearance.Body2">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+    <style name="TextViewSecondaryLight.White" parent="TextAppearance.Body2">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+
+    <style name="TextViewSecondaryLight.H8" parent="TextAppearance.H8Headline">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+    <style name="TextViewSecondaryLight.Primary.H8" parent="TextAppearance.H8Headline">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+    <style name="TextViewLinkWithoutButton.Body2" parent="TextAppearance.Body2">
+        <item name="android:textColor">@color/linkWithoutButton</item>
+    </style>
+
+
+    <style name="TextViewSecondaryLightCaption" parent="TextAppearance.Caption">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+    <style name="TextViewSecondaryLight.White.Caption" parent="TextAppearance.Caption">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+    <style name="TextViewSecondaryLightCaption.Small" parent="TextAppearance.CaptionSmall">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+    <style name="TextViewSecondaryLightCaption.ShareResult.Small" parent="TextAppearance.CaptionSmall">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+    <style name="TextViewSecondaryLight.Subtitle1" parent="TextAppearance.Subtitle1">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+    <style name="TextViewSecondaryLightBody1" parent="TextAppearance.Body1">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+    <style name="TextViewSecondaryLight.CheckupType.Body1" parent="TextAppearance.Body1">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+    <style name="TextView.SecondaryLight.White.Body1" parent="TextAppearance.Body1">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+
+    <style name="TextViewGreen500.H7" parent="TextAppearance.H7Headline">
+        <item name="android:textColor">@color/green500</item>
+    </style>
+
+    <style name="TextViewGreen500.Body1" parent="TextAppearance.Body1">
+        <item name="android:textColor">@color/green500</item>
+    </style>
+
+    <style name="TextViewGreen500.Body2" parent="TextAppearance.Body2">
+        <item name="android:textColor">@color/green500</item>
+    </style>
+
+    <style name="TextViewSecondaryLightH4" parent="TextAppearance.H4Headline">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+    <style name="TextViewSecondaryLight.Primary.H4" parent="TextAppearance.H4Headline">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+    <style name="TextViewSecondaryLight.Gray500Dark.Subtitle2" parent="TextAppearance.Subtitle2">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+    <style name="TextViewBorder.Subtitle2" parent="TextAppearance.Subtitle2">
+        <item name="android:textColor">@color/border</item>
+    </style>
+
+    <style name="TextViewBorder.JawSide.Subtitle2" parent="TextAppearance.Subtitle2">
+        <item name="android:textColor">@color/border</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="TextViewGray.Subtitle2" parent="TextAppearance.Subtitle2">
+        <item name="android:textColor">@color/textColorGray</item>
+    </style>
+
+    <style name="TextViewPrimary" parent="TextAppearance.Body1">
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
+    <style name="TextViewPrimary.Subtitle1" parent="TextAppearance.Subtitle1">
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
+    <style name="TextViewPrimary.Body2" parent="TextAppearance.Body2">
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
+    <style name="TextViewBodyText.Body1" parent="TextAppearance.Body1">
+        <item name="android:textColor">@color/bodyText500</item>
+    </style>
+
+    <style name="TextViewBodyText.Subtitle1" parent="TextAppearance.Subtitle1">
+        <item name="android:textColor">@color/bodyText500</item>
+    </style>
+
+    <style name="TextViewBodyText.CaptionSmall" parent="TextAppearance.CaptionSmall">
+        <item name="android:textColor">@color/bodyText500</item>
+    </style>
+
+    <style name="TextViewBodyText.ShareResultTips.CaptionSmall" parent="TextAppearance.CaptionSmall">
+        <item name="android:textColor">@color/bodyText500</item>
+    </style>
+
+    <style name="TextViewBodyText.Caption" parent="TextAppearance.Caption">
+        <item name="android:textColor">@color/bodyText500</item>
+    </style>
+
+    <style name="TextViewSecondaryLightH6" parent="TextAppearance.H6Headline">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+    <style name="TextViewWhite.H6" parent="TextAppearance.H6Headline">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TextViewGreen500.Body2.Selector" parent="TextAppearance.Body2">
+        <item name="android:textColor">@color/state_captured_jaw_title</item>
+        <item name="android:enabled">false</item>
+    </style>
+
+    <style name="TextViewBackground.Body2" parent="TextAppearance.Body2">
+        <item name="android:textColor">@color/background</item>
+    </style>
+
+    <style name="TextViewTextColor.Body2" parent="TextAppearance.Body2">
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="TextViewGray500.Body1.Selector" parent="TextAppearance.Body1">
+        <item name="android:textColor">@color/state_question_choice_text_view</item>
+        <item name="android:enabled">false</item>
+    </style>
+
+    <style name="TextViewGray500.Subtitle1.Selector" parent="TextAppearance.Subtitle1">
+        <item name="android:textColor">@color/state_question_choice_text_view</item>
+        <item name="android:enabled">false</item>
+    </style>
+
+    <style name="TextViewGray500.Subtitle2.Selector" parent="TextAppearance.Subtitle2">
+        <item name="android:textColor">@color/state_question_choice_text_view</item>
+        <item name="android:enabled">false</item>
+    </style>
+
+    <style name="TextViewGreen500.Caption" parent="TextAppearance.Caption">
+        <item name="android:textColor">@color/green500</item>
+    </style>
+
+    <style name="TextViewGreen500.CaptionXSmall.Selector" parent="TextAppearance.CaptionXSmall">
+        <item name="android:textColor">@color/state_checkup_problem_title_text_view</item>
+    </style>
+
+    <style name="TextViewGreen500.H6" parent="TextAppearance.H6Headline">
+        <item name="android:textColor">@color/green500</item>
+    </style>
+
+    <style name="TextViewSecondaryLight.CaptionSmall.Selector" parent="TextAppearance.CaptionSmall">
+        <item name="android:textColor">@color/state_checkup_problem_counter_text_view</item>
+    </style>
+
+    <style name="TextViewLight200.Caption" parent="TextAppearance.Caption">
+        <item name="android:textColor">@color/lightText200</item>
+    </style>
+
+    <style name="TextViewLight200.Body2" parent="TextAppearance.Body2">
+        <item name="android:textColor">@color/lightText200</item>
+    </style>
+
+    <style name="TextViewGray600.Body2" parent="TextAppearance.Body2">
+        <item name="android:textColor">@color/lightText200</item>
+    </style>
+
+    <style name="TextViewWhite.Caption" parent="TextAppearance.Caption">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TextView.White.Gray500Dark.Caption" parent="TextAppearance.Caption">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TextViewWhite.Subtitle1" parent="TextAppearance.Subtitle1">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TextViewBlack.Caption" parent="TextAppearance.Caption">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    // Button
+
+    <style name="ButtonInactive.Body2" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:textColor">@color/state_checkup_buttons_text_color</item>
+        <item name="android:textAppearance">@style/TextAppearance.Body2</item>
+        <item name="backgroundTint">@color/state_auth_buttons_background_color</item>
+        <item name="android:enabled">false</item>
+    </style>
+
+    <style name="ButtonActive.SecondaryLight" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:textAppearance">@style/TextAppearance.Subtitle1</item>
+        <item name="backgroundTint">@color/secondaryLight</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ButtonActivePrimary" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:textAppearance">@style/TextAppearance.H7Headline</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">@color/green500</item>
+    </style>
+
+    <style name="StateStrokeToothIndicator" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="strokeColor">@color/state_question_indicator_card_view</item>
+        <item name="cardBackgroundColor">@color/white</item>
+    </style>
+
+
+    <style name="ButtonWithTextViewSecondaryLightH6" parent="TextAppearance.H6Headline">
+        <item name="android:textColor">@color/secondaryLight</item>
+        <item name="backgroundTint">@color/white</item>
+    </style>
+
+    // ProgressBar
+
+    // Card View
+
+    <style name="CardViewTopCornerRadius" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/cardViewBackground</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners</item>
+    </style>
+
+    <style name="DoubleCardViewTopCornerRadius" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/primaryLight200</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners</item>
+    </style>
+
+    <style name="CardViewTakePhotoTopCornerRadius" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/CardViewTakePhotoWithTopRounded</item>
+        <item name="cardBackgroundColor">@color/white</item>
+    </style>
+
+    <style name="CardViewWhiteningCheckupResult" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="strokeColor">@color/gray50</item>
+        <item name="strokeWidth">5dp</item>
+    </style>
+
+    <style name="CardViewCheckupHistory.Parent" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/CardViewCheckupHistory</item>
+        <item name="strokeColor">@color/primaryLight200</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay_card_custom_corners" parent="Widget.MaterialComponents.CardView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">40dp</item>
+        <item name="cornerSizeTopLeft">40dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
+    <style name="CardViewTakePhotoWithTopRounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">40dp</item>
+        <item name="cornerSizeTopLeft">40dp</item>
+        <item name="cornerSizeBottomRight">8dp</item>
+        <item name="cornerSizeBottomLeft">8dp</item>
+    </style>
+
+    <style name="CardViewCheckupHistory" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">15dp</item>
+        <item name="cornerSizeTopLeft">15dp</item>
+        <item name="cornerSizeBottomRight">15dp</item>
+        <item name="cornerSizeBottomLeft">15dp</item>
+    </style>
+
+    <style name="CardViewScoreStatus" parent="Widget.MaterialComponents.CardView">
+        <item name="strokeWidth">5dp</item>
+        <item name="strokeColor">@color/white</item>
+        <item name="cardElevation">10dp</item>
+        <item name="cardBackgroundColor">@color/headlinesLabel</item>
+    </style>
+
+    <style name="CardViewScoreStatusShareCheckupResult" parent="Widget.MaterialComponents.CardView">
+        <item name="strokeWidth">5dp</item>
+        <item name="strokeColor">@color/white</item>
+        <item name="cardElevation">10dp</item>
+        <item name="cardBackgroundColor">@color/headlinesLabel</item>
+    </style>
+
+    <style name="CardViewScoreStatusCheckupHistory" parent="Widget.MaterialComponents.CardView">
+        <item name="strokeWidth">3dp</item>
+        <item name="strokeColor">@color/white</item>
+        <item name="cardElevation">5dp</item>
+        <item name="cardBackgroundColor">@color/headlinesLabel</item>
+    </style>
+
+    <style name="CardViewHomeUserCheckup" parent="Widget.MaterialComponents.CardView">
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/primaryLight200</item>
+    </style>
+
+    <style name="CardViewUnchecked" parent="Widget.MaterialComponents.CardView">
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/state_question_indicator_card_view</item>
+        <item name="cardElevation">0dp</item>
+        <item name="android:state_selected">false</item>
+    </style>
+
+    <style name="CardViewQuestionTitle" parent="Widget.MaterialComponents.CardView">
+        <item name="cardElevation">12dp</item>
+        <item name="cardBackgroundColor">@color/pageBackground</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/primaryLight200</item>
+    </style>
+
+    <style name="CardViewCheckupProblemsUnchecked" parent="Widget.MaterialComponents.CardView">
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/state_checkup_problems_border_color</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">24dp</item>
+        <item name="cardBackgroundColor">@color/state_checkup_problems_background_color</item>
+        <item name="android:state_selected">false</item>
+    </style>
+
+    <style name="CardViewInsertedJawUnchecked" parent="Widget.MaterialComponents.CardView">
+        <item name="strokeWidth">2dp</item>
+        <item name="strokeColor">@color/state_card_view_insrted_jaw_border</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">120dp</item>
+        <item name="android:state_selected">false</item>
+    </style>
+
+    // Image Button
+
+    // Image View
+
+    // Page background
+
+    <style name="PageBackground.Primary" parent="Widget.MaterialComponents.CardView">
+        <item name="android:background">@color/primary</item>
+    </style>
+
+    <style name="PageBackground.Primary.Gray500Dark" parent="Widget.MaterialComponents.CardView">
+        <item name="android:background">@color/primary</item>
+    </style>
+
+    <style name="PageBackground.PrimaryGradiant" parent="Widget.MaterialComponents.CardView">
+        <item name="android:background">@drawable/ic_gradiant_background</item>
+    </style>
+
+    // Floating action button
+
+    // Edit text
+
+    // Charts
+
+    // Bottom navigation
+
+</resources>

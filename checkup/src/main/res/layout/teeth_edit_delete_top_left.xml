@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layoutEditDelete"
+    android:layout_width="105dp"
+    android:layout_height="41dp"
+    android:visibility="invisible">
+
+    <ImageView
+        android:id="@+id/imageViewBackground"
+        android:layout_width="105dp"
+        android:layout_height="41dp"
+        android:scaleX="-1"
+        android:src="@drawable/ic_edit_background"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageViewBackground"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/imageViewBackground">
+
+        <TextView
+            android:id="@+id/textViewEdit"
+            style="@style/TextViewSecondaryLightCaption.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="3dp"
+            android:drawablePadding="3dp"
+            android:gravity="center"
+            android:text="@string/edit"
+            app:drawableStartCompat="@drawable/ic_edit_question"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewDelete"
+            style="@style/TextViewSecondaryLightCaption.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="10dp"
+            android:drawablePadding="3dp"
+            android:gravity="center"
+            android:text="@string/delete"
+            app:drawableStartCompat="@drawable/ic_delete"
+            app:layout_constraintRight_toLeftOf="@id/textViewEdit"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

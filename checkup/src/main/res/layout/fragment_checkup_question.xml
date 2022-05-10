@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/PageBackground.PrimaryGradiant"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutTeethSelection"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
+
+        <TextView
+            android:id="@+id/textViewCancel"
+            style="@style/TextViewLinkWithoutButton.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/regular"
+            android:paddingStart="31dp"
+            android:paddingTop="15dp"
+            android:paddingEnd="41dp"
+            android:paddingBottom="15dp"
+            android:text="@string/cancel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewSelectToothTitle"
+            style="@style/TextView.SecondaryLight.White.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="92dp"
+            android:fontFamily="@font/regular"
+            android:text="@string/please_select_a_tooth_that_hurts"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/layoutUpperJaw"
+            layout="@layout/upper_jaw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="38dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewSelectToothTitle" />
+
+        <TextView
+            android:id="@+id/textViewUpperJawTitle"
+            style="@style/TextViewSecondaryLightH6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/medium"
+            android:text="@string/upper"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/layoutUpperJaw"
+            app:layout_constraintLeft_toLeftOf="@id/layoutUpperJaw"
+            app:layout_constraintRight_toRightOf="@id/layoutUpperJaw"
+            app:layout_constraintTop_toTopOf="@id/layoutUpperJaw" />
+
+        <View
+            android:id="@+id/viewSpacer"
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutUpperJaw" />
+
+
+        <FrameLayout
+            android:id="@+id/selectTeethGuideTour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/layoutLowerJaw"
+            app:layout_constraintLeft_toLeftOf="@id/layoutLowerJaw"
+            app:layout_constraintRight_toRightOf="@id/layoutLowerJaw"
+            app:layout_constraintTop_toTopOf="@id/layoutUpperJaw" />
+
+        <include
+            android:id="@+id/layoutLowerJaw"
+            layout="@layout/lower_jaw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutUpperJaw" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutGuidLine"
+            android:layout_width="310dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="15dp"
+            android:layoutDirection="ltr"
+            app:layout_constraintBottom_toBottomOf="@id/layoutLowerJaw"
+            app:layout_constraintLeft_toLeftOf="@id/layoutUpperJaw"
+            app:layout_constraintRight_toRightOf="@id/layoutUpperJaw"
+            app:layout_constraintTop_toTopOf="@id/layoutUpperJaw">
+
+            <ImageView
+                android:id="@+id/imageViewGuidLine"
+                android:layout_width="268dp"
+                android:layout_height="426dp"
+                android:src="@drawable/ic_guide"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/TextViewBorder.Subtitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="115dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/regular"
+                android:text="@string/upper"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/TextViewBorder.Subtitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="110dp"
+                android:fontFamily="@font/regular"
+                android:text="@string/lower"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                style="@style/TextViewBorder.JawSide.Subtitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="26dp"
+                android:fontFamily="@font/regular"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:text="@string/left"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/TextViewBorder.Subtitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/regular"
+                android:text="@string/right"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/textViewLowerJawTitle"
+            style="@style/TextViewSecondaryLightH6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/medium"
+            android:text="@string/lower"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/layoutLowerJaw"
+            app:layout_constraintLeft_toLeftOf="@id/layoutLowerJaw"
+            app:layout_constraintRight_toRightOf="@id/layoutLowerJaw"
+            app:layout_constraintTop_toTopOf="@id/layoutLowerJaw" />
+
+        <ImageButton
+            android:id="@+id/imageButtonGo"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginEnd="42dp"
+            android:layout_marginBottom="38dp"
+            android:background="@drawable/circle_secondary"
+            android:clickable="false"
+            android:contentDescription="@string/next"
+            android:elevation="10dp"
+            android:src="@drawable/ic_round_arrow_forward_24"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/spotlightButtonGoTarget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="68dp"
+            android:layout_marginBottom="62dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewQuestionTitle"
+            style="@style/CardViewQuestionTitle"
+            android:layout_width="309dp"
+            android:layout_height="48dp"
+            android:visibility="invisible"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="6dp"
+            app:layout_constraintBottom_toTopOf="@id/viewWithSubAnswer"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/textViewQuestionTitle"
+                style="@style/TextView.SecondaryLight.White.Body1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="@font/regular"
+                android:paddingStart="42dp"
+                android:text="@string/_1_how_long_has_it_been_hurting" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <View
+            android:id="@+id/viewWithoutSubAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="379dp"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <View
+            android:id="@+id/viewWithSubAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@id/viewWithoutSubAnswer" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="434dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/tabLayoutDots" />
+
+        <FrameLayout
+            android:id="@+id/spotlightSelectAnswerTarget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="95dp"
+            android:layout_marginBottom="255dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayoutDots"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="13dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:tabBackground="@drawable/tab_selector_welcome_questions"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp" />
+
+        <FrameLayout
+            android:id="@+id/spotlightDoTheCheckupTarget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="70dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutDone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="42dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/textViewDone"
+                style="@style/TextViewSecondaryLightBody1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="@font/regular"
+                android:text="@string/i_m_done"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewDone" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonDoTheCheckup"
+                style="@style/ButtonActive.SecondaryLight"
+                android:layout_width="288dp"
+                android:layout_height="58dp"
+                android:text="@string/let_s_do_the_checkup"
+                android:textAllCaps="false"
+                app:cornerRadius="36dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewDone" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <ProgressBar
+        android:id="@+id/progressBarAddDentalIssue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dp"
+        android:visibility="gone" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/indicator"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:alpha="0"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="16dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_logo_background" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_logo" />
+    </com.google.android.material.card.MaterialCardView>
+
+</RelativeLayout>
+

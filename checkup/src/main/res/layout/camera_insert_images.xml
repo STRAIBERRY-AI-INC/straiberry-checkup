@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:visibility="gone">
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/CardViewTakePhotoTopCornerRadius"
+        android:layout_width="match_parent"
+        android:layout_height="155dp">
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_path_bottom_sheet"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutFrontTeethCenter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progressBarFrontTeethCenter"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:elevation="10dp"
+                    android:indeterminate="true"
+                    app:layout_constraintBottom_toBottomOf="@id/cardViewFrontCenter"
+                    app:layout_constraintLeft_toLeftOf="@id/cardViewFrontCenter"
+                    app:layout_constraintRight_toRightOf="@id/cardViewFrontCenter"
+                    app:layout_constraintTop_toTopOf="@id/cardViewFrontCenter"
+                    app:trackThickness="3dp" />
+
+                <TextView
+                    android:id="@+id/textViewFrontTeethTitleCenter"
+                    style="@style/TextViewGreen500.Body2.Selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/regular"
+                    android:text="@string/front_teeth"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardViewFrontCenter"
+                    style="@style/CardViewInsertedJawUnchecked"
+                    android:layout_width="76dp"
+                    android:layout_height="76dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintLeft_toLeftOf="@id/textViewFrontTeethTitleCenter"
+                    app:layout_constraintRight_toRightOf="@id/textViewFrontTeethTitleCenter"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textViewFrontTeethTitleCenter">
+
+                    <ImageView
+                        android:id="@+id/imageViewFrontTeethCenter"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_rounded_image_view"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_add_another" />
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutFrontTeeth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="47dp"
+                app:layout_constraintRight_toLeftOf="@id/layoutUpperJaw"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progressBarFrontTeeth"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:elevation="10dp"
+                    android:indeterminate="true"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/cardViewFront"
+                    app:layout_constraintLeft_toLeftOf="@id/cardViewFront"
+                    app:layout_constraintRight_toRightOf="@id/cardViewFront"
+                    app:layout_constraintTop_toTopOf="@id/cardViewFront"
+                    app:trackThickness="3dp" />
+
+                <TextView
+                    android:id="@+id/textViewFrontTeethTitle"
+                    style="@style/TextViewGreen500.Body2.Selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/regular"
+                    android:text="@string/front_teeth"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardViewFront"
+                    style="@style/CardViewInsertedJawUnchecked"
+                    android:layout_width="78dp"
+                    android:layout_height="78dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintLeft_toLeftOf="@id/textViewFrontTeethTitle"
+                    app:layout_constraintRight_toRightOf="@id/textViewFrontTeethTitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textViewFrontTeethTitle">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        app:cardCornerRadius="120dp">
+
+                        <ImageView
+                            android:id="@+id/imageViewFrontTeeth"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/background_rounded_image_view"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_add_another" />
+                    </com.google.android.material.card.MaterialCardView>
+                </com.google.android.material.card.MaterialCardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutUpperJaw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progressBarUpperTeeth"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:elevation="10dp"
+                    android:indeterminate="true"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/cardViewUpper"
+                    app:layout_constraintLeft_toLeftOf="@id/cardViewUpper"
+                    app:layout_constraintRight_toRightOf="@id/cardViewUpper"
+                    app:layout_constraintTop_toTopOf="@id/cardViewUpper"
+                    app:trackThickness="3dp" />
+
+                <TextView
+                    android:id="@+id/textViewUpperJawTitle"
+                    style="@style/TextViewGreen500.Body2.Selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/regular"
+                    android:text="@string/upper_jaw"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardViewUpper"
+                    style="@style/CardViewInsertedJawUnchecked"
+                    android:layout_width="78dp"
+                    android:layout_height="78dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintLeft_toLeftOf="@id/textViewUpperJawTitle"
+                    app:layout_constraintRight_toRightOf="@id/textViewUpperJawTitle"
+                    app:layout_constraintTop_toBottomOf="@id/textViewUpperJawTitle">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        app:cardCornerRadius="120dp">
+
+                        <ImageView
+                            android:id="@+id/imageViewUpperJaw"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/background_rounded_image_view"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_add_another" />
+                    </com.google.android.material.card.MaterialCardView>
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutLowerJaw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="47dp"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toRightOf="@id/layoutUpperJaw"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progressBarLowerTeeth"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:elevation="10dp"
+                    android:indeterminate="true"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/cardViewLower"
+                    app:layout_constraintLeft_toLeftOf="@id/cardViewLower"
+                    app:layout_constraintRight_toRightOf="@id/cardViewLower"
+                    app:layout_constraintTop_toTopOf="@id/cardViewLower"
+                    app:trackThickness="3dp" />
+
+                <TextView
+                    android:id="@+id/textViewLowerJawTitle"
+                    style="@style/TextViewGreen500.Body2.Selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/regular"
+                    android:text="@string/lower_jaw"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardViewLower"
+                    style="@style/CardViewInsertedJawUnchecked"
+                    android:layout_width="78dp"
+                    android:layout_height="78dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="@id/textViewLowerJawTitle"
+                    app:layout_constraintRight_toRightOf="@id/textViewLowerJawTitle"
+                    app:layout_constraintTop_toBottomOf="@id/textViewLowerJawTitle">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        app:cardCornerRadius="120dp">
+
+                        <ImageView
+                            android:id="@+id/imageViewLowerJaw"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/background_rounded_image_view"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_add_another" />
+                    </com.google.android.material.card.MaterialCardView>
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutLowerJawCenter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progressBarLowerTeethCenter"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:elevation="10dp"
+                    android:indeterminate="true"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/cardViewLowerCenter"
+                    app:layout_constraintLeft_toLeftOf="@id/cardViewLowerCenter"
+                    app:layout_constraintRight_toRightOf="@id/cardViewLowerCenter"
+                    app:layout_constraintTop_toTopOf="@id/cardViewLowerCenter"
+                    app:trackThickness="3dp" />
+
+                <TextView
+                    android:id="@+id/textViewLowerJawTitleCenter"
+                    style="@style/TextViewGreen500.Body2.Selector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/regular"
+                    android:text="@string/lower_jaw"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardViewLowerCenter"
+                    style="@style/CardViewInsertedJawUnchecked"
+                    android:layout_width="78dp"
+                    android:layout_height="78dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="@id/textViewLowerJawTitleCenter"
+                    app:layout_constraintRight_toRightOf="@id/textViewLowerJawTitleCenter"
+                    app:layout_constraintTop_toBottomOf="@id/textViewLowerJawTitleCenter">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        app:cardCornerRadius="120dp">
+
+                        <ImageView
+                            android:id="@+id/imageViewLowerJawCenter"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/background_rounded_image_view"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_add_another" />
+                    </com.google.android.material.card.MaterialCardView>
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</RelativeLayout>

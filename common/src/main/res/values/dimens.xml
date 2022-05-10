@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="viewpager_next_item_visible">23dp</dimen>
+    <dimen name="viewpager_current_item_horizontal_margin">30dp</dimen>
+    <dimen name="upper_jaw_top_active_top_margin">0dp</dimen>
+    <dimen name="lower_jaw_top_active_top_margin">280dp</dimen>
+    <dimen name="lower_jaw_upper_jaw_bottom_margin_inactive">0dp</dimen>
+    <dimen name="left_margin_for_questions_guid_line_in_rtl_directions">25dp</dimen>
+
+    <dimen name="calendar_current_day_text_size">14sp</dimen>
+    <dimen name="calendar_grid_view_height">30dp</dimen>
+    <dimen name="event_edit_delete_height">54dp</dimen>
+    <dimen name="tips_min_width">54dp</dimen>
+    <dimen name="problem_indicator_size">20dp</dimen>
+
+</resources>

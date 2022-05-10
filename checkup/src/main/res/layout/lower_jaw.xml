@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="35dp"
+    android:layoutDirection="ltr">
+
+    <include
+        android:id="@+id/layoutEditDeleteThirtyThree"
+        layout="@layout/teeth_edit_delete_bottom_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="105dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethThirtyThree"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethThirtyThree"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethThirtyThree"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethThirtyThree" />
+
+    <include
+        android:id="@+id/layoutEditDeleteThirtyTwo"
+        layout="@layout/teeth_edit_delete_bottom_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="105dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethThirtyTwo"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethThirtyTwo"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethThirtyTwo"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethThirtyTwo" />
+
+    <include
+        android:id="@+id/layoutEditDeleteThirtyOne"
+        layout="@layout/teeth_edit_delete_bottom_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="95dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethThirtyOne"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethThirtyOne"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethThirtyOne"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethThirtyOne" />
+
+    <include
+        android:id="@+id/layoutEditDeleteThirty"
+        layout="@layout/teeth_edit_delete_bottom_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="95dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethThirty"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethThirty"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethThirty"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethThirty" />
+
+    <include
+        android:id="@+id/layoutEditDeleteTwentyNine"
+        layout="@layout/teeth_edit_delete_bottom_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="95dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentyNine"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyNine"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyNine"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentyNine" />
+
+    <include
+        android:id="@+id/layoutEditDeleteTwentyEight"
+        layout="@layout/teeth_edit_delete_bottom_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="95dp"
+        android:layout_marginTop="25dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentyEight"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyEight"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyEight"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentyEight" />
+
+    <include
+        android:id="@+id/layoutEditDeleteTwentySeven"
+        layout="@layout/teeth_edit_delete_bottom_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="90dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentySeven"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentySeven"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentySeven"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentySeven" />
+
+    <include
+        android:id="@+id/layoutEditDeleteTwentySix"
+        layout="@layout/teeth_edit_delete_bottom_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="35dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentySix"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentySix"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentySix"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentySix" />
+
+
+    <include
+        android:id="@+id/layoutEditDeleteTwentyFive"
+        layout="@layout/teeth_edit_delete_bottom_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:layout_marginEnd="75dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentyFive"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyFive"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyFive"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentyFive" />
+
+    <include
+        android:id="@+id/layoutEditDeleteTwentyFour"
+        layout="@layout/teeth_edit_delete_bottom_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="95dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentyFour"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyFour"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyFour"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentyFour" />
+
+    <include
+        android:id="@+id/layoutEditDeleteTwentyThree"
+        layout="@layout/teeth_edit_delete_bottom_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="95dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentyThree"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyThree"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyThree"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentyThree" />
+
+    <include
+        android:id="@+id/layoutEditDeleteTwentyTwo"
+        layout="@layout/teeth_edit_delete_bottom_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="95dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentyTwo"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyTwo"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyTwo"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentyTwo" />
+
+    <include
+        android:id="@+id/layoutEditDeleteTwentyOne"
+        layout="@layout/teeth_edit_delete_bottom_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="95dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentyOne"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyOne"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyOne"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentyOne" />
+
+    <include
+        android:id="@+id/layoutEditDeleteTwenty"
+        layout="@layout/teeth_edit_delete_bottom_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="100dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwenty"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwenty"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwenty"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwenty" />
+
+    <include
+        android:id="@+id/layoutEditDeleteNineteen"
+        layout="@layout/teeth_edit_delete_bottom_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="55dp"
+        app:layout_constraintBottom_toBottomOf="@id/layoutEditDeleteTwenty"
+        app:layout_constraintLeft_toLeftOf="@id/layoutEditDeleteTwenty"
+        app:layout_constraintRight_toRightOf="@id/layoutEditDeleteTwenty"
+        app:layout_constraintTop_toTopOf="@id/layoutEditDeleteTwenty" />
+
+    <include
+        android:id="@+id/layoutEditDeleteEighteen"
+        layout="@layout/teeth_edit_delete_bottom_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toBottomOf="@id/layoutEditDeleteNineteen"
+        app:layout_constraintLeft_toLeftOf="@id/layoutEditDeleteNineteen"
+        app:layout_constraintRight_toRightOf="@id/layoutEditDeleteNineteen"
+        app:layout_constraintTop_toTopOf="@id/layoutEditDeleteNineteen" />
+
+
+    <ImageView
+        android:id="@+id/imageViewLowerJaw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="2dp"
+        android:paddingEnd="8dp"
+        android:src="@drawable/ic_lower_jaw"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageButton
+        android:id="@+id/imageButtonTeethSeventeen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:outlineProvider="bounds"
+        android:src="@drawable/ic_teeth_01"
+        android:stateListAnimator="@animator/selector_teeth_elevation"
+        app:layout_constraintLeft_toLeftOf="@id/imageViewLowerJaw"
+        app:layout_constraintTop_toTopOf="@id/imageViewLowerJaw" />
+
+    <include
+        android:id="@+id/indicatorSeventeen"
+        layout="@layout/teeth_indicator"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethSeventeen"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethSeventeen"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethSeventeen"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethSeventeen" />
+
+
+    <ImageButton
+        android:id="@+id/imageButtonTeethNineteen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@android:color/transparent"
+        android:outlineProvider="bounds"
+        android:src="@drawable/ic_teeth_02"
+        android:stateListAnimator="@animator/selector_teeth_elevation"
+        app:layout_constraintHorizontal_bias="1.2"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethSeventeen"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethSeventeen"
+        app:layout_constraintTop_toBottomOf="@id/imageButtonTeethSeventeen" />
+
+    <include
+        android:id="@+id/indicatorNineteen"
+        layout="@layout/teeth_indicator"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethNineteen"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethNineteen"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethNineteen"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethNineteen" />
+
+    <ImageButton
+        android:id="@+id/imageButtonTeethTwenty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:outlineProvider="bounds"
+        android:rotation="-10"
+        android:src="@drawable/ic_teeth_03"
+        android:stateListAnimator="@animator/selector_teeth_elevation"
+        app:layout_constraintCircle="@id/imageButtonTeethNineteen"
+        app:layout_constraintCircleAngle="170"
+        app:layout_constraintCircleRadius="28dp"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethNineteen"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethNineteen"
+        app:layout_constraintTop_toBottomOf="@id/imageButtonTeethNineteen" />
+
+    <include
+        android:id="@+id/indicatorTwenty"
+        layout="@layout/teeth_indicator"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwenty"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwenty"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwenty"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwenty" />
+
+
+    <ImageButton
+        android:id="@+id/imageButtonTeethTwentyOne"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:outlineProvider="bounds"
+        android:rotation="-30"
+        android:src="@drawable/ic_teeth_04"
+        android:stateListAnimator="@animator/selector_teeth_elevation"
+        app:layout_constraintBottom_toTopOf="@id/imageButtonTeethTwenty"
+        app:layout_constraintCircle="@id/imageButtonTeethTwenty"
+        app:layout_constraintCircleAngle="160"
+        app:layout_constraintCircleRadius="27dp"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwenty"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwenty" />
+
+    <include
+        android:id="@+id/indicatorTwentyOne"
+        layout="@layout/teeth_indicator"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentyOne"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyOne"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyOne"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentyOne" />
+
+
+    <ImageButton
+        android:id="@+id/imageButtonTeethTwentyTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:outlineProvider="bounds"
+        android:rotation="-50"
+        android:src="@drawable/ic_teeth_05"
+        android:stateListAnimator="@animator/selector_teeth_elevation"
+        app:layout_constraintBottom_toTopOf="@id/imageButtonTeethTwentyOne"
+        app:layout_constraintCircle="@id/imageButtonTeethTwentyOne"
+        app:layout_constraintCircleAngle="160"
+        app:layout_constraintCircleRadius="25dp"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyOne"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyOne" />
+
+    <include
+        android:id="@+id/indicatorTwentyTwo"
+        layout="@layout/teeth_indicator"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentyTwo"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyTwo"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyTwo"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentyTwo" />
+
+
+    <ImageButton
+        android:id="@+id/imageButtonTeethTwentyThree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:outlineProvider="bounds"
+        android:rotation="-80"
+        android:src="@drawable/ic_teeth_06"
+        android:stateListAnimator="@animator/selector_teeth_elevation"
+        app:layout_constraintBottom_toTopOf="@id/imageButtonTeethTwentyTwo"
+        app:layout_constraintCircle="@id/imageButtonTeethTwentyTwo"
+        app:layout_constraintCircleAngle="150"
+        app:layout_constraintCircleRadius="24dp"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyTwo"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyTwo" />
+
+    <include
+        android:id="@+id/indicatorTwentyThree"
+        layout="@layout/teeth_indicator"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentyThree"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyThree"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyThree"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentyThree" />
+
+    <ImageButton
+        android:id="@+id/imageButtonTeethTwentyFour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:outlineProvider="bounds"
+        android:rotation="-110"
+        android:src="@drawable/ic_teeth_07"
+        android:stateListAnimator="@animator/selector_teeth_elevation"
+        app:layout_constraintBottom_toTopOf="@id/imageButtonTeethTwentyThree"
+        app:layout_constraintCircle="@id/imageButtonTeethTwentyThree"
+        app:layout_constraintCircleAngle="130"
+        app:layout_constraintCircleRadius="25dp"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyThree"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyThree" />
+
+    <include
+        android:id="@+id/indicatorTwentyFour"
+        layout="@layout/teeth_indicator"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentyFour"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyFour"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyFour"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentyFour" />
+
+
+    <ImageButton
+        android:id="@+id/imageButtonTeethTwentyFive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:outlineProvider="bounds"
+        android:rotation="-160"
+        android:src="@drawable/ic_teeth_08"
+        android:stateListAnimator="@animator/selector_teeth_elevation"
+        app:layout_constraintBottom_toTopOf="@id/imageButtonTeethTwentyFour"
+        app:layout_constraintCircle="@id/imageButtonTeethTwentyFour"
+        app:layout_constraintCircleAngle="100"
+        app:layout_constraintCircleRadius="25dp"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyFour"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyFour" />
+
+    <include
+        android:id="@+id/indicatorTwentyFive"
+        layout="@layout/teeth_indicator"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentyFive"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyFive"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyFive"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentyFive" />
+
+
+    <ImageButton
+        android:id="@+id/imageButtonTeethTwentySix"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:outlineProvider="bounds"
+        android:rotation="-190"
+        android:src="@drawable/ic_teeth_08"
+        android:stateListAnimator="@animator/selector_teeth_elevation"
+        app:layout_constraintBottom_toTopOf="@id/imageButtonTeethTwentyFour"
+        app:layout_constraintCircle="@id/imageButtonTeethTwentyFive"
+        app:layout_constraintCircleAngle="88"
+        app:layout_constraintCircleRadius="24dp"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyFour"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyFour" />
+
+    <include
+        android:id="@+id/indicatorTwentySix"
+        layout="@layout/teeth_indicator"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentySix"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentySix"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentySix"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentySix" />
+
+
+    <ImageButton
+        android:id="@+id/imageButtonTeethTwentySeven"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:outlineProvider="bounds"
+        android:rotation="-170"
+        android:src="@drawable/ic_teeth_07"
+        android:stateListAnimator="@animator/selector_teeth_elevation"
+        app:layout_constraintBottom_toTopOf="@id/imageButtonTeethTwentyThree"
+        app:layout_constraintCircle="@id/imageButtonTeethTwentySix"
+        app:layout_constraintCircleAngle="63"
+        app:layout_constraintCircleRadius="22dp"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyThree"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyThree" />
+
+    <include
+        android:id="@+id/indicatorTwentySeven"
+        layout="@layout/teeth_indicator"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="2dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentySeven"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentySeven"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentySeven"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentySeven" />
+
+    <ImageButton
+        android:id="@+id/imageButtonTeethTwentyEight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:outlineProvider="bounds"
+        android:rotation="-180"
+        android:src="@drawable/ic_teeth_06"
+        android:stateListAnimator="@animator/selector_teeth_elevation"
+        app:layout_constraintBottom_toTopOf="@id/imageButtonTeethTwentyTwo"
+        app:layout_constraintCircle="@id/imageButtonTeethTwentySeven"
+        app:layout_constraintCircleAngle="50"
+        app:layout_constraintCircleRadius="24dp"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyTwo"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyTwo" />
+
+
+    <include
+        android:id="@+id/indicatorTwentyEight"
+        layout="@layout/teeth_indicator"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="3dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentyEight"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyEight"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyEight"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentyEight" />
+
+
+    <ImageButton
+        android:id="@+id/imageButtonTeethTwentyNine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:outlineProvider="bounds"
+        android:rotation="-180"
+        android:src="@drawable/ic_teeth_05"
+        android:stateListAnimator="@animator/selector_teeth_elevation"
+        app:layout_constraintBottom_toTopOf="@id/imageButtonTeethTwentyOne"
+        app:layout_constraintCircle="@id/imageButtonTeethTwentyEight"
+        app:layout_constraintCircleAngle="33"
+        app:layout_constraintCircleRadius="24dp"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyOne"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyOne" />
+
+    <include
+        android:id="@+id/indicatorTwentyNine"
+        layout="@layout/teeth_indicator"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethTwentyNine"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwentyNine"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwentyNine"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethTwentyNine" />
+
+
+    <ImageButton
+        android:id="@+id/imageButtonTeethThirty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:outlineProvider="bounds"
+        android:rotation="-190"
+        android:src="@drawable/ic_teeth_04"
+        android:stateListAnimator="@animator/selector_teeth_elevation"
+        app:layout_constraintBottom_toTopOf="@id/imageButtonTeethTwenty"
+        app:layout_constraintCircle="@id/imageButtonTeethTwentyNine"
+        app:layout_constraintCircleAngle="15"
+        app:layout_constraintCircleRadius="22dp"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethTwenty"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethTwenty" />
+
+    <include
+        android:id="@+id/indicatorThirty"
+        layout="@layout/teeth_indicator"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginBottom="2dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethThirty"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethThirty"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethThirty"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethThirty" />
+
+
+    <ImageButton
+        android:id="@+id/imageButtonTeethThirtyOne"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:outlineProvider="bounds"
+        android:rotation="-190"
+        android:src="@drawable/ic_teeth_03"
+        android:stateListAnimator="@animator/selector_teeth_elevation"
+        app:layout_constraintCircle="@id/imageButtonTeethThirty"
+        app:layout_constraintCircleAngle="24"
+        app:layout_constraintCircleRadius="27dp"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethNineteen"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethNineteen"
+        app:layout_constraintTop_toBottomOf="@id/imageButtonTeethNineteen" />
+
+    <include
+        android:id="@+id/indicatorThirtyOne"
+        layout="@layout/teeth_indicator"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="3dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethThirtyOne"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethThirtyOne"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethThirtyOne"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethThirtyOne" />
+
+    <ImageButton
+        android:id="@+id/imageButtonTeethThirtyTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:outlineProvider="bounds"
+        android:rotation="180"
+        android:src="@drawable/ic_teeth_02"
+        android:stateListAnimator="@animator/selector_teeth_elevation"
+        app:layout_constraintCircle="@id/imageButtonTeethThirtyOne"
+        app:layout_constraintCircleAngle="5"
+        app:layout_constraintCircleRadius="28dp"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethSeventeen"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethSeventeen"
+        app:layout_constraintTop_toBottomOf="@id/imageButtonTeethSeventeen" />
+
+    <include
+        android:id="@+id/indicatorThirtyTwo"
+        layout="@layout/teeth_indicator"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethThirtyTwo"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethThirtyTwo"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethThirtyTwo"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethThirtyTwo" />
+
+    <ImageButton
+        android:id="@+id/imageButtonTeethThirtyThree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:outlineProvider="bounds"
+        android:rotation="180"
+        android:src="@drawable/ic_teeth_01"
+        android:stateListAnimator="@animator/selector_teeth_elevation"
+        app:layout_constraintCircle="@id/imageButtonTeethThirtyTwo"
+        app:layout_constraintCircleAngle="3"
+        app:layout_constraintCircleRadius="29dp"
+        app:layout_constraintLeft_toLeftOf="@id/imageViewLowerJaw"
+        app:layout_constraintTop_toTopOf="@id/imageViewLowerJaw" />
+
+    <include
+        android:id="@+id/indicatorThirtyThree"
+        layout="@layout/teeth_indicator"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintBottom_toBottomOf="@id/imageButtonTeethThirtyThree"
+        app:layout_constraintLeft_toLeftOf="@id/imageButtonTeethThirtyThree"
+        app:layout_constraintRight_toRightOf="@id/imageButtonTeethThirtyThree"
+        app:layout_constraintTop_toTopOf="@id/imageButtonTeethThirtyThree" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

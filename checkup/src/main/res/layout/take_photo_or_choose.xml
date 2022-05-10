@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.5"
+        android:background="@color/gray700" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/CardViewTakePhotoTopCornerRadius"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/buttonTakePhoto"
+                    style="@style/TextViewSecondaryLightH6"
+                    android:layout_width="match_parent"
+                    android:layout_height="67dp"
+                    android:fontFamily="@font/regular"
+                    android:gravity="center"
+                    android:text="@string/take_photo" />
+
+                <FrameLayout
+                    style="@style/Divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp" />
+
+                <TextView
+                    android:id="@+id/buttonChoosePhoto"
+                    style="@style/TextViewSecondaryLightH6"
+                    android:layout_width="match_parent"
+                    android:layout_height="67dp"
+                    android:fontFamily="@font/regular"
+                    android:gravity="center"
+                    android:text="@string/choose_photos" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonCancel"
+            style="@style/ButtonWithTextViewSecondaryLightH6"
+            android:layout_width="match_parent"
+            android:layout_height="77dp"
+            android:fontFamily="@font/regular"
+            android:text="@string/cancel_"
+            android:textAllCaps="false"
+            app:cornerRadius="8dp" />
+
+    </LinearLayout>
+</RelativeLayout>
