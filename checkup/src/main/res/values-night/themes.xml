@@ -173,6 +173,12 @@
         <item name="android:textColor">@color/black500</item>
         <item name="backgroundTint">@color/green500</item>
     </style>
+
+    <style name="ButtonActive" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:textAppearance">@style/TextAppearance.H7Headline</item>
+        <item name="backgroundTint">@color/primary</item>
+        <item name="android:textColor">@color/gray500Dark</item>
+    </style>
     // Charts
 
     // Edit text

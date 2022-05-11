@@ -84,7 +84,10 @@
         tools:layout="@layout/fragment_checkup_question">
         <action
             android:id="@+id/action_fragmentCheckupQuestion_to_fragmentCamera"
-            app:destination="@id/fragmentCamera" />
+            app:destination="@id/fragmentCamera"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/fragmentCheckup"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/fragmentXRay"

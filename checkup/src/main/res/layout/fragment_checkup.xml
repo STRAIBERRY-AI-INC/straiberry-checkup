@@ -142,6 +142,7 @@
                         android:button="@drawable/selector_radio_button_check_up"
                         android:fontFamily="@font/regular"
                         android:paddingStart="10dp"
+                        android:visibility="gone"
                         android:paddingEnd="10dp"
                         android:text="@string/x_rays" />
 

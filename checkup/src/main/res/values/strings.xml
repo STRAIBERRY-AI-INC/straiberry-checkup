@@ -139,6 +139,10 @@
     <string name="infectious_apical_lesion">Infectious apical lesion</string>
     <string name="remained_dental_root">Remained dental root</string>
     <string name="malposed_wisdom_tooth">Malposed wisdom tooth</string>
+    <string name="white_spot">White Spot</string>
+    <string name="amalgam_filling">Amalgam Restoration</string>
+    <string name="calculus">Calculus</string>
+    <string name="carries">Carries</string>
     <string name="tooth_with_missing_counterpart">Tooth with missing counterpart</string>
     <string name="invalid_x_ray_url">The app only supports the OPGs.\nPlease insert the related link.</string>
 </resources>

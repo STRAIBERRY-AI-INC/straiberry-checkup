@@ -34,7 +34,7 @@ class StraiberryEditText @JvmOverloads constructor(
     private val textInputLayout = TextInputLayout(
         context,
         attributes,
-        R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox
+        com.google.android.material.R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox
     )
     private val textInputEditText = TextInputEditText(context)
     private val linearLayout = LinearLayout(context)

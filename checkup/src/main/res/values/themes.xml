@@ -246,6 +246,11 @@
         <item name="backgroundTint">@color/white</item>
     </style>
 
+    <style name="ButtonActive" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:textAppearance">@style/TextAppearance.H7Headline</item>
+        <item name="backgroundTint">@color/primary</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
     // ProgressBar
 
     // Card View
