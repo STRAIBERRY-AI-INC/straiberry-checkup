@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CheckupSample</string>
+    <string name="checkup_sdk_key" translatable="false">fcc9d30f-994e-46c5-ab87-85be80bb0cf6</string>
+    <string name="display_name" translatable="false">Straiberry checkup sdk sample</string>
+    <string name="unique_id" translatable="false">straiberry_android@gmail.com</string>
+
 </resources>
