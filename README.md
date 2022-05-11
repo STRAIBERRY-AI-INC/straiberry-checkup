@@ -38,7 +38,7 @@ Using following instruction you can implement our checkup feature in your applic
 2. Add the dependency
   ```sh
   	dependencies {
-	        implementation 'com.github.STRAIBERRY-AI-INC:Straiberry-charts:1.1.0'
+	    implementation 'com.github.STRAIBERRY-AI-INC:straiberry-checkup:1.1.0'
 	}
   ```
   
