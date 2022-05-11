@@ -5,6 +5,10 @@ import com.google.gson.annotations.SerializedName
 data class CreateCheckupRequest(
     @SerializedName("checkup_type")
     val checkupType: Int? = null,
+    @SerializedName("display_name")
+    val displayName: String? = null,
+    @SerializedName("unique_field")
+    val uniqueId: String? = null,
 )
 
 data class SdkTokenSuccessResponse(

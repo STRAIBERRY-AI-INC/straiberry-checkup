@@ -1,6 +1,7 @@
 package com.straiberry.android.checkup.di
 
 import com.straiberry.android.checkup.checkup.data.networking.CheckupApi
+import com.straiberry.android.checkup.checkup.data.networking.CheckupSdkApi
 import com.straiberry.android.checkup.checkup.data.networking.XRayApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,6 +13,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 private const val BASE_URL = "https://api.dev.straiberry.com/"
+private const val CHECKUP_SDK_BASE_URL = "https://sdk.straiberry.com/"
+private const val X_RAY_API = "x-ray"
+private const val CHECKUP_SDK_API = "checkup-sdk"
 const val DEBUG = "DEBUG"
 val networkingModule = module {
     single { GsonConverterFactory.create() as Converter.Factory }
@@ -35,7 +39,15 @@ val networkingModule = module {
             .build()
     }
 
-    single<Retrofit>(named("x-ray")) {
+    single<Retrofit>(named(CHECKUP_SDK_API)) {
+        Retrofit.Builder()
+            .baseUrl(CHECKUP_SDK_BASE_URL)
+            .client(get())
+            .addConverterFactory(get())
+            .build()
+    }
+
+    single<Retrofit>(named(X_RAY_API)) {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(get())
@@ -44,5 +56,6 @@ val networkingModule = module {
     }
 
     single { get<Retrofit>().create(CheckupApi::class.java) }
-    single { get<Retrofit>(named("x-ray")).create(XRayApi::class.java) }
+    single { get<Retrofit>(named(CHECKUP_SDK_API)).create(CheckupSdkApi::class.java) }
+    single { get<Retrofit>(named(X_RAY_API)).create(XRayApi::class.java) }
 }

@@ -29,4 +29,8 @@ val interactionModule = module {
     single { AddXrayImageFromUrlUseCase(get()) }
     single { CheckXrayUrlUseCase(get()) }
     single { AddImageToXrayCheckupUseCase(get()) }
+    single { CreateCheckupSdkUseCase(get()) }
+    single { AddSeveralTeethToCheckupSdkUseCase(get()) }
+    single { AddImageToCheckupSdkUseCase(get()) }
+    single { GetCheckupSdkResultUseCase(get()) }
 }

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.straiberry.android.checkup.checkup.data.networking.model.AddToothToCheckupRequest
 import com.straiberry.android.checkup.checkup.domain.model.AddToothToCheckupSuccessModel
-import com.straiberry.android.checkup.checkup.domain.usecase.AddSeveralTeethToCheckupUseCase
+import com.straiberry.android.checkup.checkup.domain.usecase.AddSeveralTeethToCheckupSdkUseCase
 import com.straiberry.android.common.base.*
 import com.straiberry.android.common.network.CoroutineContextProvider
 import kotlinx.coroutines.launch
@@ -17,7 +17,7 @@ import kotlinx.coroutines.withContext
  * a problem on created checkup.
  */
 class CheckupQuestionSubmitTeethViewModel(
-    private val addSeveralTeethToCheckupUseCase: AddSeveralTeethToCheckupUseCase,
+    private val addSeveralTeethToCheckupSdkUseCase: AddSeveralTeethToCheckupSdkUseCase,
     private val contextProvider: CoroutineContextProvider
 ) : ViewModel() {
 
@@ -34,7 +34,7 @@ class CheckupQuestionSubmitTeethViewModel(
         viewModelScope.launch {
             kotlin.runCatching {
                 withContext(contextProvider.io) {
-                    addSeveralTeethToCheckupUseCase.execute(checkupId, data)
+                    addSeveralTeethToCheckupSdkUseCase.execute(checkupId, data)
                 }
             }.onSuccess {
                 _submitStateAddTooth.value = Success(it)

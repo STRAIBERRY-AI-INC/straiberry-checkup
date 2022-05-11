@@ -1,10 +1,10 @@
 package com.straiberry.android.checkup.checkup.domain.usecase
 
-import com.straiberry.android.checkup.checkup.domain.repository.CheckupRepo
+import com.straiberry.android.checkup.checkup.domain.repository.CheckupSdkRepo
 
 class GetSdkTokenUseCase(
-    private val checkupRepo: CheckupRepo
+    private val checkupSdkRepo: CheckupSdkRepo
 ) {
     suspend fun execute(appId: String, packageName: String) =
-        checkupRepo.getSDKToken(appId, packageName)
+        checkupSdkRepo.getSDKToken(appId, packageName)
 }

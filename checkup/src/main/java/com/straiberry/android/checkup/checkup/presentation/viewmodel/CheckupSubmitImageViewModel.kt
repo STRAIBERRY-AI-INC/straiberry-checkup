@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.straiberry.android.checkup.checkup.domain.model.AddImageToCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.domain.model.UpdateImageInCheckupSuccessModel
-import com.straiberry.android.checkup.checkup.domain.usecase.AddImageToCheckupUseCase
+import com.straiberry.android.checkup.checkup.domain.usecase.AddImageToCheckupSdkUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.UpdateImageInCheckupUseCase
 import com.straiberry.android.common.base.*
 import com.straiberry.android.common.network.CoroutineContextProvider
@@ -18,7 +18,7 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
 class CheckupSubmitImageViewModel(
-    private val addImageToCheckupUseCase: AddImageToCheckupUseCase,
+    private val addImageToCheckupSdkUseCase: AddImageToCheckupSdkUseCase,
     private val updateImageInCheckupUseCase: UpdateImageInCheckupUseCase,
     private val contextProvider: CoroutineContextProvider
 ) : ViewModel() {
@@ -54,7 +54,7 @@ class CheckupSubmitImageViewModel(
         viewModelScope.launch {
             kotlin.runCatching {
                 withContext(contextProvider.main) {
-                    addImageToCheckupUseCase.execute(
+                    addImageToCheckupSdkUseCase.execute(
                         checkupIdMultipartBody,
                         imageFile,
                         imageTypeMultipartBody,

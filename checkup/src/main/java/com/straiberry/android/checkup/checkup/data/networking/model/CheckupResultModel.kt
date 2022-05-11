@@ -10,3 +10,8 @@ data class CheckupResultSuccessResponse(
     @SerializedName("message")
     val message: String = ""
 )
+
+data class GetCheckupRequest(
+    @SerializedName("unique_field")
+    val uniqueId: String? = null
+)

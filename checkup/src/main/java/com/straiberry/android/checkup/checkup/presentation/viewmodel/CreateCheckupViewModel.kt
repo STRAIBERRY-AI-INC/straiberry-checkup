@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.straiberry.android.checkup.checkup.domain.model.CreateCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.domain.model.SdkTokenSuccessModel
-import com.straiberry.android.checkup.checkup.domain.usecase.CreateCheckupUseCase
+import com.straiberry.android.checkup.checkup.domain.usecase.CreateCheckupSdkUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.GetSdkTokenUseCase
 import com.straiberry.android.common.base.*
 import com.straiberry.android.common.network.CoroutineContextProvider
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class CreateCheckupViewModel(
-    private val createCheckupUseCase: CreateCheckupUseCase,
+    private val createCheckupSdkUseCase: CreateCheckupSdkUseCase,
     private val getSdkTokenUseCase: GetSdkTokenUseCase,
     private val contextProvider: CoroutineContextProvider
 ) : ViewModel() {
@@ -22,15 +22,15 @@ class CreateCheckupViewModel(
     val submitStateCreateCheckup: LiveData<Loadable<CreateCheckupSuccessModel>> =
         _submitStateCreateCheckup
 
-    fun createCheckup(displayName: String, checkupType: Int) {
+    fun createCheckup(checkupType: Int) {
         _submitStateCreateCheckup.value = NotLoading
-        if (checkupType == -2 || displayName.isEmpty())
+        if (checkupType == -2)
             return
         _submitStateCreateCheckup.value = Loading
         viewModelScope.launch {
             kotlin.runCatching {
                 withContext(contextProvider.io) {
-                    createCheckupUseCase.execute(displayName, checkupType)
+                    createCheckupSdkUseCase.execute(checkupType)
                 }
             }.onSuccess {
                 _submitStateCreateCheckup.value = Success(it)

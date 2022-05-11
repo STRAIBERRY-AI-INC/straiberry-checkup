@@ -14,7 +14,6 @@ import com.straiberry.android.checkup.R
 import com.straiberry.android.checkup.checkup.domain.model.CreateCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.domain.model.SdkTokenSuccessModel
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.*
-import com.straiberry.android.checkup.common.helper.SdkAuthorizationHelper
 import com.straiberry.android.checkup.common.helper.StraiberryCheckupSdkInfo
 import com.straiberry.android.checkup.common.helper.TokenKeys
 import com.straiberry.android.checkup.databinding.FragmentCheckupBinding
@@ -29,6 +28,7 @@ import com.straiberry.android.common.custom.spotlight.shape.Circle
 import com.straiberry.android.common.extensions.*
 import com.straiberry.android.common.helper.ResizeViewWithAnimation
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.opencv.android.OpenCVLoader
 
 
 class FragmentCheckup : Fragment(), IsolatedKoinComponent {
@@ -60,19 +60,20 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
     ): View {
         return FragmentCheckupBinding.inflate(inflater, container, false).also {
             binding = it
+            OpenCVLoader.initDebug()
 
             // Getting checkup sdk token
-//            tokenKeys = StraiberryCheckupSdkInfo.getTokenInfo()
+            tokenKeys = StraiberryCheckupSdkInfo.getTokenInfo()
             userInfoViewModel.setUserName(StraiberryCheckupSdkInfo.getDisplayName())
             userInfoViewModel.setUserAvatar(
                 requireContext(),
                 StraiberryCheckupSdkInfo.getUserAvatar()
             )
-//            createCheckupViewModel.getCheckupSdkToken(tokenKeys.appId, tokenKeys.packageName)
-//            createCheckupViewModel.submitStateCheckupSdkToken.subscribe(
-//                viewLifecycleOwner,
-//                ::handleViewStateGetCheckupSdkToken
-//            )
+            createCheckupViewModel.getCheckupSdkToken(tokenKeys.appId, tokenKeys.packageName)
+            createCheckupViewModel.submitStateCheckupSdkToken.subscribe(
+                viewLifecycleOwner,
+                ::handleViewStateGetCheckupSdkToken
+            )
 
             // Setup go to checkup
             binding.imageButtonGo.onClick {
@@ -80,7 +81,6 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
                 //FirebaseAppEvents.onSelectedCheckup(selectedCheckupEventName)
                 // Create the checkup
                 createCheckupViewModel.createCheckup(
-                    StraiberryCheckupSdkInfo.getDisplayName(),
                     selectedCheckupIndex
                 )
                 createCheckupViewModel.submitStateCreateCheckup.subscribe(
@@ -149,7 +149,6 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
             binding.textViewDescriptionToothSensitivity,
             binding.textViewDescriptionProblemsTreatment,
             binding.textViewDescriptionOthers,
-            binding.textViewDescriptionXRay
         )
         listOf(
             binding.radioButtonRegularCheckup,
@@ -157,7 +156,6 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
             binding.radioButtonToothache,
             binding.radioButtonGeneralProblem,
             binding.radioButtonTreatmentIssue,
-            binding.radioButtonXray
         ).forEachIndexed { index, appCompatRadioButton ->
             // Show hide description
             listOfDescription[index].hideWithoutAnimation()
@@ -194,8 +192,7 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
                 chooseCheckupViewModel.setCheckupId(loadable.data.checkupId)
                 setupNext(selectedCheckupIndex)
             }
-            is Failure -> {
-            }
+            is Failure -> {}
             Loading -> showHideLoading(true)
             NotLoading -> {
             }
@@ -205,11 +202,7 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
     /** Handel view state for getting sdk token */
     private fun handleViewStateGetCheckupSdkToken(loadable: Loadable<SdkTokenSuccessModel>) {
         if (loadable is Success)
-            SdkAuthorizationHelper.setToken(
-                requireContext(),
-                loadable.data.access,
-                loadable.data.refresh
-            )
+            StraiberryCheckupSdkInfo.setToken(loadable.data.access)
     }
 
     private fun showHideLoading(showLoading: Boolean) = if (showLoading) {
@@ -226,9 +219,7 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
      * otherwise send user to camera page.
      * */
     private fun setupNext(index: Int) {
-        if (index == CHECKUP_X_RAY_TYPE)
-            findNavController().navigate(R.id.action_fragmentCheckup_to_fragmentXRay)
-        else if (index == CHECKUP_TOOTH_SENSITIVITY_TYPE || index == CHECKUP_PREVIOUS_TREATMENT_TYPE)
+        if (index == CHECKUP_TOOTH_SENSITIVITY_TYPE || index == CHECKUP_PREVIOUS_TREATMENT_TYPE)
             findNavController().navigate(R.id.action_fragmentCheckup_to_fragmentCheckupQuestion)
         else
             findNavController().navigate(R.id.action_fragmentCheckup_to_fragmentCheckupHelp)
@@ -309,8 +300,8 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
 
     companion object {
         private const val CHECKUP_X_RAY_TYPE = 4
-        private const val CHECKUP_TOOTH_SENSITIVITY_TYPE = 2
-        private const val CHECKUP_PREVIOUS_TREATMENT_TYPE = 3
+        private const val CHECKUP_TOOTH_SENSITIVITY_TYPE = 1
+        private const val CHECKUP_PREVIOUS_TREATMENT_TYPE = 2
         private const val RegularCheckupEvent = "regular_checkup"
         private const val TeethWhiteningEvent = "teeth_whitening"
         private const val ToothacheAndToothSensitivityEvent = "toothache_and_tooth_sensitivity"

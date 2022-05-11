@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.straiberry.android.checkup.checkup.domain.model.CheckupHistorySuccessModel
-import com.straiberry.android.checkup.checkup.domain.usecase.CheckupHistoryUseCase
+import com.straiberry.android.checkup.checkup.domain.usecase.CheckupSdkHistoryUseCase
 import com.straiberry.android.common.base.*
 import com.straiberry.android.common.network.CoroutineContextProvider
 import kotlinx.coroutines.launch
@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
  * data.
  */
 class CheckupHistoryViewModel(
-    private val checkupHistoryUseCase: CheckupHistoryUseCase,
+    private val checkupSdkHistoryUseCase: CheckupSdkHistoryUseCase,
     private val contextProvider: CoroutineContextProvider
 ) : ViewModel() {
 
@@ -41,7 +41,7 @@ class CheckupHistoryViewModel(
         viewModelScope.launch {
             kotlin.runCatching {
                 withContext(contextProvider.io) {
-                    checkupHistoryUseCase.execute(page = page)
+                    checkupSdkHistoryUseCase.execute(page = page)
                 }
             }.onSuccess {
                 _submitStateCheckupHistory.value = Success(it)
