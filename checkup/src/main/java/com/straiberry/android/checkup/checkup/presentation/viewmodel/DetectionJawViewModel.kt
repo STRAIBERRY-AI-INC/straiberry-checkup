@@ -6,6 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.FRONT_JAW
+import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.LOWER_JAW
+import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.UPPER_JAW
+import com.straiberry.android.checkup.common.extentions.convertToJawPosition
 import com.straiberry.android.checkup.common.extentions.isBlurry
 import com.straiberry.android.common.model.JawPosition
 import kotlinx.coroutines.launch
@@ -43,10 +47,19 @@ class DetectionJawViewModel : ViewModel() {
     private val _statePhotosUploaded = MutableLiveData<Int>()
     val statePhotosUploaded: LiveData<Int> = _statePhotosUploaded
 
+    private val _stateListOfUploadedJaws = MutableLiveData<HashMap<Int, JawPosition>>()
+    val stateListOfUploadedJaws: LiveData<HashMap<Int, JawPosition>> = _stateListOfUploadedJaws
+
     private val _submitStateSelectedJaws = MutableLiveData<HashMap<Int, JawPosition>>()
     val submitStateSelectedJaws: LiveData<HashMap<Int, JawPosition>> = _submitStateSelectedJaws
 
+    private val _submitStateDismissCheckupInstruction = MutableLiveData<Boolean>()
+    val submitStateDismissCheckupInstruction: LiveData<Boolean> =
+        _submitStateDismissCheckupInstruction
+
     init {
+        _submitStateDismissCheckupInstruction.value = false
+        _stateListOfUploadedJaws.value = hashMapOf()
         _submitStateSelectedJaws.value = hashMapOf()
         _stateDetectionModel.value = true
         _statePhotosUploaded.value = 0
@@ -58,6 +71,14 @@ class DetectionJawViewModel : ViewModel() {
             isImageBlurry = bitmap.isBlurry()
         }
         return isImageBlurry
+    }
+
+    fun checkupInstructionHasBeenShowing() {
+        _submitStateDismissCheckupInstruction.value = false
+    }
+
+    fun checkupInstructionHasBeenDismiss() {
+        _submitStateDismissCheckupInstruction.value = true
     }
 
     fun resetRecognition() {
@@ -73,24 +94,24 @@ class DetectionJawViewModel : ViewModel() {
     // 4 means that all jaws is selected.
     fun setSelectedJaw(jawIndex: Int, jawPosition: JawPosition = JawPosition.FrontTeeth) {
         if (jawIndex == AllJawsAreSelected) {
-            _submitStateSelectedJaws.value?.put(FrontIndex, JawPosition.FrontTeeth)
-            _submitStateSelectedJaws.value?.put(UpperIndex, JawPosition.UpperJaw)
-            _submitStateSelectedJaws.value?.put(LowerIndex, JawPosition.LowerJaw)
+            _submitStateSelectedJaws.value?.put(FRONT_JAW, JawPosition.FrontTeeth)
+            _submitStateSelectedJaws.value?.put(UPPER_JAW, JawPosition.UpperJaw)
+            _submitStateSelectedJaws.value?.put(LOWER_JAW, JawPosition.LowerJaw)
         } else
             _submitStateSelectedJaws.value?.put(jawIndex, jawPosition)
     }
 
     // Resting number of uploaded jaws in case of closing checkup or getting back to main page
     fun resetNumberOfUploadedJaw() {
-        _statePhotosUploaded.value = 0
+        _stateListOfUploadedJaws.postValue(hashMapOf())
     }
 
-    fun photosUploaded() {
-        _statePhotosUploaded.postValue(_statePhotosUploaded.value?.plus(1))
+    fun photosUploaded(jawType: Int) {
+        _stateListOfUploadedJaws.value?.put(jawType, jawType.convertToJawPosition())
     }
 
-    fun photosUploadedFailed() {
-        _statePhotosUploaded.postValue(_statePhotosUploaded.value?.minus(1))
+    fun photosUploadedFailed(jawType: Int) {
+        _stateListOfUploadedJaws.value?.remove(jawType)
     }
 
     fun updateRecognition(rectPosition: Recognition) {

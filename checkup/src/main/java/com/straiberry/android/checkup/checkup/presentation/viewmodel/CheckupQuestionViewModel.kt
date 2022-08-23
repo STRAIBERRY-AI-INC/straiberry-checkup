@@ -40,13 +40,14 @@ class CheckupQuestionViewModel : ViewModel() {
 
     // Figure out witch jaw's are selected
     private val _submitStateSelectedJaw =
-        MutableLiveData<Triple<JawPosition?, JawPosition?, JawPosition?>>()
-    val submitStateSelectedJaw: LiveData<Triple<JawPosition?, JawPosition?, JawPosition?>> =
+        MutableLiveData<HashMap<Int, JawPosition>>()
+    val submitStateSelectedJaw: LiveData<HashMap<Int, JawPosition>> =
         _submitStateSelectedJaw
 
 
     // Setup the default values
     init {
+        _submitStateSelectedJaw.value = hashMapOf()
         _submitStateAnswerOne.value = hashMapOf()
         _submitStateAnswerTwo.value = hashMapOf()
         _submitStateAnswerThree.value = hashMapOf()
@@ -54,12 +55,12 @@ class CheckupQuestionViewModel : ViewModel() {
         _submitStateAnswerTwoIsSubAnswer.value = false
     }
 
-    fun selectedJawForCheckup(jaws: Triple<JawPosition?, JawPosition?, JawPosition?>) {
-        _submitStateSelectedJaw.value = jaws
+    fun selectedJawForCheckup(jawIndex: Int, jawPosition: JawPosition) {
+        _submitStateSelectedJaw.value!![jawIndex] = jawPosition
     }
 
     fun resetSelectedJaw() {
-        _submitStateSelectedJaw.value = Triple(null, null, null)
+        _submitStateSelectedJaw.value = hashMapOf()
     }
 
     /**

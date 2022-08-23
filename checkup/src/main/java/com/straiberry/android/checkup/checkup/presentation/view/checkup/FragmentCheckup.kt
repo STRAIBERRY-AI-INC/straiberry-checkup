@@ -14,12 +14,12 @@ import com.straiberry.android.checkup.R
 import com.straiberry.android.checkup.checkup.domain.model.CreateCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.domain.model.SdkTokenSuccessModel
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.*
+import com.straiberry.android.checkup.common.helper.SdkAuthorizationHelper
 import com.straiberry.android.checkup.common.helper.StraiberryCheckupSdkInfo
 import com.straiberry.android.checkup.common.helper.TokenKeys
 import com.straiberry.android.checkup.databinding.FragmentCheckupBinding
 import com.straiberry.android.checkup.di.IsolatedKoinComponent
 import com.straiberry.android.checkup.di.StraiberrySdk
-import com.straiberry.android.common.base.*
 import com.straiberry.android.common.custom.spotlight.OnSpotlightListener
 import com.straiberry.android.common.custom.spotlight.ShowCasePosition
 import com.straiberry.android.common.custom.spotlight.Spotlight
@@ -27,8 +27,8 @@ import com.straiberry.android.common.custom.spotlight.Target
 import com.straiberry.android.common.custom.spotlight.shape.Circle
 import com.straiberry.android.common.extensions.*
 import com.straiberry.android.common.helper.ResizeViewWithAnimation
+import com.straiberry.android.core.base.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.opencv.android.OpenCVLoader
 
 
 class FragmentCheckup : Fragment(), IsolatedKoinComponent {
@@ -40,6 +40,8 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
     private val chooseCheckupViewModel by activityViewModels<ChooseCheckupTypeViewModel>()
     private val createCheckupViewModel by viewModel<CreateCheckupViewModel>()
     private val guideTourViewModel by viewModel<CheckupGuideTourViewModel>()
+    private val checkupQuestionViewModel by activityViewModels<CheckupQuestionViewModel>()
+    private val jawDetectionViewModel by activityViewModels<DetectionJawViewModel>()
     private val userInfoViewModel: UserInfoViewModel by activityViewModels()
     private var selectedCheckupIndex = -2
     private var selectedCheckupEventName = ""
@@ -60,7 +62,6 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
     ): View {
         return FragmentCheckupBinding.inflate(inflater, container, false).also {
             binding = it
-            OpenCVLoader.initDebug()
 
             // Getting checkup sdk token
             tokenKeys = StraiberryCheckupSdkInfo.getTokenInfo()
@@ -78,7 +79,7 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
             // Setup go to checkup
             binding.imageButtonGo.onClick {
                 // Send selected type of checkup to firebase and log current event
-                //FirebaseAppEvents.onSelectedCheckup(selectedCheckupEventName)
+//                FirebaseAppEvents.onSelectedCheckup(selectedCheckupEventName)
                 // Create the checkup
                 createCheckupViewModel.createCheckup(
                     selectedCheckupIndex
@@ -149,6 +150,7 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
             binding.textViewDescriptionToothSensitivity,
             binding.textViewDescriptionProblemsTreatment,
             binding.textViewDescriptionOthers,
+            binding.textViewDescriptionXRay
         )
         listOf(
             binding.radioButtonRegularCheckup,
@@ -156,6 +158,7 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
             binding.radioButtonToothache,
             binding.radioButtonGeneralProblem,
             binding.radioButtonTreatmentIssue,
+            binding.radioButtonXray
         ).forEachIndexed { index, appCompatRadioButton ->
             // Show hide description
             listOfDescription[index].hideWithoutAnimation()
@@ -189,10 +192,14 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
         if (loadable != Loading) showHideLoading(false)
         when (loadable) {
             is Success -> {
+                jawDetectionViewModel.resetNumberOfUploadedJaw()
+                checkupQuestionViewModel.resetSelectedJaw()
+                jawDetectionViewModel.resetSelectedJaw()
                 chooseCheckupViewModel.setCheckupId(loadable.data.checkupId)
                 setupNext(selectedCheckupIndex)
             }
-            is Failure -> {}
+            is Failure -> {
+            }
             Loading -> showHideLoading(true)
             NotLoading -> {
             }
@@ -201,8 +208,14 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
 
     /** Handel view state for getting sdk token */
     private fun handleViewStateGetCheckupSdkToken(loadable: Loadable<SdkTokenSuccessModel>) {
-        if (loadable is Success)
+        if (loadable is Success) {
+            SdkAuthorizationHelper.setToken(
+                requireContext(),
+                loadable.data.access,
+                loadable.data.refresh
+            )
             StraiberryCheckupSdkInfo.setToken(loadable.data.access)
+        }
     }
 
     private fun showHideLoading(showLoading: Boolean) = if (showLoading) {
@@ -219,10 +232,12 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
      * otherwise send user to camera page.
      * */
     private fun setupNext(index: Int) {
-        if (index == CHECKUP_TOOTH_SENSITIVITY_TYPE || index == CHECKUP_PREVIOUS_TREATMENT_TYPE)
+        if (index == CHECKUP_X_RAY_TYPE)
+            findNavController().navigate(R.id.action_fragmentCheckup_to_fragmentXRay)
+        else if (index == CHECKUP_TOOTH_SENSITIVITY_TYPE || index == CHECKUP_PREVIOUS_TREATMENT_TYPE)
             findNavController().navigate(R.id.action_fragmentCheckup_to_fragmentCheckupQuestion)
         else
-            findNavController().navigate(R.id.action_fragmentCheckup_to_fragmentCheckupHelp)
+            findNavController().navigate(R.id.action_fragmentCheckup_to_fragmentCamera)
         // User comes from checkup and goes to questions
         chooseCheckupViewModel.userComeFromDentalIssue(false)
     }

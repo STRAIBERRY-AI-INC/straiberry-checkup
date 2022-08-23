@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">StrAIberry</string>
     <string name="next">Next</string>
+    <string name="ai_powered_dental_care">Sweet Taste of AI in Oral Hygiene</string>
 
-    <string name="whitening">Whitening</string>
+    <string name="whitening_title">Whitening</string>
     <string name="oral_hygiene">Oral Hygiene</string>
     <string name="select_your_checkup">Select your Checkup</string>
     <string name="regular_checkup">Regular Checkup</string>
@@ -62,13 +62,13 @@
     <string name="others">Others</string>
     <string name="others_checkup">Others</string>
     <string name="your_regular_checkup_result">Your %s result:</string>
-    <string name="oral_hygiene_score">Oral hygiene</string>
+    <string name="oral_hygiene_details_score">Oral hygiene score</string>
     <string name="your_oral_hygiene_is_very_good_but_better_brushing_everyday">Your Oral Hygiene is very good But, better brushing everyday.</string>
     <string name="share">Share</string>
     <string name="share_with_your_friends_or_dentist_to_let_them_know_your_result">Share with your friends or dentist to let them know your result.</string>
     <string name="more_details">More Details</string>
     <string name="in_this_checkup">In this checkup,</string>
-    <string name="problem_were_found_in_your_teeth"> problems were found in your teeth.</string>
+    <string name="problem_were_found_in_your_teeth"> problems\nwere found in your teeth.</string>
     <string name="front_teeth">Front Teeth</string>
     <string name="tooth_sensitivity">Tooth Sensitivity</string>
     <string name="tooth_problem_count">%d</string>
@@ -99,6 +99,14 @@
     <string name="calcules_problem_description">It is a crusty deposit that can trap stains on the teeth and cause discoloration.It creates a strong bond that can only be removed by a dental professional.</string>
     <string name="carries_problem_description">dental caries , also known as tooth decay , is the breakdown of teeth due to acids made by bacteria .</string>
     <string name="sinus_inflection_problem_description">Occurs when your nasal cavities become infected, swollen, and inflamed. It is mostly caused by viruses.</string>
+    <string name="dental_impant_problem_description">is a prosthesis that interfaces with the bone of the jaw or skull to support a dental prosthesis such as a crown, bridge, denture, or facial prosthesis .</string>
+    <string name="bone_loss_problem_description">The most common cause of bone loss is tooth extraction and  serious gum infection. Bone loss can cause teeth to loosen or lead to tooth loss.</string>
+    <string name="amalgam_restoration_overhang_problem_description">The overhang is largely iatrogenic, caused by poor operator skill exacerbated by unusual dental morphology.</string>
+    <string name="infectious_apical_lesion_problem_description">Radiolucent lesions that appear in the bone surrounding portals of exit from infected root canal systems</string>
+    <string name="remained_dental_root_problem_description">A residual root is a tooth root which was left over in the jaw after a past extraction or is caused by extensive caries. These sometimes can give problems such as pain and infection.</string>
+    <string name="malposed_wisdom_tooth_problem_description">They may grow sideways, partially emerge from the gum, or even remain trapped beneath the gum and bone. they can cause many problems.</string>
+    <string name="tooth_with_missing_counterpart_problem_description">when you don\'t replace a missing tooth,the opposing tooth over erupts into the space and ruins the bite and chewing ability</string>
+
     <string name="show_illustration">Show Illustration</string>
     <string name="re_take_the_photo_you_must_keep_it_still_for_a_second_after_the_vibration">Re-take the photo. You must keep it still for a second after the vibration.</string>
     <string name="history_checkup">History Checkup</string>
@@ -136,13 +144,25 @@
     <string name="dental_implant">Dental implant</string>
     <string name="bone_loss">Bone loss</string>
     <string name="amalgam_restoration_overhang">Amalgam restoration overhang</string>
-    <string name="infectious_apical_lesion">Infectious apical lesion</string>
-    <string name="remained_dental_root">Remained dental root</string>
-    <string name="malposed_wisdom_tooth">Malposed wisdom tooth</string>
-    <string name="white_spot">White Spot</string>
     <string name="amalgam_filling">Amalgam Restoration</string>
     <string name="calculus">Calculus</string>
     <string name="carries">Carries</string>
+    <string name="white_spot">White Spot</string>
+    <string name="infectious_apical_lesion">Infectious apical lesion</string>
+    <string name="remained_dental_root">Remained dental root</string>
+    <string name="malposed_wisdom_tooth">Malposed wisdom tooth</string>
     <string name="tooth_with_missing_counterpart">Tooth with missing counterpart</string>
     <string name="invalid_x_ray_url">The app only supports the OPGs.\nPlease insert the related link.</string>
+    <string name="hangs_in_position">hangs in position</string>
+    <string name="problem_with_uploading_photo">There is a problem while uploading photo. Please try again.</string>
+    <string name="no_problem_found_in_checkup">It seems you are a dedicated person when it comes to your teeth!Way to go! There is no problem with your teeth.</string>
+    <string name="no_valid_opg_image_is_detected_nplease_try_with_another_image">No valid OPG image is detected,\nPlease try with another image.</string>
+    <string name="no_problem_found_in_lower_jaw_of_your_front_teeth">StrAIberry hasn’t found any issues on the lower jaw of your front teeth.</string>
+    <string name="no_problem_found_in_upper_jaw_of_front_teeth">StrAIberry hasn’t found any issues on the upper jaw of your front teeth.</string>
+    <string name="dentai_splash">دنتای،</string>
+    <string name="portable_dentist">دندانپزشک همراه</string>
+    <string name="checkup_instruction_description_one">Use your main camera on the back\nof your phone and in a good light.\nYou can stand in front of a mirror\nto see your mobile screen speed up the process.</string>
+    <string name="checkup_instruction_desciption_two">Your mouth should be no more than a\npalm\'s distance away from the camera.</string>
+    <string name="checkup_instruction_description_three">When the pattern matches the image of your tooth, the camera will automatically detect and take the photo.The moment you feel the vibration stay still for another second.</string>
+    <string name="checkup_instruction_description_four">Now you can do the same for the other two photos to cover all your teeth. The app needs you to take three photos of the Lower jaw, Upper jaw, and front teeth. The order of taking them does not matter.</string>
 </resources>

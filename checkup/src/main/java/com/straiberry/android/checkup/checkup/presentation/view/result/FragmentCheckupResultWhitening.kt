@@ -11,16 +11,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import coil.load
+import com.straiberry.android.checkup.BuildConfig
 import com.straiberry.android.checkup.checkup.domain.model.CheckupResultSuccessModel
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupQuestionViewModel
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.ChooseCheckupTypeViewModel
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.DetectionJawViewModel
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.UserInfoViewModel
+import com.straiberry.android.checkup.common.helper.StraiberryCheckupSdkInfo
 import com.straiberry.android.checkup.databinding.FragmentCheckupResultWhiteningBinding
 import com.straiberry.android.checkup.di.IsolatedKoinComponent
 import com.straiberry.android.checkup.di.StraiberrySdk
 import com.straiberry.android.common.extensions.onClick
 import com.straiberry.android.common.extensions.toStringOrZero
+import com.straiberry.android.common.helper.FirebaseAppEvents
 import com.straiberry.android.common.helper.ShareScreenshotHelper
 
 class FragmentCheckupResultWhitening : Fragment(), IsolatedKoinComponent {
@@ -59,10 +62,15 @@ class FragmentCheckupResultWhitening : Fragment(), IsolatedKoinComponent {
                     checkupResult.data.images.first().result.first().whiteningScore.toStringOrZero()
 
                 // Setup checkup description
-                val currentLanguage = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                    Resources.getSystem().configuration.locales.get(0).language
-                else
-                    Resources.getSystem().configuration.locale.language
+                val currentLanguage =
+                    if (StraiberryCheckupSdkInfo.getSelectedLanguage() == "" && BuildConfig.IS_FARSI)
+                        "fa"
+                    else if (StraiberryCheckupSdkInfo.getSelectedLanguage() != "")
+                        StraiberryCheckupSdkInfo.getSelectedLanguage()
+                    else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                        Resources.getSystem().configuration.locales.get(0).language
+                    else
+                        Resources.getSystem().configuration.locale.language
 
                 textViewTips.text = if (currentLanguage == "fa")
                     checkupResult.data.description.persian
@@ -86,7 +94,7 @@ class FragmentCheckupResultWhitening : Fragment(), IsolatedKoinComponent {
                 )
                 imageButtonShare.onClick {
                     // Log event when user shares his/her checkup result
-                    //FirebaseAppEvents.onShareCheckupResult()
+                    FirebaseAppEvents.onShareCheckupResult()
                     ShareScreenshotHelper().shareResult(shareCheckupResult, requireActivity())
                 }
 

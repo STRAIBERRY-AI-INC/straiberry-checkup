@@ -5,7 +5,6 @@ import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupQues
 import io.mockk.MockKAnnotations
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -15,13 +14,9 @@ import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class CheckupQuestionsViewModelTest {
-    private val dispatcher = TestCoroutineDispatcher()
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
-
-    @get:Rule
-    val coroutineTestRule = CoroutineTestRule(dispatcher)
 
     private fun createViewModel() =
         CheckupQuestionViewModel()

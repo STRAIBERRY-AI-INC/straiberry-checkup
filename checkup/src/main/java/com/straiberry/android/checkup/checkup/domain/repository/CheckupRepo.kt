@@ -8,7 +8,7 @@ interface CheckupRepo {
     suspend fun getSDKToken(appId: String, packageName: String): SdkTokenSuccessModel
     suspend fun deleteCheckup(checkupId: String): DeleteCheckupSuccessModel
     suspend fun getCheckup(checkupId: String): CheckupResultSuccessModel
-    suspend fun createCheckup(displayName: String, checkupType: Int): CreateCheckupSuccessModel
+    suspend fun createCheckup(checkupType: Int): CreateCheckupSuccessModel
     suspend fun addImageToCheckup(
         checkupId: MultipartBody.Part,
         image: MultipartBody.Part,

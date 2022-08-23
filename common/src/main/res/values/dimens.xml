@@ -12,5 +12,6 @@
     <dimen name="event_edit_delete_height">54dp</dimen>
     <dimen name="tips_min_width">54dp</dimen>
     <dimen name="problem_indicator_size">20dp</dimen>
+    <dimen name="hit_area_size">48dp</dimen>
 
 </resources>

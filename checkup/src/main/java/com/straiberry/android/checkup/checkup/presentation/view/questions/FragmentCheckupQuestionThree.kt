@@ -39,7 +39,8 @@ class FragmentCheckupQuestionThree : Fragment() {
                 binding.cardViewAnswerTwo,
                 binding.cardViewAnswerThree,
                 binding.cardViewAnswerFour,
-                binding.cardViewAnswerFive
+                binding.cardViewAnswerFive,
+                binding.cardViewAnswerSix
             ).forEachIndexed { index, materialCardView ->
                 materialCardView.onClick {
                     setupSelectedChoice(index)
@@ -69,7 +70,8 @@ class FragmentCheckupQuestionThree : Fragment() {
             binding.cardViewAnswerTwo,
             binding.cardViewAnswerThree,
             binding.cardViewAnswerFour,
-            binding.cardViewAnswerFive
+            binding.cardViewAnswerFive,
+            binding.cardViewAnswerSix
         ).forEachIndexed { index, materialCardView ->
             if (index == selectedChoice)
                 materialCardView.apply {
@@ -92,7 +94,8 @@ class FragmentCheckupQuestionThree : Fragment() {
             binding.textViewAnswerTwoTitle,
             binding.textViewAnswerThreeTitle,
             binding.textViewAnswerFourTitle,
-            binding.textViewAnswerFiveTitle
+            binding.textViewAnswerFiveTitle,
+            binding.textViewAnswerSixTitle
         ).forEachIndexed { index, textView ->
             textView.isEnabled = index == selectedChoice
         }
@@ -103,7 +106,8 @@ class FragmentCheckupQuestionThree : Fragment() {
             binding.imageViewAnswerTwoCheckbox,
             binding.imageViewAnswerThreeCheckbox,
             binding.textViewAnswerFourTitle,
-            binding.textViewAnswerFiveTitle
+            binding.textViewAnswerFiveTitle,
+            binding.textViewAnswerSixTitle
         ).forEachIndexed { index, imageView ->
             imageView.isSelected = index == selectedChoice
         }

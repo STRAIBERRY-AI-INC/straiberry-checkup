@@ -1,16 +1,21 @@
 package com.straiberry.android.checkup.checkup.presentation.viewmodel
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.ImageLoader
+import coil.request.ImageRequest
+import coil.request.SuccessResult
 import com.straiberry.android.checkup.checkup.domain.model.AddImageToCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.domain.usecase.AddImageToXrayCheckupUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.AddXrayImageFromUrlUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.CheckXrayUrlUseCase
-import com.straiberry.android.checkup.checkup.domain.usecase.CreateXrayCheckupUseCase
-import com.straiberry.android.common.base.*
-import com.straiberry.android.common.network.CoroutineContextProvider
+import com.straiberry.android.core.base.*
+import com.straiberry.android.core.network.CoroutineContextProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -19,7 +24,6 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
 class XrayViewModel(
-    private val createXrayCheckupUseCase: CreateXrayCheckupUseCase,
     private val addImageToXrayCheckupUseCase: AddImageToXrayCheckupUseCase,
     private val addXrayImageFromUrlUseCase: AddXrayImageFromUrlUseCase,
     private val checkXrayUrlUseCase: CheckXrayUrlUseCase,
@@ -120,6 +124,26 @@ class XrayViewModel(
             }.onFailure {
                 _submitStateUploadXrayImage.value = Failure(it)
             }
+        }
+    }
+
+    private val _submitStateUrlImageBitmap =
+        MutableLiveData<Bitmap?>()
+    val submitStateUrlImageBitmap: LiveData<Bitmap?> =
+        _submitStateUrlImageBitmap
+
+    fun getUrlImageBitmap(context: Context, imageUrl: String) {
+        viewModelScope.launch {
+            val loader = ImageLoader(context)
+            val request = ImageRequest.Builder(context)
+                .data(imageUrl)
+                .allowHardware(false)
+                .build()
+            if (loader.execute(request) is SuccessResult) {
+                val result = (loader.execute(request) as SuccessResult).drawable
+                _submitStateUrlImageBitmap.value = (result as BitmapDrawable).bitmap
+            } else
+                _submitStateUrlImageBitmap.value = null
         }
     }
 }

@@ -9,15 +9,15 @@ import com.straiberry.android.checkup.checkup.domain.model.AddToothToDentalIssue
 import com.straiberry.android.checkup.checkup.domain.usecase.RemoteAddDentalIssueUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.RemoteDeleteDentalIssueUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.RemoteUpdateDentalIssueUseCase
-import com.straiberry.android.common.base.*
-import com.straiberry.android.common.network.CoroutineContextProvider
+import com.straiberry.android.core.base.*
+import com.straiberry.android.core.network.CoroutineContextProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class RemoteDentalIssueViewModel(
     private val remoteAddDentalIssueUseCase: RemoteAddDentalIssueUseCase,
     private val remoteDeleteDentalIssueUseCase: RemoteDeleteDentalIssueUseCase,
-    private val remoteUpdateDentalIssue: RemoteUpdateDentalIssueUseCase,
+    private val remoteUpdateDentalIssueUseCase: RemoteUpdateDentalIssueUseCase,
     private val contextProvider: CoroutineContextProvider
 ) : ViewModel() {
     private val _submitStateAddDentalIssue =
@@ -92,11 +92,17 @@ class RemoteDentalIssueViewModel(
         if (toothId == -1)
             return
 
-        _submitStateAddDentalIssue.value = Loading
+        _submitStateUpdateDentalIssue.value = Loading
         viewModelScope.launch {
             kotlin.runCatching {
                 withContext(contextProvider.io) {
-                    remoteUpdateDentalIssue.execute(toothId, toothNumber, duration, cause, pain)
+                    remoteUpdateDentalIssueUseCase.execute(
+                        toothId,
+                        toothNumber,
+                        duration,
+                        cause,
+                        pain
+                    )
                 }
             }.onSuccess {
                 _submitStateUpdateDentalIssue.value = Success(it)

@@ -18,12 +18,19 @@
         <item name="android:textColor">@color/secondaryLight</item>
     </style>
 
+    <style name="TextViewBlack.Body1" parent="TextAppearance.Body1">
+        <item name="android:textColor">@color/black</item>
+    </style>
 
     <style name="TextViewSecondaryLight.H8" parent="TextAppearance.H8Headline">
         <item name="android:textColor">@color/secondaryLight</item>
     </style>
 
     <style name="TextViewSecondaryLight.Primary.H8" parent="TextAppearance.H8Headline">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+    <style name="TextViewSecondaryLight.Primary.CaptionXXSmall" parent="TextAppearance.CaptionXXSmall">
         <item name="android:textColor">@color/secondaryLight</item>
     </style>
 
@@ -34,6 +41,10 @@
 
     <style name="TextViewSecondaryLightCaption" parent="TextAppearance.Caption">
         <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
+    <style name="TextViewPrimary.CaptionXXSmall" parent="TextAppearance.CaptionXXSmall">
+        <item name="android:textColor">@color/primary</item>
     </style>
 
     <style name="TextViewSecondaryLight.White.Caption" parent="TextAppearance.Caption">
@@ -52,6 +63,10 @@
         <item name="android:textColor">@color/secondaryLight</item>
     </style>
 
+    <style name="TextViewSecondaryLight.White.Subtitle1" parent="TextAppearance.Subtitle1">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
     <style name="TextViewSecondaryLightBody1" parent="TextAppearance.Body1">
         <item name="android:textColor">@color/secondaryLight</item>
     </style>
@@ -64,6 +79,9 @@
         <item name="android:textColor">@color/secondaryLight</item>
     </style>
 
+    <style name="TextViewSecondaryLight.Primary.Body1" parent="TextAppearance.Body1">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
 
     <style name="TextViewGreen500.H7" parent="TextAppearance.H7Headline">
         <item name="android:textColor">@color/green500</item>
@@ -85,6 +103,10 @@
         <item name="android:textColor">@color/secondaryLight</item>
     </style>
 
+    <style name="TextViewSecondaryLight.White.H4" parent="TextAppearance.H4Headline">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
+
     <style name="TextViewSecondaryLight.Gray500Dark.Subtitle2" parent="TextAppearance.Subtitle2">
         <item name="android:textColor">@color/secondaryLight</item>
     </style>
@@ -95,7 +117,6 @@
 
     <style name="TextViewBorder.JawSide.Subtitle2" parent="TextAppearance.Subtitle2">
         <item name="android:textColor">@color/border</item>
-        <item name="android:background">@color/white</item>
     </style>
 
     <style name="TextViewGray.Subtitle2" parent="TextAppearance.Subtitle2">
@@ -114,6 +135,10 @@
         <item name="android:textColor">@color/primary</item>
     </style>
 
+    <style name="TextViewPrimary.White.Body2" parent="TextAppearance.Body2">
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
     <style name="TextViewBodyText.Body1" parent="TextAppearance.Body1">
         <item name="android:textColor">@color/bodyText500</item>
     </style>
@@ -128,6 +153,10 @@
 
     <style name="TextViewBodyText.ShareResultTips.CaptionSmall" parent="TextAppearance.CaptionSmall">
         <item name="android:textColor">@color/bodyText500</item>
+    </style>
+
+    <style name="TextViewGray900.GrayDark.Caption" parent="TextAppearance.Caption">
+        <item name="android:textColor">@color/gray900</item>
     </style>
 
     <style name="TextViewBodyText.Caption" parent="TextAppearance.Caption">
@@ -155,6 +184,10 @@
         <item name="android:textColor">@color/textColor</item>
     </style>
 
+    <style name="TextViewTextColor.Body1" parent="TextAppearance.Body1">
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
     <style name="TextViewGray500.Body1.Selector" parent="TextAppearance.Body1">
         <item name="android:textColor">@color/state_question_choice_text_view</item>
         <item name="android:enabled">false</item>
@@ -174,7 +207,7 @@
         <item name="android:textColor">@color/green500</item>
     </style>
 
-    <style name="TextViewGreen500.CaptionXSmall.Selector" parent="TextAppearance.CaptionXSmall">
+    <style name="TextViewGreen500.Caption.Selector" parent="TextAppearance.Caption">
         <item name="android:textColor">@color/state_checkup_problem_title_text_view</item>
     </style>
 
@@ -235,6 +268,12 @@
         <item name="backgroundTint">@color/green500</item>
     </style>
 
+    <style name="ButtonActive" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:textAppearance">@style/TextAppearance.H7Headline</item>
+        <item name="backgroundTint">@color/primary</item>
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
     <style name="StateStrokeToothIndicator" parent="@style/Widget.MaterialComponents.CardView">
         <item name="strokeColor">@color/state_question_indicator_card_view</item>
         <item name="cardBackgroundColor">@color/white</item>
@@ -246,11 +285,6 @@
         <item name="backgroundTint">@color/white</item>
     </style>
 
-    <style name="ButtonActive" parent="Widget.MaterialComponents.Button.UnelevatedButton">
-        <item name="android:textAppearance">@style/TextAppearance.H7Headline</item>
-        <item name="backgroundTint">@color/primary</item>
-        <item name="android:textColor">@color/textColor</item>
-    </style>
     // ProgressBar
 
     // Card View
@@ -273,6 +307,10 @@
     <style name="CardViewWhiteningCheckupResult" parent="@style/Widget.MaterialComponents.CardView">
         <item name="strokeColor">@color/gray50</item>
         <item name="strokeWidth">5dp</item>
+    </style>
+
+    <style name="CardViewCheckupInstruction" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/white</item>
     </style>
 
     <style name="CardViewCheckupHistory.Parent" parent="@style/Widget.MaterialComponents.CardView">
@@ -331,6 +369,10 @@
         <item name="strokeColor">@color/primaryLight200</item>
     </style>
 
+    <style name="CardViewQuestionLogo" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/white</item>
+    </style>
+
     <style name="CardViewUnchecked" parent="Widget.MaterialComponents.CardView">
         <item name="strokeWidth">1dp</item>
         <item name="strokeColor">@color/state_question_indicator_card_view</item>
@@ -378,6 +420,14 @@
 
     <style name="PageBackground.PrimaryGradiant" parent="Widget.MaterialComponents.CardView">
         <item name="android:background">@drawable/ic_gradiant_background</item>
+    </style>
+
+    <style name="PageBackground.SecondaryLight.Gray500Dark" parent="Widget.MaterialComponents.CardView">
+        <item name="android:background">@color/secondaryLight</item>
+    </style>
+
+    <style name="PageBackground.Blur.Gray500Dark" parent="Widget.MaterialComponents.CardView">
+        <item name="android:background">@color/secondaryLight</item>
     </style>
 
     // Floating action button

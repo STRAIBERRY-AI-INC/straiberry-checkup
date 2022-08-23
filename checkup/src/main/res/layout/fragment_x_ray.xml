@@ -44,11 +44,61 @@
             <View
                 android:id="@+id/frameLayoutUploadFile"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="245dp"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="49dp"
+                android:layout_marginEnd="28dp"
+                android:alpha="0.7"
+                android:background="@drawable/ic_upload_file_area"
                 android:clickable="true"
                 android:focusable="true"
-                app:layout_constraintTop_toTopOf="@id/textViewTitle" />
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutInvalidOpgFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="49dp"
+                android:layout_marginEnd="28dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textViewInvalidOpgFileError"
+                    style="@style/TextViewBlack.Body1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="27dp"
+                    android:layout_marginBottom="48dp"
+                    android:gravity="center"
+                    android:text="@string/no_valid_opg_image_is_detected_nplease_try_with_another_image"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/invalidFileAnimation"
+                    android:layout_width="88dp"
+                    android:layout_height="88dp"
+                    android:layout_marginBottom="41dp"
+                    app:layout_constraintBottom_toTopOf="@id/textViewInvalidOpgFileError"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/invalid_file_error" />
+
+                <View
+                    android:id="@+id/frameLayoutInvalidOpg"
+                    android:layout_width="match_parent"
+                    android:layout_height="328dp"
+                    android:alpha="0.7"
+                    android:background="@drawable/ic_invalid_opg_file_area"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/uploadAnimation"
@@ -67,11 +117,11 @@
                 android:id="@+id/finishUploadAnimation"
                 android:layout_width="145dp"
                 android:layout_height="145dp"
-                android:layout_marginTop="70dp"
+                android:layout_marginBottom="50dp"
                 android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@id/buttonShowResult"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewTitle"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="false"
                 app:lottie_rawRes="@raw/animation_done_uploading" />
@@ -107,7 +157,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="27dp"
-                android:fontFamily="@font/bold"
                 android:gravity="center"
                 android:text="@string/upload_x_ray_description"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -174,8 +223,8 @@
                 android:layout_marginBottom="48dp"
                 android:background="@drawable/circle_secondary"
                 android:elevation="8dp"
-                android:visibility="gone"
                 android:src="@drawable/ic_round_arrow_forward_24"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -218,15 +267,16 @@
 
     <TextView
         android:id="@+id/textViewBack"
-        style="@style/TextViewWhite.Subtitle1"
+        style="@style/TextViewWhite.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="0.8"
         android:fontFamily="@font/regular"
-        android:paddingStart="41dp"
+        android:elevation="15dp"
         android:paddingTop="15dp"
         android:paddingEnd="41dp"
         android:paddingBottom="15dp"
+        android:paddingStart="28dp"
         android:text="@string/back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

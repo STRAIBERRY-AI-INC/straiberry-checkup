@@ -7,7 +7,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.text.layoutDirection
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
@@ -16,18 +16,21 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.straiberry.android.checkup.R
 import com.straiberry.android.checkup.checkup.domain.model.DentalIssueQuestionsModel
 import com.straiberry.android.checkup.checkup.presentation.view.questions.FragmentCheckupQuestion.Companion.AllQuestions
+import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.FRONT_JAW
+import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.LOWER_JAW
+import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.UPPER_JAW
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.*
 import com.straiberry.android.checkup.databinding.FragmentCheckupQuestionBinding
-import com.straiberry.android.common.base.*
 import com.straiberry.android.common.custom.spotlight.OnTargetListener
 import com.straiberry.android.common.custom.spotlight.ShowCasePosition
 import com.straiberry.android.common.custom.spotlight.Spotlight
 import com.straiberry.android.common.custom.spotlight.Target
 import com.straiberry.android.common.custom.spotlight.shape.Circle
 import com.straiberry.android.common.extensions.*
+import com.straiberry.android.common.helper.FirebaseAppEvents
 import com.straiberry.android.common.model.JawPosition
+import com.straiberry.android.core.base.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
 
 
 enum class ButtonCancelFunctional { IsClose, IsCancel, IsBack }
@@ -40,8 +43,8 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
     val checkupGuideTourViewModel by viewModel<CheckupGuideTourViewModel>()
     val checkupQuestionViewModel by activityViewModels<CheckupQuestionViewModel>()
     val chooseCheckupTypeViewModel by activityViewModels<ChooseCheckupTypeViewModel>()
-    private val remoteDentalIssueViewModel by viewModel<RemoteDentalIssueViewModel>()
-    private val dentalIssuesViewModel by viewModel<DentalIssuesViewModel>()
+    val remoteDentalIssueViewModel by viewModel<RemoteDentalIssueViewModel>()
+    val dentalIssuesViewModel by viewModel<DentalIssuesViewModel>()
 
     var isSpotlightShowing = false
 
@@ -94,8 +97,6 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
         disableAllTooth(teethList)
         // Hide all completed tooth
         hideAllSelectedTooth()
-        // Check for first page if sub answer is selected
-        moveQuestionTitleBox(ZERO)
         // Show last selected indicator witch is incomplete
         indicatorList[lastSelectedTooth].visibleWithAnimation()
     }
@@ -208,7 +209,7 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
         // Check for device direction and calculate the x for indicator
         // If layout direction is rtl then indicator must be in start of question box
         // otherwise indicator must be at the end of question box
-        val measureX = if (Locale.getDefault().layoutDirection == LayoutDirection.LTR)
+        val measureX = if (ViewCompat.getLayoutDirection(binding.root) == LayoutDirection.LTR)
             (binding.indicator.width / 2)
         else
             -(binding.cardViewQuestionTitle.width - binding.indicator.width / 2)
@@ -234,7 +235,7 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
         // Check for device direction and calculate the x for indicator
         // If layout direction is rtl then indicator must be in start of question box
         // otherwise indicator must be at the end of question box
-        val measureX = if (Locale.getDefault().layoutDirection == LayoutDirection.LTR)
+        val measureX = if (ViewCompat.getLayoutDirection(binding.root) == LayoutDirection.LTR)
             (binding.indicator.width / 2)
         else
             -(binding.cardViewQuestionTitle.width - binding.indicator.width / 2)
@@ -377,7 +378,7 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
                 super.onPageSelected(position)
                 // Based on selected page move question box if
                 // sub answer is selected
-                moveQuestionTitleBox(position)
+                //moveQuestionTitleBox(position)
                 // Change title based on page position
                 binding.textViewQuestionTitle.apply {
                     alpha = ZERO_ALPHA
@@ -398,37 +399,38 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
     /** Selected tooth gets an elevation and move the indicator */
     fun selectTooth() {
         teethList.forEachIndexed { index, imageButton ->
-            imageButton.onClick {
-                // Reset all sub answers
-                checkupQuestionViewModel.resetSubAnswer()
-                inactiveTooth(teethList)
-                showAllSelectedTooth()
-                animateImageButtonNext(true)
-                showHideDone(false)
-                activeIndicator(index)
-                checkupQuestionViewModel.resetAnswer()
-                hideAllEditDeleteLayout()
-                hideReselectedTooth()
-                isEditAndDeleteLayoutVisible = false
-                lastSelectedTooth = index
-                isUpperJawSelected = index <= 15
-                binding.apply {
-                    imageButtonGo.visible()
-                    layoutDone.gone()
+            if (listOfSelectedTeeth.contains(index).not())
+                imageButton.onClick {
+                    // Reset all sub answers
+                    checkupQuestionViewModel.resetSubAnswer()
+                    inactiveTooth(teethList)
+                    showAllSelectedTooth()
+                    animateImageButtonNext(true)
+                    showHideDone(false)
+                    activeIndicator(index)
+                    checkupQuestionViewModel.resetAnswer()
+                    hideAllEditDeleteLayout()
+                    hideReselectedTooth()
+                    isEditAndDeleteLayoutVisible = false
+                    lastSelectedTooth = index
+                    isUpperJawSelected = index <= 15
+                    binding.apply {
+                        imageButtonGo.visible()
+                        layoutDone.gone()
+                    }
+                    if (isSpotlightShowing) {
+                        val posXY = IntArray(NUMBER_OF_INT_ARRAY)
+                        teethList[lastSelectedTooth].getLocationOnScreen(posXY)
+                        createGuideTarget(posXY.first().toFloat(), posXY.last().toFloat())
+                    }
+                    animateToothScaleUp(imageButton)
+                    // Got to next guide tour
+                    if (isSpotlightShowing)
+                        spotLight.show(1)
+                    // If no tooth is selected then change button cancel to "back"
+                    if (listOfSelectedTeeth.isNotEmpty())
+                        setupButtonCancel(ButtonCancelFunctional.IsBack)
                 }
-                if (isSpotlightShowing) {
-                    val posXY = IntArray(NUMBER_OF_INT_ARRAY)
-                    teethList[lastSelectedTooth].getLocationOnScreen(posXY)
-                    createGuideTarget(posXY.first().toFloat(), posXY.last().toFloat())
-                }
-                animateToothScaleUp(imageButton)
-                // Got to next guide tour
-                if (isSpotlightShowing)
-                    spotLight.show(1)
-                // If no tooth is selected then change button cancel to "back"
-                if (listOfSelectedTeeth.isNotEmpty())
-                    setupButtonCancel(ButtonCancelFunctional.IsBack)
-            }
         }
     }
 
@@ -616,10 +618,8 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
         layoutEditDeleteList[element].hideWithAnimation()
         // Scale down deleted tooth
         animateToothScaleDown(teethList[element])
-        // Check if user comes from dental issue
-        if (chooseCheckupTypeViewModel.submitStateIsComeFromDentalIssue.value!!)
         // Delete dental issue if its questions
-            deleteDentalIssue(element)
+        deleteDentalIssue(element)
         // Hide deleted tooth indicator
         indicatorList[element].apply {
             isSelected = false
@@ -628,6 +628,8 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
         // If list of selected tooth is empty then hide "Done" layout
         if (listOfSelectedTeeth.isEmpty())
             showHideDone(false)
+
+        selectTooth()
     }
 
 
@@ -691,11 +693,6 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
     override fun deleteDentalIssue(toothId: Int) {
         if (chooseCheckupTypeViewModel.submitStateIsComeFromDentalIssue.value!!) {
             dentalIssuesViewModel.deleteDentalIssues(toothId)
-            dentalIssuesViewModel.submitStateDeleteDentalIssues.observe(viewLifecycleOwner, {
-                // Delete dental issue in remote
-                if (it is ReadableSuccess)
-                    remoteDeleteDentalIssue(it.data)
-            })
         }
     }
 
@@ -734,6 +731,9 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
     override fun remoteDeleteDentalIssue(toothId: Int) {
         if (chooseCheckupTypeViewModel.submitStateIsComeFromDentalIssue.value!!) {
             remoteDentalIssueViewModel.remoteDeleteDentalIssue(toothId)
+            remoteDentalIssueViewModel.submitStateDeleteDentalIssue.observe(viewLifecycleOwner) {
+                showHideLoading(it == Loading)
+            }
         }
     }
 
@@ -747,6 +747,9 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
                 cause = checkupQuestionViewModel.getAnswerTwo(lastSelectedTooth),
                 pain = checkupQuestionViewModel.getAnswerThree(lastSelectedTooth)
             )
+            remoteDentalIssueViewModel.submitStateUpdateDentalIssue.observe(viewLifecycleOwner) {
+                showHideLoading(it == Loading)
+            }
         }
     }
 
@@ -760,17 +763,19 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
                 checkupQuestionViewModel.getAnswerThree(lastSelectedTooth)
             )
             remoteDentalIssueViewModel.submitStateAddDentalIssue.observe(viewLifecycleOwner, {
+                showHideLoading(it == Loading)
                 when (it) {
                     is Failure -> {
                     }
-                    Loading -> {}
+                    Loading -> {
+                    }
                     NotLoading -> {
                     }
                     is Success -> {
                         // Save in local
                         saveDentalIssue(it.data.toothId)
                         // Log and event when user created a dental issue
-                        //FirebaseAppEvents.onCreatedDentalIssue()
+                        FirebaseAppEvents.onCreatedDentalIssue()
                     }
                 }
             })
@@ -791,6 +796,14 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
                 remoteSaveDentalIssue()
             }
         }
+    }
+
+    fun showHideLoading(showLoading: Boolean) = if (showLoading) {
+        binding.buttonDoTheCheckup.goneWithAnimation()
+        binding.progressBar.visibleWithAnimation()
+    } else {
+        binding.buttonDoTheCheckup.visibleWithAnimation()
+        binding.progressBar.goneWithAnimation()
     }
 
     override fun hideQuestionBox() {
@@ -864,21 +877,20 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
         listOfSelectedTeeth.forEach {
             if (it in 3..12)
                 isFrontUpper = true
-            else if (it in 20..29)
+            else if (it in 20..28)
                 isFrontLower = true
             if (it in 0..2 || it in 13..15)
                 isUpper = true
-            if (it in 16..19 || it in 30..32)
+            if (it in 16..19 || it in 29..32)
                 isLower = true
         }
 
-        checkupQuestionViewModel.selectedJawForCheckup(
-            Triple(
-                if (isFrontUpper || isFrontLower) JawPosition.FrontTeeth else null,
-                if (isUpper || isFrontUpper) JawPosition.UpperJaw else null,
-                if (isLower || isFrontLower) JawPosition.LowerJaw else null
-            )
-        )
+        if (isFrontLower || isFrontUpper)
+            checkupQuestionViewModel.selectedJawForCheckup(FRONT_JAW, JawPosition.FrontTeeth)
+        if (isUpper || isFrontUpper)
+            checkupQuestionViewModel.selectedJawForCheckup(UPPER_JAW, JawPosition.UpperJaw)
+        if (isLower || isFrontLower)
+            checkupQuestionViewModel.selectedJawForCheckup(LOWER_JAW, JawPosition.LowerJaw)
     }
 
     companion object {

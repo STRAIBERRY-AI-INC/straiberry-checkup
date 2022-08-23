@@ -16,16 +16,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="61dp"
+        android:layout_marginTop="25dp"
         android:animateLayoutChanges="true"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutDayQuestion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="73dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="22dp"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -40,7 +40,6 @@
                 android:background="@android:color/transparent"
                 android:clickable="false"
                 android:src="@drawable/ic_round_check_circle_24"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -60,7 +59,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewAnswerOneSubAnswerOne"
                 style="@style/CardViewUnchecked"
-                android:layout_width="wrap_content"
+                android:layout_width="186dp"
                 android:layout_height="38dp"
                 android:layout_marginStart="35dp"
                 app:cardCornerRadius="33dp"
@@ -93,7 +92,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardViewAnswerOneSubAnswerTwo"
                 style="@style/CardViewUnchecked"
-                android:layout_width="wrap_content"
+                android:layout_width="186dp"
                 android:layout_height="38dp"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="7dp"

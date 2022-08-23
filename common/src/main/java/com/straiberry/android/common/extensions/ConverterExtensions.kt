@@ -301,22 +301,39 @@ fun Int.convertToJawPosition(): JawPosition {
     }
 }
 
-fun Int.convertToOralHygieneScore(): String {
-    return when {
-        this <= -26 -> "D-"
-        this <= -21 -> "D"
-        this <= -16 -> "D+"
-        this <= -11 -> "C-"
-        this <= -6 -> "C"
-        this <= -1 -> "C+"
-        this <= 4 -> "B-"
-        this <= 9 -> "B"
-        this <= 14 -> "B+"
-        this <= 19 -> "A-"
-        this <= 24 -> "A"
-        this <= 30 -> "A+"
-        else -> ""
-    }
+fun Int.convertToOralHygieneScore(isXray: Boolean = false): String {
+    return if (isXray)
+        when {
+            this <= -67 -> "D-"
+            this <= -55 -> "D"
+            this <= -42 -> "D+"
+            this <= -28 -> "C-"
+            this <= -14 -> "C"
+            this <= -1 -> "C+"
+            this <= 66 -> "A"
+            this <= 80 -> "A+"
+            this <= 14 -> "B-"
+            this <= 27 -> "B"
+            this <= 41 -> "B+"
+            this <= 54 -> "A-"
+            else -> ""
+        }
+    else
+        when {
+            this <= -26 -> "D-"
+            this <= -21 -> "D"
+            this <= -16 -> "D+"
+            this <= -11 -> "C-"
+            this <= -6 -> "C"
+            this <= -1 -> "C+"
+            this <= 4 -> "B-"
+            this <= 9 -> "B"
+            this <= 14 -> "B+"
+            this <= 19 -> "A-"
+            this <= 24 -> "A"
+            this <= 30 -> "A+"
+            else -> ""
+        }
 }
 
 fun Int.converterOralHygieneScore(): Int {

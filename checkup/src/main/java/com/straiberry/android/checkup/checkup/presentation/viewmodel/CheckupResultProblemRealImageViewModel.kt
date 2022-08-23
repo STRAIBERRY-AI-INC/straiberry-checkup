@@ -26,6 +26,11 @@ class CheckupResultProblemRealImageViewModel : ViewModel() {
     val submitStateToothWithProblemFrontTeeth: LiveData<ArrayList<Pair<Double, Double>>> =
         _submitStateToothWithProblemFrontTeeth
 
+    fun resetAll() {
+        _submitStateToothWithProblemUpperJaw.value = arrayListOf()
+        _submitStateToothWithProblemFrontTeeth.value = arrayListOf()
+        _submitStateToothWithProblemLowerJaw.value = arrayListOf()
+    }
 
     fun setToothWithProblemsUpperJaw(toothWithProblems: ArrayList<Pair<Double, Double>>) {
         _submitStateToothWithProblemUpperJaw.value = toothWithProblems

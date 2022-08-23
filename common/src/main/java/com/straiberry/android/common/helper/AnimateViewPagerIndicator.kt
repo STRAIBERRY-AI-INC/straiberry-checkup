@@ -11,7 +11,8 @@ import com.straiberry.android.common.extensions.dp
 class AnimateViewPagerIndicator(
     private val lastPage: Int,
     private val tabLayout: TabLayout,
-    private val imageButton: ImageButton
+    private val imageButton: ImageButton,
+    private val imageButtonGoToHomeSize: Int
 ) {
 
     companion object {
@@ -21,7 +22,6 @@ class AnimateViewPagerIndicator(
         private const val AnimationDurationForAlpha = 500L
         private const val FullAlpha = 1F
         private const val ZeroAlpha = 0F
-        private val ImageButtonGoToHomeSize = 58.dp
         private val TranslationXImageButtonGotToHome = (-75F).dp
         private const val TranslationXShow = 0f
         private val TranslationXHideTabIndicator = (20f).dp
@@ -68,7 +68,7 @@ class AnimateViewPagerIndicator(
             .duration = AnimationDurationForTranslation
         val animation = ResizeAnimation(
             imageButton,
-            ImageButtonGoToHomeSize, StartHeightZero, ImageButtonGoToHomeSize, StartWithZero, false
+            imageButtonGoToHomeSize, StartHeightZero, imageButtonGoToHomeSize, StartWithZero, false
         )
         animation.duration = AnimationDurationForButtonGo
         imageButton.startAnimation(animation)
@@ -93,10 +93,10 @@ class AnimateViewPagerIndicator(
             AnimationDurationForTranslation
         val animation = ResizeAnimation(
             imageButton,
-            ImageButtonGoToHomeSize,
-            ImageButtonGoToHomeSize,
-            ImageButtonGoToHomeSize,
-            ImageButtonGoToHomeSize,
+            imageButtonGoToHomeSize,
+            imageButtonGoToHomeSize,
+            imageButtonGoToHomeSize,
+            imageButtonGoToHomeSize,
             true
         )
         animation.duration = AnimationDurationForButtonGo

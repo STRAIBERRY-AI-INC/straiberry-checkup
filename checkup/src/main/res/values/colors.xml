@@ -6,6 +6,7 @@
     <color name="gray50">#C4C4C4</color>
     <color name="gray200Opacity60">#9AA1A1A1</color>
     <color name="blue100">#FFDCFFFC</color>
+    <color name="gray900">#393939</color>
 
     // Dark colors
     <color name="secondaryDark">#0A112D</color>

@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootLayout"
-    android:layout_width="117dp"
-    android:layout_height="46dp"
-    android:layout_marginEnd="7dp"
+    android:layout_width="138dp"
+    android:layout_height="70dp"
+    android:layout_marginEnd="8dp"
     android:layout_marginBottom="7dp">
 
     <View
@@ -14,8 +14,8 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardViewToothProblem"
         style="@style/CardViewCheckupProblemsUnchecked"
-        android:layout_width="117dp"
-        android:layout_height="46dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:stateListAnimator="@animator/selector_checkup_problem_elevation"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -29,39 +29,40 @@
 
             <ImageView
                 android:id="@+id/imageViewProblemIcon"
-                android:layout_width="22dp"
-                android:layout_height="25dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:layout_marginStart="13dp"
+                android:layout_marginTop="10dp"
                 android:src="@drawable/ic_cap"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textViewProblemTitle"
-                style="@style/TextViewGreen500.CaptionXSmall.Selector"
-                android:layout_width="wrap_content"
+                style="@style/TextViewGreen500.Caption.Selector"
+                android:layout_width="65dp"
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:fontFamily="@font/medium"
-                android:text="@string/tooth_sensitivity"
-                app:layout_constraintBottom_toBottomOf="@id/imageViewProblemIcon"
-                app:layout_constraintLeft_toRightOf="@id/imageViewProblemIcon"
-                app:layout_constraintRight_toRightOf="parent" />
+                android:layout_marginStart="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/textViewProblemCount"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textViewProblemCount"
-                style="@style/TextViewSecondaryLight.CaptionSmall.Selector"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
+                style="@style/TextViewTextColor.Body1"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/circle_secondary"
                 android:enabled="false"
                 android:fontFamily="@font/medium"
-                android:text="@string/tooth_problem_count"
-                app:layout_constraintBottom_toTopOf="@id/textViewProblemTitle"
-                app:layout_constraintLeft_toLeftOf="@id/textViewProblemTitle"
-                app:layout_constraintRight_toRightOf="@id/textViewProblemTitle"
-                app:layout_constraintTop_toTopOf="@id/imageViewProblemIcon" />
+                android:gravity="center"
+                app:layout_constraintBottom_toBottomOf="@id/imageViewProblemIcon"
+                app:layout_constraintEnd_toEndOf="@id/imageViewProblemIcon"
+                app:layout_constraintStart_toEndOf="@id/imageViewProblemIcon" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

@@ -5,19 +5,14 @@ import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupResu
 import io.mockk.MockKAnnotations
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.*
 
 @ExperimentalCoroutinesApi
 class CheckupResultProblemRealImageViewModelTest {
-    private val dispatcher = TestCoroutineDispatcher()
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
-
-    @get:Rule
-    val coroutineTestRule = CoroutineTestRule(dispatcher)
 
     private fun createViewModel() =
         CheckupResultProblemRealImageViewModel()

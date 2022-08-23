@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.straiberry.android.checkup.R
 import com.straiberry.android.checkup.checkup.data.networking.model.CheckupHistorySuccessResponse
 import com.straiberry.android.checkup.checkup.domain.model.CheckupResultSuccessModel
+import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.FRONT_JAW
 import com.straiberry.android.checkup.databinding.ItemCheckupHistoryBinding
 import com.straiberry.android.checkup.databinding.ItemCheckupHistoryDividerBinding
 import com.straiberry.android.checkup.databinding.ItemCheckupHistoryLoadingBinding
@@ -34,8 +35,8 @@ class CheckupHistoryAdapter(
         fun bind(item: CheckupHistorySuccessResponse.Data) {
             binding.textViewMonthAndDay.text = context.getString(
                 R.string.month_day,
-                item.createdAt.toDate()?.getDayFromDate(),
-                item.createdAt.toDate()?.getMonthFromDate()
+                item.createdAt.toDate(true)?.getDayFromDate(),
+                item.createdAt.toDate(true)?.getMonthFromDate()
             )
             binding.textViewCheckupType.text =
                 convertCheckupTypeToString(item.checkupType.toInt())
@@ -43,16 +44,6 @@ class CheckupHistoryAdapter(
             // If checkup type is whitening then hide oral hygiene score.
             // If checkup type is x-ray then hide whitening score
             when {
-                item.checkupType.toInt() == TEETH_WHITENING_TYPE -> {
-                    binding.apply {
-                        textViewWhiteningScore.visible()
-                        textViewWhiteningTitle.visible()
-                        imageViewWhitening.visible()
-                        textViewOralHygieneTitle.gone()
-                        cardViewOralHygieneScore.gone()
-                        imageViewOral.gone()
-                    }
-                }
                 item.checkupType.toInt() == XRAY_TYPE -> {
                     binding.apply {
                         textViewWhiteningScore.gone()
@@ -63,6 +54,25 @@ class CheckupHistoryAdapter(
                         imageViewOral.visible()
                     }
                 }
+                item.checkupType.toInt() == TEETH_WHITENING_TYPE -> {
+                    binding.apply {
+                        textViewWhiteningScore.visible()
+                        textViewWhiteningTitle.visible()
+                        imageViewWhitening.visible()
+                        textViewOralHygieneTitle.gone()
+                        cardViewOralHygieneScore.gone()
+                        imageViewOral.gone()
+                    }
+                }
+                item.images.count { it.imageType == FRONT_JAW.toString() } == 0 ->
+                    binding.apply {
+                        textViewWhiteningScore.gone()
+                        textViewWhiteningTitle.gone()
+                        imageViewWhitening.gone()
+                        textViewOralHygieneTitle.visible()
+                        cardViewOralHygieneScore.visible()
+                        imageViewOral.visible()
+                    }
                 else -> binding.apply {
                     textViewWhiteningScore.visible()
                     textViewWhiteningTitle.visible()
@@ -75,7 +85,7 @@ class CheckupHistoryAdapter(
             binding.textViewOralHygieneScore.text = item.overalScore
             binding.textViewWhiteningScore.text =
                 item.whiteningScore.toStringOrZero().toFloat().toInt().toString()
-            binding.textViewTime.text = item.createdAt.toDate()?.getTimeFromDate()
+            binding.textViewTime.text = item.createdAt.toDate(true)?.getTimeFromDate()
             binding.root.onClick { onCheckupClick(CheckupResultSuccessModel(item)) }
         }
     }
@@ -94,7 +104,7 @@ class CheckupHistoryAdapter(
     class ViewHolderDivider(val binding: ItemCheckupHistoryDividerBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: CheckupHistorySuccessResponse.Data) {
-            binding.textViewYear.text = item.createdAt.toDate()?.getYearFromDate()
+            binding.textViewYear.text = item.createdAt.toDate(true)?.getYearFromDate()
         }
     }
 
@@ -174,9 +184,9 @@ class CheckupHistoryAdapter(
      */
     fun add(dataListAddMore: List<CheckupHistorySuccessResponse.Data?>?) {
         dataListAddMore?.forEachIndexed { index, data ->
-            if (data!!.createdAt.toDate()?.getYearFromDate()?.toInt()!! < currentYear) {
+            if (data!!.createdAt.toDate(true)?.getYearFromDate()?.toInt()!! < currentYear) {
                 dataCheckupHistory?.add(CheckupHistory(data, Divider))
-                currentYear = data.createdAt.toDate()?.getYearFromDate()?.toInt()!!
+                currentYear = data.createdAt.toDate(true)?.getYearFromDate()?.toInt()!!
             }
             dataCheckupHistory?.add(CheckupHistory(data, Item))
         }

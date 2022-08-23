@@ -59,7 +59,6 @@
             style="@style/CardViewTopCornerRadius"
             android:layout_width="match_parent"
             android:layout_height="481dp"
-            android:paddingBottom="50dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent">
 
@@ -142,7 +141,6 @@
                         android:button="@drawable/selector_radio_button_check_up"
                         android:fontFamily="@font/regular"
                         android:paddingStart="10dp"
-                        android:visibility="gone"
                         android:paddingEnd="10dp"
                         android:text="@string/x_rays" />
 

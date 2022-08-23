@@ -14,14 +14,17 @@ import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupQues
 import com.straiberry.android.checkup.databinding.FragmentCheckupQuestionBinding
 import com.straiberry.android.checkup.di.IsolatedKoinComponent
 import com.straiberry.android.checkup.di.StraiberrySdk
-import com.straiberry.android.common.base.*
 import com.straiberry.android.common.custom.spotlight.OnSpotlightListener
 import com.straiberry.android.common.custom.spotlight.ShowCasePosition
 import com.straiberry.android.common.custom.spotlight.Spotlight
 import com.straiberry.android.common.custom.spotlight.Target
 import com.straiberry.android.common.custom.spotlight.shape.Circle
 import com.straiberry.android.common.custom.spotlight.shape.Oval
-import com.straiberry.android.common.extensions.*
+import com.straiberry.android.common.extensions.convertToothIdToDental
+import com.straiberry.android.common.extensions.dp
+import com.straiberry.android.common.extensions.onClick
+import com.straiberry.android.common.extensions.subscribe
+import com.straiberry.android.core.base.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -189,13 +192,7 @@ class FragmentCheckupQuestion : CheckupQuestion(), IsolatedKoinComponent {
             binding.buttonDoTheCheckup.onClick {
                 // Check if user comes from dental issue
                 if (chooseCheckupTypeViewModel.submitStateIsComeFromDentalIssue.value!!)
-
-                // Check if user added a dental issue, if true then show bottom sheet
-                    if (isUserAddedADentalIssue)
-                    //BottomSheetAppreciateAnswers().showBottomSheet(childFragmentManager)
-                    else
-                        findNavController().popBackStack()
-
+                    findNavController().popBackStack()
                 // If false then do the checkup
                 else {
                     doTheCheckup()
@@ -205,6 +202,13 @@ class FragmentCheckupQuestion : CheckupQuestion(), IsolatedKoinComponent {
                     }
                 }
             }
+
+            dentalIssuesViewModel.submitStateDeleteDentalIssues.observe(viewLifecycleOwner, {
+                // Delete dental issue in remote
+                if (it is ReadableSuccess) {
+                    remoteDeleteDentalIssue(it.data)
+                }
+            })
 
             getAllDentalIssues()
         }.root
@@ -248,14 +252,6 @@ class FragmentCheckupQuestion : CheckupQuestion(), IsolatedKoinComponent {
             viewLifecycleOwner,
             ::handleViewStateAddToothToCheckup
         )
-    }
-
-    private fun showHideLoading(showLoading: Boolean) = if (showLoading) {
-        binding.buttonDoTheCheckup.goneWithAnimation()
-        binding.progressBar.visibleWithAnimation()
-    } else {
-        binding.buttonDoTheCheckup.visibleWithAnimation()
-        binding.progressBar.goneWithAnimation()
     }
 
 

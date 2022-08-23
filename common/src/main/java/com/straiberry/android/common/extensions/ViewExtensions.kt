@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -182,6 +183,11 @@ fun getScreenWidth(): Int {
 
 fun getScreenHeight(): Int {
     return Resources.getSystem().displayMetrics.heightPixels
+}
+
+fun Context.isDarkMode(): Boolean {
+    val darkModeFlag = this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+    return darkModeFlag == Configuration.UI_MODE_NIGHT_YES
 }
 
 typealias EndOfAnimation = () -> Unit

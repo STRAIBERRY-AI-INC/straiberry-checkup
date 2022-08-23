@@ -8,10 +8,10 @@ import com.straiberry.android.checkup.checkup.domain.model.DentalIssueQuestionsM
 import com.straiberry.android.checkup.checkup.domain.usecase.AddDentalIssueUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.DeleteDentalIssueUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.GetAllDentalIssueUseCase
-import com.straiberry.android.common.base.Readable
-import com.straiberry.android.common.base.ReadableFailure
-import com.straiberry.android.common.base.ReadableSuccess
-import com.straiberry.android.common.network.CoroutineContextProvider
+import com.straiberry.android.core.base.Readable
+import com.straiberry.android.core.base.ReadableFailure
+import com.straiberry.android.core.base.ReadableSuccess
+import com.straiberry.android.core.network.CoroutineContextProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 

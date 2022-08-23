@@ -3,20 +3,21 @@ package com.straiberry.android.checkup
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.straiberry.android.checkup.checkup.domain.model.AddImageToCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.domain.model.UpdateImageInCheckupSuccessModel
-import com.straiberry.android.checkup.checkup.domain.usecase.AddImageToCheckupUseCase
-import com.straiberry.android.checkup.checkup.domain.usecase.UpdateImageInCheckupUseCase
+import com.straiberry.android.checkup.checkup.domain.usecase.AddImageToCheckupSdkUseCase
+import com.straiberry.android.checkup.checkup.domain.usecase.UpdateImageInCheckupSdkUseCase
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupSubmitImageViewModel
-import com.straiberry.android.common.base.Failure
-import com.straiberry.android.common.base.Loading
-import com.straiberry.android.common.base.NotLoading
-import com.straiberry.android.common.base.Success
-import com.straiberry.android.common.network.CoroutineContextProvider
+import com.straiberry.android.core.base.Failure
+import com.straiberry.android.core.base.Loading
+import com.straiberry.android.core.base.NotLoading
+import com.straiberry.android.core.base.Success
+import com.straiberry.android.core.network.CoroutineContextProvider
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -26,7 +27,7 @@ import java.io.File
 
 @ExperimentalCoroutinesApi
 class CheckupSubmitImageViewModelTest {
-    private val dispatcher = TestCoroutineDispatcher()
+    private val dispatcher = StandardTestDispatcher()
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
@@ -35,10 +36,10 @@ class CheckupSubmitImageViewModelTest {
     val coroutineTestRule = CoroutineTestRule(dispatcher)
 
     @RelaxedMockK
-    lateinit var addImageToCheckupUseCase: AddImageToCheckupUseCase
+    lateinit var addImageToCheckupUseCase: AddImageToCheckupSdkUseCase
 
     @RelaxedMockK
-    lateinit var updateImageInCheckupUseCase: UpdateImageInCheckupUseCase
+    lateinit var updateImageInCheckupUseCase: UpdateImageInCheckupSdkUseCase
 
     private fun createViewModel() =
         CheckupSubmitImageViewModel(
@@ -60,43 +61,21 @@ class CheckupSubmitImageViewModelTest {
     @Test
     fun `When checkup id is empty, then state should be not loading`() = runTest {
         val viewModel = createViewModel()
-        viewModel.addImageToCheckup("", File(""), 0, 0)
-        viewModel.updateImageInCheckup("", File(""), 0, 0)
-        Assert.assertEquals(NotLoading, viewModel.submitStateAddImage.value)
-        Assert.assertEquals(NotLoading, viewModel.submitStateUpdateImage.value)
+        viewModel.addFrontImageToCheckup("", File(""), 0)
+        viewModel.updateFrontImageInCheckup("", File(""), 0)
+        Assert.assertEquals(NotLoading, viewModel.submitStateAddFrontImageToCheckup.value)
+        Assert.assertEquals(NotLoading, viewModel.submitStateUpdateFrontImageInCheckup.value)
     }
 
     @Test
     fun `When checkup id is not empty, then state should be loading`() = runTest {
         val viewModel = createViewModel()
-        viewModel.submitStateAddImage.observeForever {
-            viewModel.addImageToCheckup("1", File(""), 0, 0)
-            Assert.assertEquals(Loading, viewModel.submitStateAddImage.value)
-        }
-
-        viewModel.submitStateUpdateImage.observeForever {
-            viewModel.updateImageInCheckup("1", File(""), 0, 0)
-            Assert.assertEquals(NotLoading, viewModel.submitStateUpdateImage.value)
-        }
+        viewModel.addFrontImageToCheckup("1", File(""), 0)
+        viewModel.updateFrontImageInCheckup("1", File(""), 0)
+        Assert.assertEquals(Loading, viewModel.submitStateAddFrontImageToCheckup.value)
+        Assert.assertEquals(Loading, viewModel.submitStateUpdateFrontImageInCheckup.value)
     }
 
-
-    @Test
-    fun `When image is uploaded, then state should be success`() =
-        runTest {
-            coEvery {
-                addImageToCheckupUseCase.execute(
-                    checkupIdMultipartBody, imageFile,
-                    imageTypeMultipartBody, isLastImageMultiPartBody
-                )
-            } returns AddImageToCheckupSuccessModel(0, 0)
-
-            val viewModel = createViewModel()
-            viewModel.submitStateAddImage.observeForever {
-                viewModel.addImageToCheckup("1", File(""), 0, 0)
-                Assert.assertEquals(true, (viewModel.submitStateAddImage.value is Success))
-            }
-        }
 
     @Test
     fun `When image is not uploaded, then state should be failure`() =
@@ -106,13 +85,57 @@ class CheckupSubmitImageViewModelTest {
                     checkupIdMultipartBody, imageFile,
                     imageTypeMultipartBody, isLastImageMultiPartBody
                 )
-            }.throws(Exception())
+            } throws Exception()
 
             val viewModel = createViewModel()
-            viewModel.addImageToCheckup("1", File(""), 0, 0)
-            Assert.assertEquals(true, (viewModel.submitStateAddImage.value is Failure))
+            viewModel.addUpperImageToCheckup("1", File(""), 0)
+            delay(100)
+            Assert.assertEquals(
+                true,
+                (viewModel.submitStateAddUpperImageToCheckup.value is Failure)
+            )
         }
 
+    @Test
+    fun `When image is uploaded, then state should be success`() =
+        runTest {
+            val viewModel = createViewModel()
+            coEvery {
+                addImageToCheckupUseCase.execute(
+                    checkupIdMultipartBody, imageFile,
+                    imageTypeMultipartBody, isLastImageMultiPartBody
+                )
+            } returns AddImageToCheckupSuccessModel(0, 0)
+
+            viewModel.addFrontImageToCheckup("1", File(""), 0)
+            delay(100)
+            Assert.assertEquals(
+                true,
+                (viewModel.submitStateAddFrontImageToCheckup.value is Success)
+            )
+        }
+
+
+    @Test
+    fun `When image is not updated, then state should be failure`() =
+        runTest {
+            coEvery {
+                updateImageInCheckupUseCase.execute(
+                    checkupIdMultipartBody, imageFile,
+                    imageTypeMultipartBody, 0
+                )
+            } throws Exception()
+
+            val viewModel = createViewModel()
+            viewModel.updateFrontImageInCheckup("1", File(""), 0)
+            delay(100)
+            Assert.assertEquals(
+                true,
+                viewModel.submitStateUpdateFrontImageInCheckup.value is Failure
+            )
+
+
+        }
 
     @Test
     fun `When image is updated, then state should be success`() =
@@ -125,26 +148,12 @@ class CheckupSubmitImageViewModelTest {
             } returns UpdateImageInCheckupSuccessModel(true)
 
             val viewModel = createViewModel()
-            viewModel.submitStateUpdateImage.observeForever {
-                viewModel.updateImageInCheckup("1", File(""), 0, 0)
-                Assert.assertEquals(true, (it is Success))
-            }
-
-        }
-
-    @Test
-    fun `When image is not updated, then state should be failure`() =
-        runTest {
-            coEvery {
-                updateImageInCheckupUseCase.execute(
-                    checkupIdMultipartBody, imageFile,
-                    imageTypeMultipartBody, 0
-                )
-            }.throws(Exception())
-
-            val viewModel = createViewModel()
-            viewModel.updateImageInCheckup("1", File(""), 0, 0)
-            Assert.assertEquals(true, (viewModel.submitStateUpdateImage.value is Failure))
+            viewModel.updateFrontImageInCheckup("1", File(""), 0)
+            delay(100)
+            Assert.assertEquals(
+                true,
+                (viewModel.submitStateUpdateFrontImageInCheckup.value is Success)
+            )
         }
 
     companion object {

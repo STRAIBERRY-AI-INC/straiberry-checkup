@@ -454,39 +454,39 @@
     <string name="accept_in_persian" />
     <string name="please_try_again_in_a_few_minutes">Please try again in\n a few minutes.</string>
     <string name="no_toothache_nwith_regular_checkup">No toothache\nwith Regular follow ups</string>
-    <string name="tap_here_and_select_a_checkup" >Tap Here\nand Select a checkup</string>
-    <string name="tap_here_and_run_checkup" >Tap Here\nand run checkup</string>
-    <string name="tap_here_to_see_your_checkup_history" >Tap Here\nto see your checkup history</string>
-    <string name="tap_here_to_see_other_peoples_result" >Tap Here\nto see other people\’s result.</string>
-    <string name="you_can_scroll_the_charts_to_see_others" >You can scroll\nthe charts to see others.</string>
-    <string name="you_can_see_oral_hygiene_score" >You can see\nOral Hygiene\'s score</string>
-    <string name="tap_here_change_calender_layout" >Tap here\nchange the calender layout.</string>
-    <string name="tap_here_create_a_new_event" >Tap here\ncreate a new event.</string>
-    <string name="tap_here_and_select_a_painful_teeth" >Tap here\nand select a painful teeth</string>
-    <string name="tap_here_and_unselect_the_tooth" >Tap here\nand unselect the tooth</string>
-    <string name="tap_here_to_go_to_the_questions" >Tap here\nto got to the questions</string>
-    <string name="tap_here_and_select_an_answer" >Tap here\nand select an answer</string>
-    <string name="tap_here_to_close_the_checkup_process" >Tap here\nto close the checkup process</string>
-    <string name="tap_here_to_edit_or_delete_pain_tooth" >Tap here\nto edit and delete pain tooth</string>
-    <string name="tap_here_to_continue_checkup_process" >Tap here\nto continue the checkup process</string>
-    <string name="tap_here_enter_a_name" >Tap here\nenter a name</string>
-    <string name="you_can_see_the_change_on_chart_if_select_a_label" >You can see the change\non chart if select a label</string>
-    <string name="tap_here_make_your_event_done_or_undone" >Tap here\nmake your event done or undone</string>
-    <string name="you_can_see_done_events" >You can see done events</string>
-    <string name="tap_here_can_edit_or_delete_your_events" >Hold here\ncan edit or delete your events</string>
-    <string name="tap_here_and_select_a_question" >Tap here\nand select a question</string>
-    <string name="you_can_see_status_of_answers" >You can see status of answers</string>
-    <string name="tap_here_and_answer_the_questions" >Tap here\nand answer the questions</string>
-    <string name="tap_here_to_upload_tooth_photos" >Tap here\nto upload tooth photos</string>
+    <string name="tap_here_and_select_a_checkup">Tap Here\nand Select a checkup</string>
+    <string name="tap_here_and_run_checkup">Tap Here\nand run checkup</string>
+    <string name="tap_here_to_see_your_checkup_history">Tap Here\nto see your checkup history</string>
+    <string name="tap_here_to_see_other_peoples_result">Tap Here\nto see other people\’s result.</string>
+    <string name="you_can_scroll_the_charts_to_see_others">You can scroll\nthe charts to see others.</string>
+    <string name="you_can_see_oral_hygiene_score">You can see\nOral Hygiene\'s score</string>
+    <string name="tap_here_change_calender_layout">Tap here\nchange the calender layout.</string>
+    <string name="tap_here_create_a_new_event">Tap here\ncreate a new event.</string>
+    <string name="tap_here_and_select_a_painful_teeth">Tap here\nand select a painful teeth</string>
+    <string name="tap_here_and_unselect_the_tooth">Tap here\nand unselect the tooth</string>
+    <string name="tap_here_to_go_to_the_questions">Tap here\nto got to the questions</string>
+    <string name="tap_here_and_select_an_answer">Tap here\nand select an answer</string>
+    <string name="tap_here_to_close_the_checkup_process">Tap here\nto close the checkup process</string>
+    <string name="tap_here_to_edit_or_delete_pain_tooth">Tap here\nto edit and delete pain tooth</string>
+    <string name="tap_here_to_continue_checkup_process">Tap here\nto continue the checkup process</string>
+    <string name="tap_here_enter_a_name">Tap here\nenter a name</string>
+    <string name="you_can_see_the_change_on_chart_if_select_a_label">You can see the change\non chart if select a label</string>
+    <string name="tap_here_make_your_event_done_or_undone">Tap here\nmake your event done or undone</string>
+    <string name="you_can_see_done_events">You can see done events</string>
+    <string name="tap_here_can_edit_or_delete_your_events">Hold here\ncan edit or delete your events</string>
+    <string name="tap_here_and_select_a_question">Tap here\nand select a question</string>
+    <string name="you_can_see_status_of_answers">You can see status of answers</string>
+    <string name="tap_here_and_answer_the_questions">Tap here\nand answer the questions</string>
+    <string name="tap_here_to_upload_tooth_photos">Tap here\nto upload tooth photos</string>
     <string name="you_should_put_your_main_camera_in_front_of_your_mouth_to_detect_and_take_a_photo">You should put your main camera in\nfront of your mouth to detect\nand take a photo.</string>
     <string name="by_filling_this_part_you_will_be_able_to_more_information_on_the_charts_on_the_home_page">By filling this part, you will be able\nto see more information on\nthe charts on the homepage!</string>
     <string name="language">Language</string>
-    <string name="english">English</string>
+    <string name="english" translatable="false">English</string>
     <string name="german">German</string>
-    <string name="deutsch">Deutsch</string>
+    <string name="deutsch" translatable="false">Deutsch</string>
     <string name="persian">Persian</string>
-    <string name="persian_fa">فارسی</string>
-    <string name="unknown">Unknown</string>
+    <string name="persian_fa" translatable="false">فارسی</string>
+    <string name="unknown" translatable="false">Unknown</string>
     <string name="this_image_is_too_dark_please_take_another_one">The taken photo is dark. Please take another image in a brighter environment.</string>
     <string name="only_this_event">Only this event</string>
     <string name="this_and_all_future_events">This and all future events</string>
@@ -495,4 +495,8 @@
     <string name="edit_event">Save events?</string>
     <string name="delete_event">Delete events?</string>
     <string name="x_rays">X-rays</string>
+    <string name="do_you_want_to_speak_with_online_support">Do you want to\nspeak with online support?</string>
+    <string name="show_hide_password" translatable="false">show/hide password</string>
+    <string name="edit_text" translatable="false">edit text</string>
+
 </resources>

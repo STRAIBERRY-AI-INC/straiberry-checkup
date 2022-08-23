@@ -16,6 +16,13 @@ interface CheckupSdkRepo {
         lastImage: MultipartBody.Part,
     ): AddImageToCheckupSuccessModel
 
+    suspend fun updateImageInCheckup(
+        checkupId: MultipartBody.Part,
+        image: MultipartBody.Part,
+        imageType: MultipartBody.Part,
+        imageId: Int
+    ): UpdateImageInCheckupSuccessModel
+
     suspend fun addSeveralToothToCheckup(
         checkupId: String,
         data: ArrayList<AddToothToCheckupRequest>

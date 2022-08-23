@@ -4,12 +4,17 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun Long.plus24Hour():Long{
+fun Long.plus24Hour(): Long {
     return this + 24 * 60 * 60 * 1000
 }
-fun String.toDate(): Date? {
-    val format = SimpleDateFormat(RemoteDateFormatWithThreeMilliSecond, Locale.ENGLISH).apply {
-        timeZone = TimeZone.getTimeZone("UTC")
+
+fun String.toDate(tehranIsTimeZone: Boolean = false): Date? {
+    val pattern = if (tehranIsTimeZone)
+        RemoteDateFormatWithTehranTimeZoneSecond
+    else
+        RemoteDateFormatWithThreeMilliSecond
+    val format = SimpleDateFormat(pattern, Locale.ENGLISH).apply {
+        timeZone = TimeZone.getDefault()
     }
     try {
         return format.parse(this)
@@ -19,7 +24,7 @@ fun String.toDate(): Date? {
     return Date()
 }
 
-fun Calendar.getWeekCountOfMonth(){
+fun Calendar.getWeekCountOfMonth() {
     val cal = this
     for (i in 0..10) {
         cal[Calendar.YEAR] = 2010
@@ -346,6 +351,7 @@ fun Long.getMonthAndDay(): String? {
 const val RemoteDateFormatWithMilli = "yyyy-MM-dd'T'hh:mm:ss.SSSSSS'Z'"
 const val RemoteDateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
 const val RemoteDateFormatWithThreeMilliSecond = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+const val RemoteDateFormatWithTehranTimeZoneSecond = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX"
 const val RemoteDateFormatYear = "yyyy/MM/dd"
 const val RemoteDateFormatYearSecond = "yyyy-MM-dd"
 const val LocaleDataFormatWithAmPm = "MMM dd,yyyy H:mm:ss a"

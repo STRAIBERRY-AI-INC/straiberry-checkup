@@ -6,6 +6,7 @@ data class TokenKeys(val appId: String = "", val packageName: String = "")
 object StraiberryCheckupSdkInfo {
     private const val CHECKUP_SDK_INFO = "CheckupSdkInfo"
     private const val DISPLAY_NAME = "DisplayName"
+    private const val CHECKUP_LANGUAGE = "CheckupLanguage"
     private const val USER_AVATAR = "UserAvatar"
     private const val UNIQUE_ID = "UniqueId"
     private const val TOKEN = "token"
@@ -38,4 +39,10 @@ object StraiberryCheckupSdkInfo {
     }
 
     fun getUniqueId(): String = Paper.book().read(UNIQUE_ID)
+
+    fun setSelectedLanguage(language: String) {
+        Paper.book().write(CHECKUP_LANGUAGE, language)
+    }
+
+    fun getSelectedLanguage(): String = Paper.book().read(CHECKUP_LANGUAGE, "")
 }

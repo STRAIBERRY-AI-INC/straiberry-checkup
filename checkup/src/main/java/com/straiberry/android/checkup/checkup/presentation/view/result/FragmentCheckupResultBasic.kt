@@ -3,6 +3,7 @@ package com.straiberry.android.checkup.checkup.presentation.view.result
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.text.SpannableStringBuilder
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,15 +14,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.straiberry.android.checkup.R
 import com.straiberry.android.checkup.checkup.domain.model.CheckupResultSuccessModel
-import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupQuestionViewModel
-import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupType
-import com.straiberry.android.checkup.checkup.presentation.viewmodel.ChooseCheckupTypeViewModel
-import com.straiberry.android.checkup.checkup.presentation.viewmodel.UserInfoViewModel
+import com.straiberry.android.checkup.checkup.presentation.viewmodel.*
 import com.straiberry.android.checkup.databinding.FragmentCheckupResultBasicBinding
 import com.straiberry.android.checkup.di.IsolatedKoinComponent
 import com.straiberry.android.checkup.di.StraiberrySdk
 import com.straiberry.android.common.extensions.*
+import com.straiberry.android.common.helper.FirebaseAppEvents
 import com.straiberry.android.common.helper.ShareScreenshotHelper
+import com.straiberry.android.common.model.JawPosition
 
 class FragmentCheckupResultBasic : Fragment(), IsolatedKoinComponent {
     private lateinit var binding: FragmentCheckupResultBasicBinding
@@ -29,6 +29,7 @@ class FragmentCheckupResultBasic : Fragment(), IsolatedKoinComponent {
 
     private val chooseCheckupViewModel by activityViewModels<ChooseCheckupTypeViewModel>()
     private val checkupQuestionViewModel by activityViewModels<CheckupQuestionViewModel>()
+    private val jawDetectionViewModel by activityViewModels<DetectionJawViewModel>()
     private val userInfoViewModel: UserInfoViewModel by activityViewModels()
     private var removeWhiteningScore = false
 
@@ -76,24 +77,65 @@ class FragmentCheckupResultBasic : Fragment(), IsolatedKoinComponent {
             var totalProblemCount = 0
             checkupResult.data.images.forEach { allImages ->
                 allImages.result.forEach { result ->
-                    totalProblemCount += if (result.problems.isNotEmpty())
-                        result.problems.filter { it.conf != 0.0 }.size
+                    if (result.problems.isNotEmpty())
+                        result.problems.filter { problems -> problems.conf != ZERO_CONFIDENT }
+                            .forEach {
+                                totalProblemCount += it.toothClass.count()
+                            }
                     else
-                        0
+                        totalProblemCount += 0
                 }
             }
 
-            // Set total problem
-            binding.textViewCheckupCountProblem.text = SpannableStringBuilder()
-                .append(getString(R.string.in_this_checkup))
-                .append(" ")
-                .color(ContextCompat.getColor(requireContext(), R.color.primary)) {
-                    append(
-                        totalProblemCount.toString()
-                    )
+            if (totalProblemCount == 0)
+                binding.apply {
+                    buttonMore.text = getString(R.string.done)
+                    textViewCheckupCountProblem.text =
+                        getString(R.string.no_problem_found_in_checkup)
+                    buttonMore.onClick {
+                        findNavController().popBackStack()
+                    }
                 }
-                .append(" ")
-                .append(getString(R.string.problem_were_found_in_your_teeth))
+            else {
+                // Set total problem
+                binding.textViewCheckupCountProblem.gravity = Gravity.CENTER
+                binding.textViewCheckupCountProblem.text = SpannableStringBuilder()
+                    .append(getString(R.string.in_this_checkup))
+                    .append(" ")
+                    .color(ContextCompat.getColor(requireContext(), R.color.primary)) {
+                        append(
+                            totalProblemCount.toString()
+                        )
+                    }
+                    .append(" ")
+                    .append(getString(R.string.problem_were_found_in_your_teeth))
+                // More details
+                binding.buttonMore.onClick {
+                    jawDetectionViewModel.resetSelectedJaw()
+                    // Save witch jaw has been selected by user
+                    checkupResult.data.images.forEach {
+                        when {
+                            it.imageType.toInt() == FragmentCheckupResultDetails.FRONT_JAW -> jawDetectionViewModel.setSelectedJaw(
+                                0,
+                                JawPosition.FrontTeeth
+                            )
+                            it.imageType.toInt() == FragmentCheckupResultDetails.X_RAY_JAW -> jawDetectionViewModel.setSelectedJaw(
+                                0,
+                                JawPosition.FrontTeeth
+                            )
+                            it.imageType.toInt() == FragmentCheckupResultDetails.UPPER_JAW -> jawDetectionViewModel.setSelectedJaw(
+                                1,
+                                JawPosition.UpperJaw
+                            )
+                            it.imageType.toInt() == FragmentCheckupResultDetails.LOWER_JAW -> jawDetectionViewModel.setSelectedJaw(
+                                2,
+                                JawPosition.LowerJaw
+                            )
+                        }
+                    }
+                    findNavController().navigate(R.id.action_fragmentCheckupResultBasic_to_fragmentCheckupResultDetails)
+                }
+            }
 
             // If checkup type is not "regular checkup","other" and if is not include
             // a front teeth, then remove whitening score from layout
@@ -101,7 +143,8 @@ class FragmentCheckupResultBasic : Fragment(), IsolatedKoinComponent {
                 && chooseCheckupViewModel.submitStateSelectedCheckupIndex.value != CheckupType.Others
             )
             // Check for the checkup that is not include a front teeth
-                if (checkupQuestionViewModel.submitStateSelectedJaw.value?.first == null ||
+                if (checkupQuestionViewModel.submitStateSelectedJaw.value?.containsValue(JawPosition.FrontTeeth)!!
+                        .not() ||
                     chooseCheckupViewModel.submitStateSelectedCheckupIndex.value == CheckupType.XRays
                 )
                     removeWhiteningScore()
@@ -129,15 +172,11 @@ class FragmentCheckupResultBasic : Fragment(), IsolatedKoinComponent {
                 )
                 imageButtonShare.onClick {
                     // Log event when user shares his/her checkup result
-                    //FirebaseAppEvents.onShareCheckupResult()
+                    FirebaseAppEvents.onShareCheckupResult()
                     ShareScreenshotHelper().shareResult(shareCheckupResult, requireActivity())
                 }
             }
 
-            // More details
-            binding.buttonMore.onClick {
-                findNavController().navigate(R.id.action_fragmentCheckupResultBasic_to_fragmentCheckupResultDetails)
-            }
         }.root
     }
 
@@ -181,4 +220,7 @@ class FragmentCheckupResultBasic : Fragment(), IsolatedKoinComponent {
         }
     }
 
+    companion object {
+        const val ZERO_CONFIDENT = 0.0
+    }
 }

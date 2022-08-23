@@ -6,19 +6,14 @@ import com.straiberry.android.common.model.JawPosition
 import io.mockk.MockKAnnotations
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.*
 
 @ExperimentalCoroutinesApi
 class CheckupResultProblemIllustrationViewModelTest {
-    private val dispatcher = TestCoroutineDispatcher()
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
-
-    @get:Rule
-    val coroutineTestRule = CoroutineTestRule(dispatcher)
 
     private fun createViewModel() =
         CheckupResultProblemIllustrationViewModel()

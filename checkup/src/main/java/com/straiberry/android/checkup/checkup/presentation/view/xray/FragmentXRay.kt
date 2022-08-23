@@ -28,10 +28,10 @@ import com.straiberry.android.checkup.common.extentions.getImage
 import com.straiberry.android.checkup.databinding.FragmentXRayBinding
 import com.straiberry.android.checkup.di.IsolatedKoinComponent
 import com.straiberry.android.checkup.di.StraiberrySdk
-import com.straiberry.android.common.base.*
 import com.straiberry.android.common.extensions.*
 import com.straiberry.android.common.helper.ResizeViewWithAnimation
 import com.straiberry.android.common.model.JawPosition
+import com.straiberry.android.core.base.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FragmentXRay : Fragment(), IsolatedKoinComponent {
@@ -50,7 +50,7 @@ class FragmentXRay : Fragment(), IsolatedKoinComponent {
     private val detectionJawViewModel by activityViewModels<DetectionJawViewModel>()
 
     private var isShowingUploadFile = true
-
+    private var layoutIsOnError = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,7 +85,31 @@ class FragmentXRay : Fragment(), IsolatedKoinComponent {
 
 
             binding.textViewBack.onClick {
-                findNavController().popBackStack()
+                if (layoutIsOnError)
+                    binding.apply {
+                        layoutInvalidOpgFile.goneWithAnimation()
+                        frameLayoutUploadFile.visibleWithAnimation()
+                        textViewDescription.visibleWithAnimation()
+                        textViewSwitch.visibleWithAnimation()
+                        textViewTitle.visibleWithAnimation()
+                        layoutIsOnError = false
+                        isShowingUploadFile = true
+                    }
+                else
+                    findNavController().popBackStack()
+            }
+
+            binding.frameLayoutInvalidOpg.onClick {
+                if (layoutIsOnError)
+                    binding.apply {
+                        layoutInvalidOpgFile.goneWithAnimation()
+                        frameLayoutUploadFile.visibleWithAnimation()
+                        textViewDescription.visibleWithAnimation()
+                        textViewSwitch.visibleWithAnimation()
+                        textViewTitle.visibleWithAnimation()
+                        layoutIsOnError = false
+                        isShowingUploadFile = true
+                    }
             }
 
             binding.frameLayoutUploadFile.onClick {
@@ -97,6 +121,9 @@ class FragmentXRay : Fragment(), IsolatedKoinComponent {
                 if (text!!.isNotEmpty()) {
                     binding.imageButtonSend.visible()
                     binding.textViewSwitch.goneWithAnimation()
+                } else {
+                    binding.imageButtonSend.gone()
+                    binding.textViewSwitch.visibleWithAnimation()
                 }
                 binding.layoutError.goneWithAnimation()
             }
@@ -210,6 +237,7 @@ class FragmentXRay : Fragment(), IsolatedKoinComponent {
             }
             is Failure -> {
                 binding.apply {
+                    frameLayoutUploadFile.visibleWithAnimation()
                     uploadAnimation.goneWithAnimation()
                     textViewDescription.visibleWithAnimation()
                     textViewSwitch.visibleWithAnimation()
@@ -217,6 +245,7 @@ class FragmentXRay : Fragment(), IsolatedKoinComponent {
             }
             Loading -> {
                 binding.apply {
+                    frameLayoutUploadFile.goneWithAnimation()
                     uploadAnimation.visibleWithAnimation()
                     textViewDescription.goneWithAnimation()
                     textViewSwitch.goneWithAnimation()
@@ -237,7 +266,7 @@ class FragmentXRay : Fragment(), IsolatedKoinComponent {
 
     private fun showHideLoadingGetCheckupResult(show: Boolean) = if (show) {
         binding.progressGetResult.visibleWithAnimation()
-        binding.buttonShowResult.goneWithAnimation()
+        binding.buttonShowResult.hideWithAnimation()
     } else {
         binding.buttonShowResult.visibleWithAnimation()
         binding.progressGetResult.goneWithAnimation()
@@ -282,14 +311,28 @@ class FragmentXRay : Fragment(), IsolatedKoinComponent {
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     val image = result.data!!.data!!.getImage(requireContext())
-                        .convertToFile(requireContext())
-                    xrayViewModel.uploadXrayImage(
-                        chooseCheckupViewModel.submitStateCreateCheckupId.value!!, image
-                    )
-                    xrayViewModel.submitStateUploadXrayImage.subscribe(
-                        viewLifecycleOwner,
-                        ::handleViewStateUploadXrayImage
-                    )
+                    OpgAnalyzer(requireContext(), image) { isOpg, opgImage ->
+                        if (isOpg) {
+                            xrayViewModel.uploadXrayImage(
+                                chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
+                                opgImage!!.convertToFile(requireContext())
+                            )
+                            xrayViewModel.submitStateUploadXrayImage.subscribe(
+                                viewLifecycleOwner,
+                                ::handleViewStateUploadXrayImage
+                            )
+                        } else
+                            binding.apply {
+                                layoutInvalidOpgFile.visibleWithAnimation()
+                                frameLayoutUploadFile.goneWithAnimation()
+                                uploadAnimation.goneWithAnimation()
+                                textViewDescription.goneWithAnimation()
+                                textViewSwitch.goneWithAnimation()
+                                textViewTitle.goneWithAnimation()
+                                isShowingUploadFile = false
+                                layoutIsOnError = true
+                            }
+                    }.analyze()
                 }
             }
 

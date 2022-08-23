@@ -53,7 +53,7 @@ class FlowCheckupDataStore(val context: Context) : CheckupDataStore {
         Paper.book().read(DentalIssueQuestions) as ArrayList<DentalIssueQuestionsModel>
 
     override fun shouldShowCheckupHelp(): Boolean {
-        return Prefs.getInteger(context, TIPS_COUNTER) >= 3
+        return Prefs.getInteger(context, TIPS_COUNTER) <= 2
     }
 
     override fun checkupHelpHasBeenSeen() {

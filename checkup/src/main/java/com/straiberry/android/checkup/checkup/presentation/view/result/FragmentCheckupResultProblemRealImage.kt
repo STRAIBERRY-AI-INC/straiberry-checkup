@@ -2,6 +2,7 @@ package com.straiberry.android.checkup.checkup.presentation.view.result
 
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,22 +19,26 @@ import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentC
 import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.LOWER_JAW
 import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.UPPER_JAW
 import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.X_RAY_JAW
-import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupResultProblemIllustrationViewModel
-import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupResultProblemRealImageViewModel
-import com.straiberry.android.checkup.checkup.presentation.viewmodel.ChooseCheckupTypeViewModel
+import com.straiberry.android.checkup.checkup.presentation.viewmodel.*
+import com.straiberry.android.checkup.common.extentions.createPaletteSync
 import com.straiberry.android.checkup.databinding.FragmentCheckupProblemRealImageBinding
 import com.straiberry.android.checkup.di.IsolatedKoinComponent
 import com.straiberry.android.checkup.di.StraiberrySdk
+import com.straiberry.android.common.extensions.gone
 import com.straiberry.android.common.extensions.toImageXPosition
 import com.straiberry.android.common.extensions.toImageYPosition
 import com.straiberry.android.common.extensions.visibleWithAnimation
 import com.straiberry.android.common.model.JawPosition
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class FragmentCheckupResultProblemRealImage : Fragment(), IsolatedKoinComponent {
     private lateinit var binding: FragmentCheckupProblemRealImageBinding
+    private val xrayViewModel by viewModel<XrayViewModel>()
     private val checkupResultProblemRealImageViewModel by activityViewModels<CheckupResultProblemRealImageViewModel>()
     private val checkupResultProblemIllustrationViewModel by activityViewModels<CheckupResultProblemIllustrationViewModel>()
     private val chooseCheckupViewModel by activityViewModels<ChooseCheckupTypeViewModel>()
+    private lateinit var selectedCheckup: CheckupType
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,18 +60,37 @@ class FragmentCheckupResultProblemRealImage : Fragment(), IsolatedKoinComponent 
                 start()
             }
 
+            selectedCheckup = chooseCheckupViewModel.submitStateSelectedCheckupIndex.value!!
+
             checkupResultProblemIllustrationViewModel.submitStateToothCurrentPosition.observe(
                 viewLifecycleOwner,
                 { jawPosition ->
-                    // Remove all indicators
                     binding.layoutRealImage.removeAllViews()
+                    binding.layoutRealImage.addView(binding.imageViewRealImage)
                     when (jawPosition) {
-                        JawPosition.FrontTeeth -> {
-                            binding.imageViewRealImage.load(
+                        JawPosition.FrontTeeth, JawPosition.FrontTeethLower, JawPosition.FrontTeethUpper -> {
+                            val jawImageUrl =
                                 chooseCheckupViewModel.submitStateCheckupResult.value?.data?.images?.first { it.imageType.toInt() == FRONT_JAW || it.imageType.toInt() == X_RAY_JAW }?.image
-                            ) {
+
+                            // If checkup is x-ray then get image as bitmap and create a square background
+                            if (selectedCheckup == CheckupType.XRays) {
+                                binding.imageViewRealImage.gone()
+                                xrayViewModel.getUrlImageBitmap(requireContext(), jawImageUrl!!)
+                                xrayViewModel.submitStateUrlImageBitmap.observe(viewLifecycleOwner) { jawBitmap ->
+                                    binding.imageViewRealImageXray.load(jawBitmap)
+                                    jawBitmap?.createPaletteSync()?.getDominantColor(Color.GRAY)
+                                        ?.let { it1 ->
+                                            binding.cardViewBackground.setCardBackgroundColor(
+                                                it1
+                                            )
+                                        }
+                                }
+                            }
+
+                            binding.imageViewRealImage.load(jawImageUrl) {
                                 placeholder(circularProgressDrawable)
                             }
+
                             checkupResultProblemRealImageViewModel.submitStateToothWithProblemFrontTeeth.observe(
                                 viewLifecycleOwner,
                                 {
@@ -106,7 +130,13 @@ class FragmentCheckupResultProblemRealImage : Fragment(), IsolatedKoinComponent 
 
     private fun checkoutToothWithProblems(teethWithProblem: ArrayList<Pair<Double, Double>>) {
         // Remove all indicators
+        val showedImageView = if (selectedCheckup == CheckupType.XRays)
+            binding.imageViewRealImageXray
+        else
+            binding.imageViewRealImage
+
         binding.layoutRealImage.removeAllViews()
+        binding.layoutRealImage.addView(showedImageView)
         teethWithProblem.forEach {
             binding.layoutRealImage.addView(
                 layoutInflater.inflate(
@@ -114,37 +144,40 @@ class FragmentCheckupResultProblemRealImage : Fragment(), IsolatedKoinComponent 
                     binding.root,
                     false
                 ).apply {
-                    x = it.first.toImageXPosition(binding.imageViewRealImage.width)
-                        .toFloat() - resources.getDimension(R.dimen.problem_indicator_size)
-                    y = it.second.toImageYPosition(binding.imageViewRealImage.height)
-                        .toFloat() - resources.getDimension(R.dimen.problem_indicator_size)
-                    visibleWithAnimation()
-                    this.findViewById<MaterialCardView>(R.id.indicatorLower).apply {
-                        strokeColor = ContextCompat.getColor(context, R.color.secondaryLight)
-                        ObjectAnimator.ofPropertyValuesHolder(
-                            this,
-                            PropertyValuesHolder.ofFloat(
-                                "scaleX",
-                                AnimationScaleUp
-                            ),
-                            PropertyValuesHolder.ofFloat(
-                                "scaleY",
-                                AnimationScaleUp
-                            )
-                        ).apply {
-                            duration = AnimationDuration
-                            repeatCount = ObjectAnimator.INFINITE
-                            repeatMode = ObjectAnimator.REVERSE
-                            repeatCount = AnimationRepeatCount
-                            start()
-                        }.doOnEnd {
-                            this.apply {
-                                this.animate().scaleX(AnimationScaleDown).scaleY(
-                                    AnimationScaleDown
-                                ).start()
+                    showedImageView.viewTreeObserver.addOnGlobalLayoutListener {
+                        x = it.first.toImageXPosition(showedImageView.width)
+                            .toFloat() - resources.getDimension(R.dimen.problem_indicator_size)
+                        y = it.second.toImageYPosition(showedImageView.height)
+                            .toFloat() - resources.getDimension(R.dimen.problem_indicator_size)
+                        visibleWithAnimation()
+                        this.findViewById<MaterialCardView>(R.id.indicatorLower).apply {
+                            strokeColor = ContextCompat.getColor(context, R.color.secondaryLight)
+                            ObjectAnimator.ofPropertyValuesHolder(
+                                this,
+                                PropertyValuesHolder.ofFloat(
+                                    "scaleX",
+                                    AnimationScaleUp
+                                ),
+                                PropertyValuesHolder.ofFloat(
+                                    "scaleY",
+                                    AnimationScaleUp
+                                )
+                            ).apply {
+                                duration = AnimationDuration
+                                repeatCount = ObjectAnimator.INFINITE
+                                repeatMode = ObjectAnimator.REVERSE
+                                repeatCount = AnimationRepeatCount
+                                start()
+                            }.doOnEnd {
+                                this.apply {
+                                    this.animate().scaleX(AnimationScaleDown).scaleY(
+                                        AnimationScaleDown
+                                    ).start()
+                                }
                             }
                         }
                     }
+
                 })
         }
     }

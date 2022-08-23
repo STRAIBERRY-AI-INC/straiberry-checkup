@@ -1,55 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
+
+    <com.straiberry.android.checkup.common.custom.view.ShareCheckupResultView
+        android:id="@+id/shareCheckupResult"
+        android:layout_width="585dp"
+        android:layout_height="585dp"
+        android:clickable="false"
+        android:focusable="false"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/PageBackground.Primary"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <com.straiberry.android.checkup.common.custom.view.ShareCheckupResultView
-            android:id="@+id/shareCheckupResult"
-            android:layout_width="585dp"
-            android:layout_height="585dp"
-            android:clickable="false"
-            android:focusable="false"
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieAnimation"
+            android:layout_width="289dp"
+            android:layout_height="271dp"
+            android:layout_marginBottom="-10dp"
+            app:layout_constraintBottom_toTopOf="@id/cardViewContainer"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="false"
+            app:lottie_rawRes="@raw/animation_checkup_result_basic"
+            app:lottie_speed="2" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            style="@style/PageBackground.Primary"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewContainer"
+            style="@style/CardViewTopCornerRadius"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="448dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/lottieAnimation"
-                android:layout_width="289dp"
-                android:layout_height="271dp"
-                android:layout_marginBottom="-10dp"
-                app:layout_constraintBottom_toTopOf="@id/cardViewContainer"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="false"
-                app:lottie_rawRes="@raw/animation_checkup_result_basic"
-                app:lottie_speed="2" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardViewContainer"
-                style="@style/CardViewTopCornerRadius"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="448dp"
-                app:cardElevation="0dp"
-                app:layout_constraintBottom_toBottomOf="parent">
-
+                android:layout_height="match_parent"
+                android:fillViewport="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layoutCheckupDetailsParent"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
 
                     <TextView
@@ -85,7 +84,7 @@
 
                         <TextView
                             android:id="@+id/textViewWhiteningScore"
-                            style="@style/TextViewSecondaryLight.Primary.H4"
+                            style="@style/TextViewSecondaryLight.White.H4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
@@ -120,7 +119,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="180dp"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="12dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/textViewCheckupResultTitle">
@@ -128,12 +127,11 @@
                         <com.google.android.material.card.MaterialCardView
                             android:id="@+id/cardViewOralHygieneScore"
                             style="@style/CardViewScoreStatus"
-                            android:layout_width="73dp"
-                            android:layout_height="36dp"
+                            android:layout_width="72dp"
+                            android:layout_height="38dp"
                             android:layout_marginTop="17dp"
                             android:layout_marginBottom="10dp"
-                            app:cardCornerRadius="19dp"
-                            app:cardElevation="4dp"
+                            app:cardCornerRadius="38dp"
                             app:layout_constraintBottom_toTopOf="@id/textViewOralHygieneTitle"
                             app:layout_constraintLeft_toLeftOf="@id/textViewOralHygieneTitle"
                             app:layout_constraintRight_toRightOf="@id/textViewOralHygieneTitle">
@@ -144,14 +142,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:fontFamily="@font/light" />
+                                android:fontFamily="@font/bold" />
                         </com.google.android.material.card.MaterialCardView>
 
                         <ImageView
                             android:id="@+id/imageViewOral"
                             android:layout_width="36dp"
                             android:layout_height="36dp"
-                            android:layout_marginBottom="5dp"
+                            android:layout_marginBottom="12dp"
                             android:src="@drawable/ic_oral"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent" />
@@ -161,7 +159,8 @@
                             style="@style/TextViewGreen500.Caption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="6dp"
                             android:fontFamily="@font/regular"
                             android:text="@string/oral_hygiene"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -185,7 +184,7 @@
                             android:layout_height="36dp"
                             android:layout_marginTop="17dp"
                             android:layout_marginBottom="10dp"
-                            app:cardCornerRadius="19dp"
+                            app:cardCornerRadius="38dp"
                             app:cardElevation="4dp"
                             app:layout_constraintBottom_toTopOf="@id/textViewOralHygieneTitleCenter"
                             app:layout_constraintLeft_toLeftOf="@id/textViewOralHygieneTitleCenter"
@@ -204,7 +203,7 @@
                             android:id="@+id/imageViewOralCenter"
                             android:layout_width="36dp"
                             android:layout_height="36dp"
-                            android:layout_marginBottom="5dp"
+                            android:layout_marginBottom="10dp"
                             android:src="@drawable/ic_oral"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent" />
@@ -214,6 +213,7 @@
                             style="@style/TextViewGreen500.Caption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="7dp"
                             android:layout_marginTop="8dp"
                             android:fontFamily="@font/regular"
                             android:text="@string/oral_hygiene"
@@ -248,6 +248,7 @@
                         android:layout_width="239dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
+                        android:fontFamily="@font/regular"
                         android:text="@string/your_oral_hygiene_is_very_good_but_better_brushing_everyday"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
@@ -308,10 +309,12 @@
 
                     <TextView
                         android:id="@+id/textViewCheckupCountProblem"
-                        style="@style/TextViewBodyText.Subtitle1"
-                        android:layout_width="237dp"
+                        style="@style/TextViewSecondaryLight.White.Subtitle1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="46dp"
                         android:layout_marginTop="19dp"
+                        android:layout_marginEnd="46dp"
                         android:fontFamily="@font/regular"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
@@ -332,7 +335,7 @@
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/textViewCheckupCountProblem" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </ScrollView>
+        </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

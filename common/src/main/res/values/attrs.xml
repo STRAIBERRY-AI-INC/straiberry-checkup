@@ -9,6 +9,7 @@
         <attr name="isTextAlignmentCenter" format="boolean" />
         <attr name="isNumber" format="boolean" />
         <attr name="isCode" format="boolean" />
+        <attr name="isSearch" format="boolean" />
     </declare-styleable>
 
     Charts

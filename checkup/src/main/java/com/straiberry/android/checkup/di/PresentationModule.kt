@@ -18,5 +18,5 @@ val presentationModule = module {
     viewModel { CheckupGuideTourViewModel(get(), get()) }
     viewModel { CheckupHelpViewModel(get(), get()) }
     viewModel { CheckupResultViewModel(get(), get()) }
-    viewModel { XrayViewModel(get(), get(), get(), get(), get()) }
+    viewModel { XrayViewModel(get(), get(), get(), get()) }
 }

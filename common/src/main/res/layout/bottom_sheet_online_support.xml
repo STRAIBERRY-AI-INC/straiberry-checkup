@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardViewUpdateProfilePicture"
+    style="@style/CardViewTopCornerRadius"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="0dp"
+    app:layout_behavior="@string/bottom_sheet_behavior"
+    app:layout_constraintBottom_toBottomOf="parent">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            style="@style/TextViewLightText600.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="21dp"
+            android:fontFamily="@font/regular"
+            android:gravity="center"
+            android:text="@string/do_you_want_to_speak_with_online_support"
+            app:layout_constraintStart_toEndOf="@id/imageViewOnlineSupport"
+            app:layout_constraintTop_toTopOf="@id/imageViewOnlineSupport" />
+
+        <ImageView
+            android:id="@+id/imageViewOnlineSupport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="34dp"
+            android:src="@drawable/ic_online_support"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonYes"
+            style="@style/ButtonActive.SecondaryLight"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:layout_marginTop="40dp"
+            android:text="@string/yes"
+            android:textAllCaps="false"
+            app:cornerRadius="24dp"
+            app:layout_constraintStart_toStartOf="@id/textViewTitle"
+            app:layout_constraintTop_toBottomOf="@id/textViewTitle" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonNo"
+            style="@style/ButtonActiveOutlined"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="40dp"
+            android:text="@string/no"
+            android:textAllCaps="false"
+            app:cornerRadius="24dp"
+            app:layout_constraintStart_toEndOf="@id/buttonYes"
+            app:layout_constraintTop_toBottomOf="@id/textViewTitle" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

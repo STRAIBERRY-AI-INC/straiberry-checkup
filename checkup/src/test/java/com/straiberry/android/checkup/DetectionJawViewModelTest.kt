@@ -6,19 +6,14 @@ import com.straiberry.android.common.model.JawPosition
 import io.mockk.MockKAnnotations
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.*
 
 @ExperimentalCoroutinesApi
 class DetectionJawViewModelTest {
-    private val dispatcher = TestCoroutineDispatcher()
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
-
-    @get:Rule
-    val coroutineTestRule = CoroutineTestRule(dispatcher)
 
     private fun createViewModel() =
         DetectionJawViewModel()
@@ -34,7 +29,7 @@ class DetectionJawViewModelTest {
     }
 
     @Test
-    fun `When class in init, then states should be default values`() = runTest {
+    fun `When class is init, then states should be default values`() = runTest {
         val viewModel = createViewModel()
         Assert.assertEquals(hashMapOf<Int, JawPosition>(), viewModel.submitStateSelectedJaws.value)
         Assert.assertEquals(true, viewModel.stateDetectionModel.value)
@@ -74,21 +69,21 @@ class DetectionJawViewModelTest {
     @Test
     fun `When checkup photos uploaded successfully, then state should plus one`() = runTest {
         val viewModel = createViewModel()
-        viewModel.photosUploaded()
-        Assert.assertEquals(1, viewModel.statePhotosUploaded.value)
+        viewModel.photosUploaded(FrontIndex)
+        Assert.assertEquals(1, viewModel.stateListOfUploadedJaws.value!!.size)
     }
 
     @Test
     fun `When checkup photos uploaded fails, then state should mines one`() = runTest {
         val viewModel = createViewModel()
-        viewModel.photosUploadedFailed()
-        Assert.assertEquals(-1, viewModel.statePhotosUploaded.value)
+        viewModel.photosUploadedFailed(FrontIndex)
+        Assert.assertEquals(0, viewModel.stateListOfUploadedJaws.value!!.size)
     }
 
     companion object {
-        private const val FrontIndex = 0
-        private const val UpperIndex = 1
-        private const val LowerIndex = 2
+        private const val FrontIndex = 1
+        private const val UpperIndex = -1
+        private const val LowerIndex = 0
         private const val AllJawsAreSelected = 4
     }
 }

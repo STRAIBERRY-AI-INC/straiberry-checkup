@@ -15,23 +15,29 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.doOnPreDraw
 import androidx.navigation.fragment.findNavController
 import coil.load
+import com.straiberry.android.checkup.BuildConfig
 import com.straiberry.android.checkup.R
 import com.straiberry.android.checkup.checkup.domain.model.AddImageToCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.domain.model.UpdateImageInCheckupSuccessModel
-import com.straiberry.android.checkup.checkup.presentation.view.camera.CameraAnalyzer.Companion.MinimumConfidence
+import com.straiberry.android.checkup.checkup.presentation.view.help.FragmentCheckupInstructionDialog
+import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.FRONT_JAW
+import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.LOWER_JAW
+import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.UPPER_JAW
 import com.straiberry.android.checkup.common.extentions.getImage
 import com.straiberry.android.checkup.common.extentions.getPath
 import com.straiberry.android.checkup.common.extentions.modifyOrientation
 import com.straiberry.android.checkup.databinding.FragmentCameraBinding
-import com.straiberry.android.checkup.di.*
-import com.straiberry.android.common.base.*
+import com.straiberry.android.checkup.di.IsolatedKoinComponent
+import com.straiberry.android.checkup.di.StraiberrySdk
 import com.straiberry.android.common.custom.spotlight.*
 import com.straiberry.android.common.custom.spotlight.Target
 import com.straiberry.android.common.custom.spotlight.shape.Circle
 import com.straiberry.android.common.extensions.*
+import com.straiberry.android.common.features.support.BottomSheetOnlineSupport
+import com.straiberry.android.core.base.*
 
 
-class FragmentCamera : DetectionJaw(), IsolatedKoinComponent {
+class FragmentCamera : JawDetector(), IsolatedKoinComponent {
     // Permissions
     private val cameraPermissions = listOf(Manifest.permission.CAMERA)
     private val readStoragePermissions = listOf(
@@ -51,8 +57,26 @@ class FragmentCamera : DetectionJaw(), IsolatedKoinComponent {
         return FragmentCameraBinding.inflate(inflater, container, false).also {
             binding = it
 
-            if (guideTourViewModel.getGuideTourStatus().cameraGuideTour.not())
-                setupGuideTour()
+            stopDetectionModel()
+            hideLayoutChoosePhoto()
+
+            // Show checkup instruction
+            if (checkupHelpViewModel.shouldShowCheckupHelp())
+                FragmentCheckupInstructionDialog().show(childFragmentManager, "")
+            else {
+                showLayoutChoosePhoto()
+                if (guideTourViewModel.getGuideTourStatus().cameraGuideTour.not())
+                    setupGuideTour()
+            }
+
+            // Observe dismissing checkup instruction
+            jawDetectionViewModel.submitStateDismissCheckupInstruction.observe(viewLifecycleOwner) {
+                if (it) {
+                    showLayoutChoosePhoto()
+                    if (guideTourViewModel.getGuideTourStatus().cameraGuideTour.not())
+                        setupGuideTour()
+                }
+            }
 
             // Setup click for button take photo
             binding.layoutTakePhotoOrChoose.buttonTakePhoto.onClick {
@@ -67,12 +91,19 @@ class FragmentCamera : DetectionJaw(), IsolatedKoinComponent {
             }
 
             // Setup button cancel
-            binding.layoutTakePhotoOrChoose.buttonCancel.onClick { findNavController().popBackStack() }
+            binding.layoutTakePhotoOrChoose.buttonCancel.onClick {
+                jawDetectionViewModel.resetNumberOfUploadedJaw()
+                checkupQuestionViewModel.resetSelectedJaw()
+                jawDetectionViewModel.resetSelectedJaw()
+                stopDetectionModel()
+                findNavController().popBackStack()
+            }
 
             // Setup button close
             binding.textViewClose.onClick {
                 jawDetectionViewModel.resetNumberOfUploadedJaw()
                 checkupQuestionViewModel.resetSelectedJaw()
+                jawDetectionViewModel.resetSelectedJaw()
                 stopDetectionModel()
                 findNavController().popBackStack()
             }
@@ -84,12 +115,6 @@ class FragmentCamera : DetectionJaw(), IsolatedKoinComponent {
             }
 
             binding.layoutInsertImage.imageViewFrontTeeth.onClick {
-                hideAllGuide()
-                binding.imageViewFrontSample.visibleWithAnimation()
-                setupNextJaw(Front)
-            }
-
-            binding.layoutInsertImage.imageViewFrontTeethCenter.onClick {
                 hideAllGuide()
                 binding.imageViewFrontSample.visibleWithAnimation()
                 setupNextJaw(Front)
@@ -107,13 +132,6 @@ class FragmentCamera : DetectionJaw(), IsolatedKoinComponent {
                 setupNextJaw(Lower)
             }
 
-            binding.layoutInsertImage.imageViewLowerJawCenter.onClick {
-                hideAllGuide()
-                binding.imageViewLowerSample.visibleWithAnimation()
-                setupNextJaw(Lower)
-            }
-
-
             checkoutNecessaryUploadedImage()
             showCapturedImageBasedOnSelectedJaw()
             setupSelectedJawsBasedOnUserSelection()
@@ -123,43 +141,51 @@ class FragmentCamera : DetectionJaw(), IsolatedKoinComponent {
              *  - Measure the cropped image base on model rect output
              *  - Take picture and do the transaction
              */
-            jawDetectionViewModel.recognitionPosition.observe(viewLifecycleOwner,
-                { jawRecognition ->
-                    // Check if current detected image is not uploading and
-                    // its one of selected jaws by user.
-                    if (getDetectionModelState()
-                        && !when {
-                            jawRecognition.label == Front && frontJawIsUploading -> true
-                            jawRecognition.label == Lower && lowerJawIsUploading -> true
-                            jawRecognition.label == Upper && upperJawIsUploading -> true
-                            else -> false
-                        }
-                        && listOfSelectedJaws.contains(jawRecognition.label)
-                        && jawRecognition.confidence >= MinimumConfidence
-                    ) {
-                        if (jawRecognition.frame != null)
-                            ImageAnalyzer(
-                                requireContext(),
-                                jawRecognition.frame
-                            ) { _, imageIsCorrect, _, _ ->
-                                if (imageIsCorrect) {
-                                    showImagesThatUserMustCapture()
-                                    takePhotoFromDetectedJaw(jawRecognition.label)
-                                }
-                            }.analyze()
-
+            jawDetectionViewModel.recognitionPosition.observe(
+                viewLifecycleOwner
+            ) { jawRecognition ->
+                // Check if current detected image is not uploading and
+                // its one of selected jaws by user.
+                if (getDetectionModelState()
+                    && !when {
+                        jawRecognition.label == Front && frontJawIsUploading -> true
+                        jawRecognition.label == Lower && lowerJawIsUploading -> true
+                        jawRecognition.label == Upper && upperJawIsUploading -> true
+                        else -> false
                     }
-                })
+                    && listOfSelectedJaws.contains(jawRecognition.label)
+                    && jawRecognition.confidence >= MinimumConfidence
+                ) {
+                    showImagesThatUserMustCapture()
+                    takePhotoFromDetectedJaw(jawRecognition.label)
+                }
+            }
 
-            checkupSubmitImageViewModel.submitStateAddImage.subscribe(
-                viewLifecycleOwner,
-                ::handleViewStateAddImageToCheckup
-            )
+            checkupSubmitImageViewModel.submitStateAddFrontImageToCheckup.observe(viewLifecycleOwner) {
+                handleViewStateAddImageToCheckup(it, FRONT_JAW)
+            }
+            checkupSubmitImageViewModel.submitStateAddUpperImageToCheckup.observe(viewLifecycleOwner) {
+                handleViewStateAddImageToCheckup(it, UPPER_JAW)
+            }
+            checkupSubmitImageViewModel.submitStateAddLowerImageToCheckup.observe(viewLifecycleOwner) {
+                handleViewStateAddImageToCheckup(it, LOWER_JAW)
+            }
 
-            checkupSubmitImageViewModel.submitStateUpdateImage.subscribe(
-                viewLifecycleOwner,
-                ::handleViewStateUpdateImageInCheckup
-            )
+            checkupSubmitImageViewModel.submitStateUpdateFrontImageInCheckup.observe(
+                viewLifecycleOwner
+            ) {
+                handleViewStateUpdateImageInCheckup(it, FRONT_JAW)
+            }
+            checkupSubmitImageViewModel.submitStateUpdateUpperImageInCheckup.observe(
+                viewLifecycleOwner
+            ) {
+                handleViewStateUpdateImageInCheckup(it, UPPER_JAW)
+            }
+            checkupSubmitImageViewModel.submitStateUpdateLowerImageInCheckup.observe(
+                viewLifecycleOwner
+            ) {
+                handleViewStateUpdateImageInCheckup(it, LOWER_JAW)
+            }
         }.root
     }
 
@@ -178,11 +204,14 @@ class FragmentCamera : DetectionJaw(), IsolatedKoinComponent {
         clearView()
     }
 
-    /** Handel view state for adding captured image to checkup */
-    private fun handleViewStateAddImageToCheckup(loadable: Loadable<AddImageToCheckupSuccessModel>) {
+    /** Handel view state for adding front jaw image to checkup */
+    private fun handleViewStateAddImageToCheckup(
+        loadable: Loadable<AddImageToCheckupSuccessModel>,
+        jawType: Int
+    ) {
         if (loadable != Loading) {
-            getCurrentCapturedJaw().enable()
-            getCurrentProgressBar().goneWithAnimation()
+            currentUploadJawLayout(jawType).enable()
+            getProgressBarRelatedToUploadedJaw(jawType).goneWithAnimation()
         }
         when (loadable) {
             is Success -> {
@@ -192,18 +221,19 @@ class FragmentCamera : DetectionJaw(), IsolatedKoinComponent {
             is Failure -> {
                 showError(
                     getString(
-                        R.string.the_selected_picture_is_incorrect,
-                        getCurrentDetectedJaw()
+                        R.string.problem_with_uploading_photo,
                     ),
                     false
                 )
-                jawDetectionViewModel.photosUploadedFailed()
+                jawDetectionViewModel.photosUploadedFailed(jawType)
                 showHideLoading(false)
-                getCurrentCapturedJaw().load(R.drawable.ic_add_another)
+                currentUploadJawLayout(jawType).load(R.drawable.ic_add_another)
+                if (BuildConfig.IS_FARSI)
+                    BottomSheetOnlineSupport().show(childFragmentManager, "")
             }
             Loading -> {
-                getCurrentCapturedJaw().disable()
-                getCurrentProgressBar().visibleWithAnimation()
+                currentUploadJawLayout(jawType).disable()
+                getProgressBarRelatedToUploadedJaw(jawType).visibleWithAnimation()
             }
             NotLoading -> {
 
@@ -211,16 +241,18 @@ class FragmentCamera : DetectionJaw(), IsolatedKoinComponent {
         }
     }
 
-
     /** Handel view state for updating captured image in checkup */
-    private fun handleViewStateUpdateImageInCheckup(loadable: Loadable<UpdateImageInCheckupSuccessModel>) {
+    private fun handleViewStateUpdateImageInCheckup(
+        loadable: Loadable<UpdateImageInCheckupSuccessModel>,
+        jawType: Int
+    ) {
         if (loadable != Loading) {
-            getCurrentCapturedJaw().enable()
-            getCurrentProgressBar().goneWithAnimation()
+            currentUploadJawLayout(jawType).enable()
+            getProgressBarRelatedToUploadedJaw(jawType).goneWithAnimation()
         }
         when (loadable) {
             is Success -> {
-                jawDetectionViewModel.photosUploaded()
+                jawDetectionViewModel.photosUploaded(jawType)
             }
             is Failure -> {
                 showError(
@@ -229,12 +261,12 @@ class FragmentCamera : DetectionJaw(), IsolatedKoinComponent {
                         getCurrentDetectedJaw()
                     ), false
                 )
-                getCurrentCapturedJaw().load(R.drawable.ic_add_another)
+                currentUploadJawLayout(jawType).load(R.drawable.ic_add_another)
             }
             Loading -> {
-                jawDetectionViewModel.photosUploadedFailed()
-                getCurrentCapturedJaw().disable()
-                getCurrentProgressBar().visibleWithAnimation()
+                jawDetectionViewModel.photosUploadedFailed(jawType)
+                currentUploadJawLayout(jawType).disable()
+                getProgressBarRelatedToUploadedJaw(jawType).visibleWithAnimation()
             }
             NotLoading -> {
 
@@ -258,15 +290,16 @@ class FragmentCamera : DetectionJaw(), IsolatedKoinComponent {
                         result.data?.data?.getImage(requireContext())!!.modifyOrientation(
                             result.data?.data!!.getPath(requireContext())
                         )!!
-
                     // Analyze image. If image is not an correct jaw, then
                     // show an error.
                     try {
                         ImageAnalyzer(
                             context = requireContext(),
                             bitmap = savedBitmap,
-                        ) { label, isImageCorrect, _, finalImage ->
-                            if (!listOfSelectedJaws.contains(label) || !isImageCorrect) {
+                            isCheckingImageFromGallery = true,
+                            checkingFrame = false
+                        ) { label, score, _, _, finalImage ->
+                            if (!listOfSelectedJaws.contains(label) || score < MinimumConfidence) {
                                 showError(
                                     getString(
                                         R.string.the_selected_picture_is_incorrect,
@@ -274,8 +307,6 @@ class FragmentCamera : DetectionJaw(), IsolatedKoinComponent {
                                     ),
                                     false
                                 )
-                                getCurrentProgressBar().goneWithAnimation()
-                                getCurrentCapturedJaw().enable()
                             } else {
                                 // Update current captured jaw
                                 setCurrentDetectedJaw(label, true)
@@ -290,9 +321,7 @@ class FragmentCamera : DetectionJaw(), IsolatedKoinComponent {
                             }
                         }.analyze()
                     } catch (e: java.lang.Exception) {
-                        //Firebase.crashlytics.recordException(e)
-                        getCurrentProgressBar().goneWithAnimation()
-                        getCurrentCapturedJaw().enable()
+//                        Firebase.crashlytics.recordException(e)
                         showError(
                             getString(
                                 R.string.the_selected_picture_is_incorrect,

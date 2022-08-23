@@ -8,8 +8,8 @@ import com.straiberry.android.checkup.checkup.domain.model.CreateCheckupSuccessM
 import com.straiberry.android.checkup.checkup.domain.model.SdkTokenSuccessModel
 import com.straiberry.android.checkup.checkup.domain.usecase.CreateCheckupSdkUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.GetSdkTokenUseCase
-import com.straiberry.android.common.base.*
-import com.straiberry.android.common.network.CoroutineContextProvider
+import com.straiberry.android.core.base.*
+import com.straiberry.android.core.network.CoroutineContextProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 

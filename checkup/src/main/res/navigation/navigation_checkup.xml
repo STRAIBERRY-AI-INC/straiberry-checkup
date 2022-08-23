@@ -14,12 +14,13 @@
             android:id="@+id/action_fragmentCamera_to_fragmentCheckupResultBasic"
             app:destination="@id/fragmentCheckupResultBasic"
             app:launchSingleTop="true"
-            app:popUpTo="@id/fragmentCamera"
+            app:popUpTo="@id/fragmentCheckup"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_fragmentCamera_to_fragmentCheckupResultWhitening"
             app:destination="@id/fragmentCheckupResultWhitening"
-            app:popUpTo="@id/fragmentCamera"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/fragmentCheckup"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
@@ -31,7 +32,8 @@
         <action
             android:id="@+id/action_fragmentCheckupResultBasic_to_fragmentCheckupResultDetails"
             app:destination="@id/fragmentCheckupResultDetails"
-            app:popUpTo="@id/fragmentCheckupResultBasic"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_checkup"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
@@ -47,19 +49,6 @@
         <deepLink app:uri="android-app://com.straiberry.app.features.checkup.presentation.view.result.FragmentCheckupResultWhitening" />
     </fragment>
     <fragment
-        android:id="@+id/fragmentCheckupHelp"
-        android:name="com.straiberry.android.checkup.checkup.presentation.view.help.FragmentCheckupHelp"
-        android:label="FragmentCheckupHelp"
-        tools:layout="@layout/fragment_checkup_help">
-        <action
-            android:id="@+id/action_fragmentCheckupHelp_to_fragmentCamera"
-            app:destination="@id/fragmentCamera"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/fragmentCheckup"
-            app:popUpToInclusive="false" />
-
-    </fragment>
-    <fragment
         android:id="@+id/fragmentCheckup"
         android:name="com.straiberry.android.checkup.checkup.presentation.view.checkup.FragmentCheckup"
         android:label="FragmentCheckup"
@@ -68,11 +57,10 @@
             android:id="@+id/action_fragmentCheckup_to_fragmentCheckupQuestion"
             app:destination="@id/fragmentCheckupQuestion" />
         <action
-            android:id="@+id/action_fragmentCheckup_to_fragmentCheckupHelp"
-            app:destination="@id/fragmentCheckupHelp" />
-        <action
             android:id="@+id/action_fragmentCheckup_to_fragmentCamera"
-            app:destination="@id/fragmentCamera" />
+            app:destination="@id/fragmentCamera"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/fragmentCheckup" />
         <action
             android:id="@+id/action_fragmentCheckup_to_fragmentXRay"
             app:destination="@id/fragmentXRay" />
@@ -87,7 +75,7 @@
             app:destination="@id/fragmentCamera"
             app:launchSingleTop="true"
             app:popUpTo="@id/fragmentCheckup"
-            app:popUpToInclusive="false" />
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/fragmentXRay"

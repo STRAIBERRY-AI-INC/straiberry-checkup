@@ -57,25 +57,28 @@ fun Int.convertToCheckupName(context: Context): String {
     }
 }
 
-fun Int.convertCavityClassToDrawable(context: Context): Drawable {
-    return when (this) {
-        0 -> ContextCompat.getDrawable(context, R.drawable.ic_amalgam_filling)!!
-        1 -> ContextCompat.getDrawable(context, R.drawable.ic_calcules)!!
-        2 -> ContextCompat.getDrawable(context, R.drawable.ic_carries)!!
-        3 -> ContextCompat.getDrawable(context, R.drawable.ic_white_spot)!!
-        4 -> ContextCompat.getDrawable(context, R.drawable.ic_dental_implant)!!
-        5 -> ContextCompat.getDrawable(context, R.drawable.ic_bone_loss)!!
-        6 -> ContextCompat.getDrawable(context, R.drawable.ic_amalgam_restoration_overhang)!!
-        7 -> ContextCompat.getDrawable(context, R.drawable.ic_infectious_apical_lesion)!!
-        8 -> ContextCompat.getDrawable(context, R.drawable.ic_remained_dental_root)!!
-        9 -> ContextCompat.getDrawable(context, R.drawable.ic_malposed_wisdom_tooth)!!
-        10 -> ContextCompat.getDrawable(context, R.drawable.ic_tooth_with_missing_counterpart)!!
-        else -> ContextCompat.getDrawable(
-            context,
-            com.straiberry.android.common.R.drawable.ic_amalgam_filling
-        )!!
-    }
-
+fun Int.convertCavityClassToDrawable(checkupType: CheckupType, context: Context): Drawable {
+    return if (checkupType == CheckupType.XRays)
+        return when (this) {
+            0 -> ContextCompat.getDrawable(context, R.drawable.ic_amalgam_restoration_overhang)!!
+            1 -> ContextCompat.getDrawable(context, R.drawable.ic_bone_loss)!!
+            2 -> ContextCompat.getDrawable(context, R.drawable.ic_calcules)!!
+            3 -> ContextCompat.getDrawable(context, R.drawable.ic_dental_implant)!!
+            4 -> ContextCompat.getDrawable(context, R.drawable.ic_carries)!!
+            5 -> ContextCompat.getDrawable(context, R.drawable.ic_infectious_apical_lesion)!!
+            6 -> ContextCompat.getDrawable(context, R.drawable.ic_malposed_wisdom_tooth)!!
+            7 -> ContextCompat.getDrawable(context, R.drawable.ic_remained_dental_root)!!
+            8 -> ContextCompat.getDrawable(context, R.drawable.ic_tooth_with_missing_counterpart)!!
+            else -> ContextCompat.getDrawable(context, R.drawable.ic_amalgam_restoration_overhang)!!
+        }
+    else
+        when (this) {
+            0 -> ContextCompat.getDrawable(context, R.drawable.ic_amalgam_filling)!!
+            1 -> ContextCompat.getDrawable(context, R.drawable.ic_calcules)!!
+            2 -> ContextCompat.getDrawable(context, R.drawable.ic_carries)!!
+            3 -> ContextCompat.getDrawable(context, R.drawable.ic_white_spot)!!
+            else -> ContextCompat.getDrawable(context, R.drawable.ic_amalgam_filling)!!
+        }
 
 }
 
@@ -92,20 +95,44 @@ fun Int.convertToCheckupType(): CheckupType {
 }
 
 
-fun Int.convertCavityClassToString(context: Context): String {
+fun Int.convertCavityClassToString(checkupType: CheckupType, context: Context): String {
+    return if (checkupType == CheckupType.XRays)
+        return when (this) {
+            0 -> context.getString(R.string.amalgam_restoration_overhang)
+            1 -> context.getString(R.string.bone_loss)
+            2 -> context.getString(R.string.calculus)
+            3 -> context.getString(R.string.dental_implant)
+            4 -> context.getString(R.string.carries)
+            5 -> context.getString(R.string.infectious_apical_lesion)
+            6 -> context.getString(R.string.malposed_wisdom_tooth)
+            7 -> context.getString(R.string.remained_dental_root)
+            8 -> context.getString(R.string.tooth_with_missing_counterpart)
+            else -> context.getString(R.string.amalgam_restoration_overhang)
+        }
+    else
+        when (this) {
+            0 -> context.getString(R.string.amalgam_filling)
+            1 -> context.getString(R.string.calculus)
+            2 -> context.getString(R.string.carries)
+            3 -> context.getString(R.string.white_spot)
+            else -> context.getString(R.string.amalgam_filling)
+        }
+}
+
+fun String.convertCavityClassToIntPosition(context: Context): Int {
     return when (this) {
-        0 -> context.getString(R.string.amalgam_filling)
-        1 -> context.getString(R.string.calculus)
-        2 -> context.getString(R.string.carries)
-        3 -> context.getString(R.string.white_spot)
-        4 -> context.getString(R.string.dental_implant)
-        5 -> context.getString(R.string.bone_loss)
-        6 -> context.getString(R.string.amalgam_restoration_overhang)
-        7 -> context.getString(R.string.infectious_apical_lesion)
-        8 -> context.getString(R.string.remained_dental_root)
-        9 -> context.getString(R.string.malposed_wisdom_tooth)
-        10 -> context.getString(R.string.tooth_with_missing_counterpart)
-        else -> context.getString(com.straiberry.android.common.R.string.amalgam_filling)
+        context.getString(R.string.amalgam_filling) -> 0
+        context.getString(R.string.calculus) -> 1
+        context.getString(R.string.carries) -> 2
+        context.getString(R.string.white_spot) -> 3
+        context.getString(R.string.amalgam_restoration_overhang) -> 4
+        context.getString(R.string.bone_loss) -> 5
+        context.getString(R.string.dental_implant) -> 6
+        context.getString(R.string.infectious_apical_lesion) -> 7
+        context.getString(R.string.malposed_wisdom_tooth) -> 8
+        context.getString(R.string.remained_dental_root) -> 9
+        context.getString(R.string.tooth_with_missing_counterpart) -> 10
+        else -> 0
     }
 }
 

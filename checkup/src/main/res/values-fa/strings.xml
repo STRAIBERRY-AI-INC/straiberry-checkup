@@ -1,8 +1,7 @@
 <resources>
-    <string name="app_name">StrAIberry</string>
     <string name="next">بعدی</string>
-
-    <string name="whitening">میزان سفیدی</string>
+    <string name="ai_powered_dental_care">Sweet Taste of AI in Oral Hygiene</string>
+    <string name="whitening_title">میزان سفیدی</string>
     <string name="oral_hygiene">بهداشت دهان</string>
     <string name="select_your_checkup">نوع معاینه خود را انتخاب کنید:</string>
     <string name="regular_checkup">معاینه  دوره ای</string>
@@ -26,7 +25,7 @@
     <string name="days">چند روز</string>
     <string name="weeks">چند هفته</string>
     <string name="month">چند ماه</string>
-    <string name="once_and_then_dissipated">یه دوره درد داشت ولی الان خوب شده</string>
+    <string name="once_and_then_dissipated">مدتی درد داشت و برطرف شد</string>
     <string name="_1_how_long_has_it_been_hurting">۱- از چه زمانی درد دارید؟</string>
     <string name="days_">چند روز:</string>
     <string name="intermittent_mild">متناوب، خفیف</string>
@@ -62,7 +61,7 @@
     <string name="others">سایر موارد</string>
     <string name="others_checkup">سایر موارد</string>
     <string name="your_regular_checkup_result">نتیجه %s شما:</string>
-    <string name="oral_hygiene_score">بهداشت دهان</string>
+    <string name="oral_hygiene_details_score">بهداشت دهان</string>
     <string name="your_oral_hygiene_is_very_good_but_better_brushing_everyday">Your Oral Hygiene is very good But, better brushing everyday.</string>
     <string name="share">اشتراک گذاری </string>
     <string name="share_with_your_friends_or_dentist_to_let_them_know_your_result"> نتیجه معاینه خود را با دوستان یا دندانپزشکتون به اشتراک بگذارید …</string>
@@ -99,6 +98,14 @@
     <string name="calcules_problem_description">رسوب مواد آلی روی دندان که به مرور زمان میکروب های دهانی نیز به آن ها اضافه می شوند.</string>
     <string name="carries_problem_description">آسیب ساختار دندان ناشی از اسید تولید شده توسط باکتری های دهان که معمولا با سیاه شدن دندان یا ایجاد حفره مشخص می شود.</string>
     <string name="sinus_inflection_problem_description">التهاب حفره های خالی در راه هوایی بینی که معمولا ناشی از عفونت ویروسی می باشد.</string>
+    <string name="dental_impant_problem_description">پیچ هایی از جنس فلز که در استخوان قرار داده می شوند و به دندانپزشک این امکان را می دهند تا به کمک روکش و بریج و … نواحی بی دندانی را بازسازی کند.</string>
+    <string name="bone_loss_problem_description">بیشترین عامل تحلیل استخوان، کشیدن دندان و مشکلات شدید لثه می باشد. تحلیل استخوان ممکن است موجب لق شدن و از دست رفتن دندان شود.</string>
+    <string name="amalgam_restoration_overhang_problem_description">بیرون زدگی ترمیم آمالگام و تبعیت نکردن از مورفولوژی آناتومیک دندان است که معمولا به دلیل عدم تبحر دندانپزشک مسیول ایجاد می شود.</string>
+    <string name="infectious_apical_lesion_problem_description">ضایعه رادیولوسنت در  استخوان اطراف انتهای ریشه دندان عفونی که در رادیوگرافی قابل ملاحظه است.</string>
+    <string name="remained_dental_root_problem_description">ریشه دندان ممکن است در اثر پوسیدگی شدید ایجاد شوند و یا حین خارج کردن دندان در استخوان باقی بمانند. ممکن است عامل درد و عفونت باشند.</string>
+    <string name="malposed_wisdom_tooth_problem_description">دندان های عقل ممکن است با زاویه نامناسب رویش پیدا کنند، نیمه نهفته یا کاملا نهفته باشند. در اینصورت ممکن است مشکلاتی را ایجاد کنند.</string>
+    <string name="tooth_with_missing_counterpart_problem_description">در صورتیکه دندان از دست رفته بازسازی نشود، دندان مقابل آن به سمت فضای خالی حرکت کرده و در جویدن مشکل ایجاد می کند.</string>
+
     <string name="show_illustration">مشاهده تصویر سازی</string>
     <string name="re_take_the_photo_you_must_keep_it_still_for_a_second_after_the_vibration">دوباره عکس بگیرید شما باید موبایل رابرای یک ثانیه پس از ویبره ثابت نگه دارید</string>
     <string name="history_checkup">تاریخچه</string>
@@ -125,20 +132,36 @@
     <string name="this_image_have_a_low_qulity_please_retake_again">عکس گرفته شده تار است. لطفا دوباره عکس بگیرید.</string>
     <string name="this_image_is_too_dark_please_take_another_one">عکس گرفته شده تاریک است. لطفا در یک محیط روشن‌تر عکس بگیرید.</string>
     <string name="x_rays">رادیوگرافی</string>
-    <string name="x_ray_description">It is a picture of teeth/bone that aids in the diagnosis of any abnormalities in the mouth.</string>
+    <string name="x_ray_description">تصویری از دندان و استخوان\n اطرافش است که به تشخیص \nبیماری های دهان و دندان \nکمک می کند .</string>
     <string name="upload_file">بارگذاری تصویر</string>
-    <string name="upload_x_ray_description">.لطفا تصویری که ارسال میکنید، از تمام\nزاوایای دندان شما باشد.\n\nحداکثر اندازه ۳۵ مگابایت</string>
+    <string name="upload_x_ray_description">لطفا عکس شامل رادیوگرافی پانورامیک دندان\n(فک کامل) را بارگذاری نمایید\n\nحداکثر اندازه ۳۵ مگابایت</string>
     <string name="add_url">ارسال لینک تصویر</string>
     <string name="please_insert_the_link">لطفا لینک فایل را وارد نمایید.</string>
     <string name="url_successful_added">لینک با موفقیت اضافه شد.</string>
     <string name="show_result">مشاهده نتیجه</string>
     <string name="please_insert_the_related_link">لطفا لینک فایل را وارد نمایید.</string>
-    <string name="dental_implant">Dental implant</string>
-    <string name="bone_loss">Bone loss</string>
-    <string name="amalgam_restoration_overhang">Amalgam restoration overhang</string>
-    <string name="infectious_apical_lesion">Infectious apical lesion</string>
-    <string name="remained_dental_root">Remained dental root</string>
-    <string name="malposed_wisdom_tooth">Malposed wisdom tooth</string>
-    <string name="tooth_with_missing_counterpart">Tooth with missing counterpart</string>
+    <string name="dental_implant">ایمپلنت دندانی</string>
+    <string name="bone_loss">تحلیل استخوان</string>
+    <string name="amalgam_restoration_overhang">بیرون زدگی ترمیم آمالگام</string>
+    <string name="white_spot">لکه سفید روی دندان</string>
+    <string name="amalgam_filling">ترمیم آمالگام</string>
+    <string name="calculus">جرم دندان</string>
+    <string name="carries">پوسیدگی دندان</string>
+    <string name="infectious_apical_lesion">ضایعه عفونی انتهای ریشه</string>
+    <string name="remained_dental_root">ریشه دندان باقیمانده</string>
+    <string name="malposed_wisdom_tooth">موقعیت نامناسب دندان عقل</string>
+    <string name="tooth_with_missing_counterpart">دندانی که دندان مقابل ندارد</string>
+    <string name="problem_with_uploading_photo">در آپلود تصویر مشکلی پیش امده. لطفا دوباره سعی کنید.</string>
     <string name="invalid_x_ray_url">در حال حاضر، تنها از تصاویر OPG پشتیبانی میکنیم،\nلطفا لینک مربوطه را وارد نمایید.</string>
+    <string name="hangs_in_position">با تغییر موقعیت سر، تغییر می‌کند.</string>
+    <string name="no_problem_found_in_checkup">به نظر می رسد هنگامی که صحبت از دندان به میان می آید٬شما یک فرد دقیق هستید! همین رویه را ادامه دهید!هیچ مشکلی در رابطه بادندان های شما وجود ندارد.</string>
+    <string name="no_valid_opg_image_is_detected_nplease_try_with_another_image">در عکس بارگذاری شده،رادیوگرافی پانورامیک دندانی وجود ندارد،\nلطفا عکس دیگری بارگذاری کنید</string>
+    <string name="no_problem_found_in_lower_jaw_of_your_front_teeth">استرایبری هیچ مشکلی در فک پایین دندان های جلوی شما پیدا نکرده است.</string>
+    <string name="no_problem_found_in_upper_jaw_of_front_teeth">استرایبری هیچ مشکلی در فک بالایی دندان های جلوی شما پیدا نکرده است.</string>
+    <string name="dentai_splash">دنتای،</string>
+    <string name="portable_dentist">دندانپزشک همراه</string>
+    <string name="checkup_instruction_description_one">از دوربین پشت موبایل استفاده کنید.نور فضای اتاق کافی باشد.\nلطفا جلوی آینه بروید، تا بتوانید\nصفحه موبایل را در آینه ببینید.</string>
+    <string name="checkup_instruction_desciption_two"> فاصله دوربین موبایل با دهان شما\n یک کف دست باشد.</string>
+    <string name="checkup_instruction_description_three">اپلیکیشن به طور خودکار، دندان  های شما را تشخیص خواهد داد، به محض اینکه تشخیص داد، شما لرزه ای را احساس خواهید کرد، پس از لرزه، لطفا یک ثانیه گوشی خود را بی حرکت نگه داردی تا عکس مناسب گرفته شود.</string>
+    <string name="checkup_instruction_description_four">سه عکس از فک بالا، فک پایین ودندان جلو برای این معاینه لازم استکه ترتیب آن مهم نیست.\nبرای عکس بعدی اقدام کنید.</string>
 </resources>

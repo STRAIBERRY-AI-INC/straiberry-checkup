@@ -65,6 +65,7 @@ class StraiberryEditText @JvmOverloads constructor(
 
         addView(linearLayout)
         linearLayout.apply {
+            contentDescription = context.getString(R.string.edit_text)
             layoutParams.width = LayoutParams.MATCH_PARENT
             layoutParams.height = LayoutParams.MATCH_PARENT
             gravity = Gravity.CENTER_VERTICAL
@@ -73,6 +74,7 @@ class StraiberryEditText @JvmOverloads constructor(
         linearLayout.addView(textInputLayout)
         // Setup image button toggle password
         imageButtonTogglePassword.apply {
+            contentDescription = context.getString(R.string.show_hide_password)
             background = null
             layoutParams = LinearLayout.LayoutParams(
                 imageButtonPasswordVisibilitySize,
@@ -81,6 +83,8 @@ class StraiberryEditText @JvmOverloads constructor(
                 rightMargin = imageButtonPasswordVisibilityMargin
                 leftMargin = imageButtonPasswordVisibilityMargin
             }
+            //this.increaseHitArea(context.resources.getDimension(R.dimen.hit_area_size))
+
             setImageResource(R.drawable.ic_eye_close)
             gone()
             // Change the visibility of password
@@ -220,21 +224,42 @@ class StraiberryEditText @JvmOverloads constructor(
         // Max Length
         val filterArray = arrayOfNulls<InputFilter>(1)
         filterArray[0] =
-            InputFilter.LengthFilter(straiberryEditText.getInt(R.styleable.StraiberryEditText_maxLength, 0))
+            InputFilter.LengthFilter(
+                straiberryEditText.getInt(
+                    R.styleable.StraiberryEditText_maxLength,
+                    0
+                )
+            )
         if (straiberryEditText.getInt(R.styleable.StraiberryEditText_maxLength, 0) > 0)
             textInputEditText.apply { filters = filterArray }
 
         // Text Alignment
-        if (straiberryEditText.getBoolean(R.styleable.StraiberryEditText_isTextAlignmentCenter, false))
+        if (straiberryEditText.getBoolean(
+                R.styleable.StraiberryEditText_isTextAlignmentCenter,
+                false
+            )
+        )
             textInputEditText.apply {
                 setPadding(0, 0, 0, 0)
                 textAlignment = View.TEXT_ALIGNMENT_CENTER
-                gravity = Gravity.CENTER }
+                gravity = Gravity.CENTER
+            }
 
         // Input Type
         if (straiberryEditText.getBoolean(R.styleable.StraiberryEditText_isNumber, false))
             textInputEditText.apply { inputType = InputType.TYPE_CLASS_NUMBER }
-        isCode = straiberryEditText.getBoolean(R.styleable.StraiberryEditText_isCode,false)
+        isCode = straiberryEditText.getBoolean(R.styleable.StraiberryEditText_isCode, false)
+
+        // Input Type
+        if (straiberryEditText.getBoolean(R.styleable.StraiberryEditText_isSearch, false))
+            textInputEditText.apply {
+                linearLayout.background = ContextCompat.getDrawable(
+                    context,
+                    R.drawable.custom_edit_text_focused
+                )
+                setPadding(PaddingLeftSearch.dp(context), 0, PaddingRightSearch.dp(context), 0)
+            }
+        isCode = straiberryEditText.getBoolean(R.styleable.StraiberryEditText_isCode, false)
 
         straiberryEditText.recycle()
     }
@@ -287,12 +312,14 @@ class StraiberryEditText @JvmOverloads constructor(
         private val CardElevationFocus = 12F.dp
         private val PaddingLeft = 30.dp
         private val PaddingRight = 30.dp
+        private const val PaddingLeftSearch = 40
+        private const val PaddingRightSearch = 40
         private val PaddingBottom = 8.dp
         private const val TextSize = 14f
         private val imageButtonPasswordVisibilitySize = 24.dp
         private val imageButtonPasswordVisibilityMargin = 30.dp
         private var isPasswordVisible = false
-        private var isCode=false
-        private const val DefaultMaxLine= 1
+        private var isCode = false
+        private const val DefaultMaxLine = 1
     }
 }

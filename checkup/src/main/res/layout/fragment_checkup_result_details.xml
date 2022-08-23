@@ -1,91 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/PageBackground.Primary.Gray500Dark"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        style="@style/PageBackground.Primary.Gray500Dark"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/cardViewContainerCheckupTitle"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/cardViewContainerCheckupTitle"
-            app:layout_constraintTop_toTopOf="parent" />
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayoutDots"
+        android:layout_width="match_parent"
+        android:layout_height="27dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="13dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toTopOf="@id/cardViewContainerCheckupTitle"
+        app:tabBackground="@drawable/tab_selector_checkup_result"
+        app:tabGravity="center"
+        app:tabIndicatorHeight="0dp" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayoutDots"
-            android:layout_width="match_parent"
-            android:layout_height="27dp"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="13dp"
-            android:background="@android:color/transparent"
-            app:layout_constraintBottom_toTopOf="@id/cardViewContainerCheckupTitle"
-            app:tabBackground="@drawable/tab_selector_checkup_result"
-            app:tabGravity="center"
-            app:tabIndicatorHeight="0dp" />
+    <TextView
+        android:id="@+id/textViewClose"
+        style="@style/TextViewWhite.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/regular"
+        android:paddingStart="21dp"
+        android:paddingTop="15dp"
+        android:paddingEnd="21dp"
+        android:paddingBottom="15dp"
+        android:text="@string/close"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewSwitchToReal"
+        style="@style/TextView.White.Gray500Dark.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/background_text_view_button"
+        android:fontFamily="@font/regular"
+        android:paddingStart="8dp"
+        android:paddingTop="3dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="3dp"
+        android:text="@string/show_real_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardViewContainerCheckupTitle"
+        style="@style/DoubleCardViewTopCornerRadius"
+        android:layout_width="match_parent"
+        android:layout_height="344dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
-            android:id="@+id/textViewClose"
-            style="@style/TextViewWhite.Caption"
+            android:id="@+id/textViewCheckupType"
+            style="@style/TextViewSecondaryLightH6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:fontFamily="@font/regular"
-            android:paddingStart="21dp"
-            android:paddingTop="15dp"
-            android:paddingEnd="21dp"
-            android:paddingBottom="15dp"
-            android:text="@string/close"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="@string/regular_checkup" />
+    </com.google.android.material.card.MaterialCardView>
 
-        <TextView
-            android:id="@+id/textViewSwitchToReal"
-            style="@style/TextView.White.Gray500Dark.Caption"
-            android:layout_width="wrap_content"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardViewContainer"
+        style="@style/CardViewTopCornerRadius"
+        android:layout_width="match_parent"
+        android:layout_height="287dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="19dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/background_text_view_button"
-            android:fontFamily="@font/regular"
-            android:paddingStart="8dp"
-            android:paddingTop="3dp"
-            android:paddingEnd="8dp"
-            android:text="@string/show_real_image"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardViewContainerCheckupTitle"
-            style="@style/DoubleCardViewTopCornerRadius"
-            android:layout_width="match_parent"
-            android:layout_height="344dp"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <TextView
-                android:id="@+id/textViewCheckupType"
-                style="@style/TextViewSecondaryLightH6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:fontFamily="@font/regular"
-                android:text="@string/regular_checkup" />
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardViewContainer"
-            style="@style/CardViewTopCornerRadius"
-            android:layout_width="match_parent"
-            android:layout_height="287dp"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:fillViewport="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/textViewJawType"
@@ -135,26 +137,25 @@
                         style="@style/TextViewSecondaryLight.H8"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
                         android:fontFamily="@font/bold"
-                        android:textAlignment="center" />
+                        android:gravity="center" />
                 </com.google.android.material.card.MaterialCardView>
 
                 <TextView
-                    android:id="@+id/textViewOralHygieneScoreTitle"
+                    android:id="@+id/textViewOralHygieneScoreTitle2"
                     style="@style/TextViewGreen500.Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/regular"
-                    android:text="@string/oral_hygiene_score"
+                    android:text="@string/oral_hygiene_details_score"
                     app:layout_constraintLeft_toLeftOf="@id/cardViewOralHygieneScore"
                     app:layout_constraintRight_toRightOf="@id/cardViewOralHygieneScore"
                     app:layout_constraintTop_toBottomOf="@id/cardViewOralHygieneScore" />
 
 
                 <TextView
-                    android:id="@+id/textviewEmptyProblems"
+                    android:id="@+id/textviewNoProblemFound"
                     style="@style/TextViewSecondaryLight.Subtitle1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -164,24 +165,25 @@
                     android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textViewOralHygieneScoreTitle" />
+                    app:layout_constraintTop_toBottomOf="@id/textViewOralHygieneScoreTitle2" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewProblems"
+                    android:layout_height="70dp"
                     android:layout_width="match_parent"
-                    android:layout_height="46dp"
+                    android:layout_marginTop="19dp"
                     android:layout_marginStart="17dp"
-                    android:layout_marginTop="29dp"
+                    app:layout_constraintTop_toBottomOf="@id/textViewOralHygieneScoreTitle2"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textViewOralHygieneScoreTitle" />
+                    tools:listitem="@layout/item_checkup_problems" />
 
                 <FrameLayout
                     android:id="@+id/frameLayoutLine361"
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="15dp"
                     android:layout_marginEnd="15dp"
                     android:alpha="0.4"
                     android:background="@color/headlinesLabel"
@@ -202,13 +204,16 @@
                 <TextView
                     android:id="@+id/textViewProblemDescribe"
                     style="@style/TextViewSecondaryLight.White"
-                    android:layout_width="322dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="35dp"
+                    android:layout_marginEnd="35dp"
+                    android:minHeight="90dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     android:fontFamily="@font/regular"
-                    android:text="@string/amalgam_filling_problem_description"
                     app:layout_constraintStart_toStartOf="@id/textViewProblemMainTitle"
                     app:layout_constraintTop_toBottomOf="@id/textViewProblemMainTitle" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+        </ScrollView>
+    </com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

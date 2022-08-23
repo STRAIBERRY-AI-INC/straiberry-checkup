@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.straiberry.android.checkup.BuildConfig
 import com.straiberry.android.checkup.R
 import com.straiberry.android.common.extensions.gone
 import com.straiberry.android.common.extensions.visible
@@ -40,6 +41,8 @@ class ShareCheckupResultView @JvmOverloads constructor(
     private var frameLayoutLine72Share: FrameLayout
     private var layoutOralHygieneScoreShare: ConstraintLayout
     private var layoutOralHygieneScoreShareCenter: ConstraintLayout
+    private var layoutAppInfoGlobal: ConstraintLayout
+    private var layoutAppInfoFarsi: ConstraintLayout
 
     init {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -59,6 +62,8 @@ class ShareCheckupResultView @JvmOverloads constructor(
         frameLayoutLine72Share = findViewById(R.id.frameLayoutLine72Share)
         layoutOralHygieneScoreShareCenter = findViewById(R.id.layoutOralHygieneScoreShareCenter)
         layoutOralHygieneScoreShare = findViewById(R.id.layoutOralHygieneScoreShare)
+        layoutAppInfoFarsi = findViewById(R.id.layoutAppInfoFarsi)
+        layoutAppInfoGlobal = findViewById(R.id.layoutAppInfoGlobal)
     }
 
     fun setCheckupResult(
@@ -110,5 +115,11 @@ class ShareCheckupResultView @JvmOverloads constructor(
             layoutOralHygieneScoreShare.gone()
             layoutWhiteningScoreShareCenter.visible()
         }
+
+        // Show app info layout based on flavor version
+        if (BuildConfig.IS_FARSI)
+            layoutAppInfoFarsi.visible()
+        else
+            layoutAppInfoGlobal.visible()
     }
 }

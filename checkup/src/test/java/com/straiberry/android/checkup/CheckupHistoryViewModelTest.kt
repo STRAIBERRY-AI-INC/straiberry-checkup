@@ -2,18 +2,19 @@ package com.straiberry.android.checkup
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.straiberry.android.checkup.checkup.domain.model.CheckupHistorySuccessModel
-import com.straiberry.android.checkup.checkup.domain.usecase.CheckupHistoryUseCase
+import com.straiberry.android.checkup.checkup.domain.usecase.CheckupSdkHistoryUseCase
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupHistoryViewModel
-import com.straiberry.android.common.base.Failure
-import com.straiberry.android.common.base.NotLoading
-import com.straiberry.android.common.base.Success
-import com.straiberry.android.common.network.CoroutineContextProvider
+import com.straiberry.android.core.base.Failure
+import com.straiberry.android.core.base.NotLoading
+import com.straiberry.android.core.base.Success
+import com.straiberry.android.core.network.CoroutineContextProvider
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -25,7 +26,7 @@ import org.mockito.ArgumentMatchers.any
 
 @ExperimentalCoroutinesApi
 class CheckupHistoryViewModelTest {
-    private val dispatcher = TestCoroutineDispatcher()
+    private val dispatcher = StandardTestDispatcher()
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
@@ -34,7 +35,7 @@ class CheckupHistoryViewModelTest {
     val coroutineTestRule = CoroutineTestRule(dispatcher)
 
     @RelaxedMockK
-    lateinit var checkupHistoryUseCase: CheckupHistoryUseCase
+    lateinit var checkupHistoryUseCase: CheckupSdkHistoryUseCase
 
     private fun createViewModel() =
         CheckupHistoryViewModel(
@@ -68,6 +69,7 @@ class CheckupHistoryViewModelTest {
 
             val viewModel = createViewModel()
             viewModel.checkupHistory(1)
+            delay(100)
             assertEquals(true, (viewModel.submitStateCheckupHistory.value is Success))
         }
 
@@ -79,6 +81,7 @@ class CheckupHistoryViewModelTest {
 
         val viewModel = createViewModel()
         viewModel.checkupHistory(1)
+        delay(100)
         assertEquals(true, (viewModel.submitStateCheckupHistory.value is Failure))
     }
 }

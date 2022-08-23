@@ -6,21 +6,22 @@ import com.straiberry.android.checkup.checkup.domain.usecase.AddDentalIssueUseCa
 import com.straiberry.android.checkup.checkup.domain.usecase.DeleteDentalIssueUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.GetAllDentalIssueUseCase
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.DentalIssuesViewModel
-import com.straiberry.android.common.base.ReadableFailure
-import com.straiberry.android.common.base.ReadableSuccess
-import com.straiberry.android.common.network.CoroutineContextProvider
+import com.straiberry.android.core.base.ReadableFailure
+import com.straiberry.android.core.base.ReadableSuccess
+import com.straiberry.android.core.network.CoroutineContextProvider
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.*
 
 @ExperimentalCoroutinesApi
 class DentalIssueViewModelTest {
-    private val dispatcher = TestCoroutineDispatcher()
+    private val dispatcher = StandardTestDispatcher()
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
@@ -64,6 +65,7 @@ class DentalIssueViewModelTest {
 
         val viewModel = createViewModel()
         viewModel.addDentalIssue(DentalIssue)
+        delay(100)
         Assert.assertEquals(true, (viewModel.submitStateAddDentalIssue.value is ReadableSuccess))
     }
 
@@ -75,6 +77,7 @@ class DentalIssueViewModelTest {
 
         val viewModel = createViewModel()
         viewModel.addDentalIssue(DentalIssue)
+        delay(100)
         Assert.assertEquals(true, (viewModel.submitStateAddDentalIssue.value is ReadableFailure))
     }
 
@@ -86,6 +89,7 @@ class DentalIssueViewModelTest {
 
         val viewModel = createViewModel()
         viewModel.getDentalIssues()
+        delay(100)
         Assert.assertEquals(true, (viewModel.submitStateGetDentalIssues.value is ReadableSuccess))
     }
 
@@ -97,6 +101,7 @@ class DentalIssueViewModelTest {
 
         val viewModel = createViewModel()
         viewModel.getDentalIssues()
+        delay(100)
         Assert.assertEquals(true, (viewModel.submitStateGetDentalIssues.value is ReadableFailure))
     }
 
@@ -108,6 +113,7 @@ class DentalIssueViewModelTest {
 
         val viewModel = createViewModel()
         viewModel.deleteDentalIssues(ToothId)
+        delay(100)
         Assert.assertEquals(
             true,
             (viewModel.submitStateDeleteDentalIssues.value is ReadableSuccess)
@@ -122,6 +128,7 @@ class DentalIssueViewModelTest {
 
         val viewModel = createViewModel()
         viewModel.deleteDentalIssues(ToothId)
+        delay(100)
         Assert.assertEquals(
             true,
             (viewModel.submitStateDeleteDentalIssues.value is ReadableFailure)

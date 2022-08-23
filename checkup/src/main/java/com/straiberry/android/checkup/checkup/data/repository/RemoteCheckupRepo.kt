@@ -17,7 +17,6 @@ class RemoteCheckupRepo(
 ) : CheckupRepo {
 
     override suspend fun createCheckup(
-        displayName: String,
         checkupType: Int
     ): CreateCheckupSuccessModel =
         checkupApi.createCheckup(

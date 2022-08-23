@@ -1,27 +1,29 @@
 package com.straiberry.android.checkup
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.straiberry.android.checkup.checkup.domain.model.AddImageToCheckupSuccessModel
+import com.straiberry.android.checkup.checkup.domain.usecase.AddImageToXrayCheckupUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.AddXrayImageFromUrlUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.CheckXrayUrlUseCase
-import com.straiberry.android.checkup.checkup.domain.usecase.CreateXrayCheckupUseCase
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.XrayViewModel
-import com.straiberry.android.common.base.Failure
-import com.straiberry.android.common.base.Loading
-import com.straiberry.android.common.base.NotLoading
-import com.straiberry.android.common.base.Success
-import com.straiberry.android.common.network.CoroutineContextProvider
+import com.straiberry.android.core.base.Failure
+import com.straiberry.android.core.base.Loading
+import com.straiberry.android.core.base.NotLoading
+import com.straiberry.android.core.base.Success
+import com.straiberry.android.core.network.CoroutineContextProvider
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.*
 
 @ExperimentalCoroutinesApi
 class XrayViewModelTest {
-    private val dispatcher = TestCoroutineDispatcher()
+    private val dispatcher = StandardTestDispatcher()
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
@@ -30,7 +32,7 @@ class XrayViewModelTest {
     val coroutineTestRule = CoroutineTestRule(dispatcher)
 
     @RelaxedMockK
-    lateinit var createXrayCheckupUseCase: CreateXrayCheckupUseCase
+    lateinit var addImageToXrayCheckupUseCase: AddImageToXrayCheckupUseCase
 
     @RelaxedMockK
     lateinit var addXrayImageFromUrlUseCase: AddXrayImageFromUrlUseCase
@@ -38,7 +40,7 @@ class XrayViewModelTest {
     @RelaxedMockK
     lateinit var checkXrayUrlUseCase: CheckXrayUrlUseCase
     private fun createViewModel() = XrayViewModel(
-        createXrayCheckupUseCase, addXrayImageFromUrlUseCase, checkXrayUrlUseCase,
+        addImageToXrayCheckupUseCase, addXrayImageFromUrlUseCase, checkXrayUrlUseCase,
         CoroutineContextProvider(dispatcher, dispatcher)
     )
 
@@ -62,10 +64,8 @@ class XrayViewModelTest {
     @Test
     fun `When checkup id is not empty, then state should be loading`() = runTest {
         val viewModel = createViewModel()
-        viewModel.submitStateAddXrayImageFromUrl.observeForever {
-            viewModel.addXrayImageFromUrl("1", "url")
-            Assert.assertEquals(Loading, viewModel.submitStateAddXrayImageFromUrl.value)
-        }
+        viewModel.addXrayImageFromUrl("1", "url")
+        Assert.assertEquals(Loading, viewModel.submitStateAddXrayImageFromUrl.value)
     }
 
     @Test
@@ -73,10 +73,11 @@ class XrayViewModelTest {
         runTest {
             coEvery {
                 addXrayImageFromUrlUseCase.execute("1", "url")
-            } returns Unit
+            } returns AddImageToCheckupSuccessModel(1, 1)
 
             val viewModel = createViewModel()
             viewModel.addXrayImageFromUrl("1", "url")
+            delay(100)
             Assert.assertEquals(true, (viewModel.submitStateAddXrayImageFromUrl.value is Success))
         }
 
@@ -89,6 +90,7 @@ class XrayViewModelTest {
 
             val viewModel = createViewModel()
             viewModel.addXrayImageFromUrl("1", "url")
+            delay(100)
             Assert.assertEquals(true, (viewModel.submitStateAddXrayImageFromUrl.value is Failure))
         }
 
@@ -102,6 +104,7 @@ class XrayViewModelTest {
 
             val viewModel = createViewModel()
             viewModel.checkXrayUrl("url")
+            delay(100)
             Assert.assertEquals(true, (viewModel.submitStateCheckXrayUrl.value is Success))
         }
 
@@ -114,6 +117,7 @@ class XrayViewModelTest {
 
             val viewModel = createViewModel()
             viewModel.checkXrayUrl("url")
+            delay(100)
             Assert.assertEquals(true, (viewModel.submitStateCheckXrayUrl.value is Failure))
         }
 }

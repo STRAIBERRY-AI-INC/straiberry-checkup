@@ -1,11 +1,39 @@
 <resources>
 
-    <style name="TextViewSecondaryLight.Subtitle1" parent="TextAppearance.Subtitle1">
-        <item name="android:textColor">@color/secondaryLight</item>
-    </style>
+    <style name="TextViewLightText600.Body1" parent="TextAppearance.Body1" />
+    // Edit text
 
     <style name="TextAppearance.EditText.Code" parent="Widget.AppCompat.EditText">
         <item name="android:textColor">@color/secondary</item>
     </style>
 
+    <style name="CardViewTopCornerRadius" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/cardViewBackground</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay_card_custom_corners" parent="Widget.MaterialComponents.CardView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">40dp</item>
+        <item name="cornerSizeTopLeft">40dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
+    <style name="ButtonActive.SecondaryLight" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:textAppearance">@style/TextAppearance.Subtitle1</item>
+        <item name="backgroundTint">@color/secondaryLight</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ButtonActiveOutlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textAppearance">@style/TextAppearance.H7Headline</item>
+        <item name="android:textColor">@color/secondaryLight</item>
+        <item name="strokeColor">@color/secondaryLight</item>
+        <item name="strokeWidth">2dp</item>
+    </style>
+
+    <style name="TextViewSecondaryLight.Subtitle1" parent="TextAppearance.Subtitle1">
+        <item name="android:textColor">@color/secondaryLight</item>
+    </style>
 </resources>

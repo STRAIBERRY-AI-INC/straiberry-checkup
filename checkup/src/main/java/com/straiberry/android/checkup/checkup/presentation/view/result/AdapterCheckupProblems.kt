@@ -23,7 +23,7 @@ data class CheckupProblemsModel(
 
 class AdapterCheckupProblems(
     val context: Context,
-    var data: List<CheckupProblemsModel>,
+    var data: List<CheckupProblemsModel> = listOf(),
     private val toothProblemClick: ToothProblemClick,
     private val checkupResultLastSelectedProblemViewModel: CheckupResultLastSelectedProblemViewModel,
     private val currentJawPosition: JawPosition,
@@ -54,13 +54,20 @@ class AdapterCheckupProblems(
             holder.binding.cardViewToothProblem.isSelected = true
             holder.binding.textViewProblemCount.isEnabled = true
             holder.binding.textViewProblemTitle.isEnabled = true
+            var jawType = data[position].jawType
+
+            if (isIllustration.not())
+                if (data[position].jawType == JawPosition.FrontTeethLower || data[position].jawType == JawPosition.FrontTeethUpper)
+                    jawType = JawPosition.FrontTeeth
+
             toothProblemClick.toothProblemOnCLick(
                 position,
                 data[position].listOfToothIndex,
                 data[position].listOfToothPosition,
                 data[position].title,
-                data[position].jawType
+                jawType
             )
+
         }
 
         if (performClickForFirstTime) {
@@ -76,10 +83,10 @@ class AdapterCheckupProblems(
                 }
                 JawPosition.FrontTeethLower -> {
                     toothProblemClick.toothProblemOnCLick(
-                        checkupResultLastSelectedProblemViewModel.submitStateSelectedProblemFrontUpperIllustration.value!!,
-                        data[checkupResultLastSelectedProblemViewModel.submitStateSelectedProblemFrontUpperIllustration.value!!].listOfToothIndex,
-                        data[checkupResultLastSelectedProblemViewModel.submitStateSelectedProblemFrontUpperIllustration.value!!].listOfToothPosition,
-                        data[checkupResultLastSelectedProblemViewModel.submitStateSelectedProblemFrontUpperIllustration.value!!].title,
+                        checkupResultLastSelectedProblemViewModel.submitStateSelectedProblemFrontLowerIllustration.value!!,
+                        data[checkupResultLastSelectedProblemViewModel.submitStateSelectedProblemFrontLowerIllustration.value!!].listOfToothIndex,
+                        data[checkupResultLastSelectedProblemViewModel.submitStateSelectedProblemFrontLowerIllustration.value!!].listOfToothPosition,
+                        data[checkupResultLastSelectedProblemViewModel.submitStateSelectedProblemFrontLowerIllustration.value!!].title,
                         data[position].jawType
                     )
                 }
@@ -89,7 +96,7 @@ class AdapterCheckupProblems(
                         data[checkupResultLastSelectedProblemViewModel.submitStateSelectedProblemFrontRealImage.value!!].listOfToothIndex,
                         data[checkupResultLastSelectedProblemViewModel.submitStateSelectedProblemFrontRealImage.value!!].listOfToothPosition,
                         data[checkupResultLastSelectedProblemViewModel.submitStateSelectedProblemFrontRealImage.value!!].title,
-                        data[position].jawType
+                        if (isIllustration) data[position].jawType else JawPosition.FrontTeeth
                     )
                 }
                 JawPosition.UpperJaw -> {

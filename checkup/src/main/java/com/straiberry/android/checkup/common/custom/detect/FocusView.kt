@@ -173,6 +173,7 @@ class FocusView @JvmOverloads constructor(
         // Show logo
         showLogo()
         // Setup progress
+        removeView(circularProgressIndicator)
         addView(circularProgressIndicator.apply {
             visibleWithAnimation()
             // Measure the size of progress and it's must be the same size of

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>web-view-test Raychat</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <script>
+  function gup(e, l) { l || (l = location.href), e = e.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]"); var n = new RegExp("[\\?&]" + e + "=([^&#]*)").exec(l); return null == n ? null : n[1] }
+  if (gup('utm_medium', window.location.href) !== "widget") {
+    ! function() {
+      function t() {
+        var t = document.createElement("script");
+        t.type = "text/javascript", t.async = !0, localStorage.getItem("rayToken") ? t.src = "https://app.raychat.io/scripts/js/" + o + "?rid=" + localStorage.getItem("rayToken") + "&href=" + window.location.href : t.src = "https://app.raychat.io/scripts/js/" + o + "?href="+window.location.href;
+        var e = document.getElementsByTagName("script")[0];
+        e.parentNode.insertBefore(t, e)
+      }
+      var e = document,
+        a = window,
+        o = "0dbfd679-66f2-466d-9b03-f5363610aef8";
+      "complete" == e.readyState ? t() : a.attachEvent ? a.attachEvent("onload", t) : a.addEventListener("load", t, !1)
+    }();
+  }
+
+
+  window.addEventListener('raychat_ready', function (ets) {
+
+   raychat_toggle_container()
+
+});
+
+
+
+
+
+
+
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

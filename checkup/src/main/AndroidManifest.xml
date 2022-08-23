@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.straiberry.android.checkup">
 
     <uses-permission android:name="android.permission.VIBRATE" />
 
-    <application android:name=".App">
+    <application
+        android:name=".App"
+        android:supportsRtl="true">
 
         <activity
             android:name="com.canhub.cropper.CropImageActivity"

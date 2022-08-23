@@ -7,22 +7,23 @@ import com.straiberry.android.checkup.checkup.domain.usecase.RemoteAddDentalIssu
 import com.straiberry.android.checkup.checkup.domain.usecase.RemoteDeleteDentalIssueUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.RemoteUpdateDentalIssueUseCase
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.RemoteDentalIssueViewModel
-import com.straiberry.android.common.base.Failure
-import com.straiberry.android.common.base.NotLoading
-import com.straiberry.android.common.base.Success
-import com.straiberry.android.common.network.CoroutineContextProvider
+import com.straiberry.android.core.base.Failure
+import com.straiberry.android.core.base.NotLoading
+import com.straiberry.android.core.base.Success
+import com.straiberry.android.core.network.CoroutineContextProvider
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.*
 
 @ExperimentalCoroutinesApi
 class RemoteDentalIssueViewModelTest {
-    private val dispatcher = TestCoroutineDispatcher()
+    private val dispatcher = StandardTestDispatcher()
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
@@ -65,7 +66,7 @@ class RemoteDentalIssueViewModelTest {
     }
 
     @Test
-    fun `When a dental issue is added, then state should be success`() = runTest {
+    fun `When a dental issue is not added, then state should be failure`() = runTest {
         coEvery {
             remoteAddDentalIssueUseCase.execute(
                 toothNumber = "1",
@@ -73,26 +74,28 @@ class RemoteDentalIssueViewModelTest {
                 cause = 0,
                 pain = 0
             )
-        } returns AddToothToDentalIssueSuccessModel(ToothId)
-
-        val viewModel = createViewModel()
-        viewModel.remoteAddDentalIssue(toothNumber = "1", duration = 0, cause = 0, pain = 0)
-        Assert.assertEquals(true, (viewModel.submitStateAddDentalIssue.value is Success))
-    }
-
-    @Test
-    fun `When dental issue is not added, then state should be failure`() = runTest {
-        coEvery {
-            remoteAddDentalIssueUseCase.execute(toothNumber = "", duration = 0, cause = 0, pain = 0)
         } throws Exception()
 
         val viewModel = createViewModel()
         viewModel.remoteAddDentalIssue(toothNumber = "1", duration = 0, cause = 0, pain = 0)
+        delay(100)
         Assert.assertEquals(true, (viewModel.submitStateAddDentalIssue.value is Failure))
     }
 
     @Test
-    fun `When a dental issue is updated, then state should be success`() = runTest {
+    fun `When dental issue is added, then state should be success`() = runTest {
+        coEvery {
+            remoteAddDentalIssueUseCase.execute(toothNumber = "", duration = 0, cause = 0, pain = 0)
+        } returns AddToothToDentalIssueSuccessModel(ToothId)
+
+        val viewModel = createViewModel()
+        viewModel.remoteAddDentalIssue(toothNumber = "1", duration = 0, cause = 0, pain = 0)
+        delay(100)
+        Assert.assertEquals(true, (viewModel.submitStateAddDentalIssue.value is Success))
+    }
+
+    @Test
+    fun `When a dental issue didn't updated, then state should be failure`() = runTest {
         coEvery {
             remoteUpdateDentalIssueUseCase.execute(
                 toothId = 0,
@@ -101,7 +104,7 @@ class RemoteDentalIssueViewModelTest {
                 cause = 0,
                 pain = 0
             )
-        } returns AddToothToDentalIssueSuccessModel(ToothId)
+        } throws Exception()
 
         val viewModel = createViewModel()
         viewModel.remoteUpdateDentalIssue(
@@ -111,11 +114,12 @@ class RemoteDentalIssueViewModelTest {
             cause = 0,
             pain = 0
         )
+        delay(100)
         Assert.assertEquals(true, (viewModel.submitStateUpdateDentalIssue.value is Success))
     }
 
     @Test
-    fun `When a dental issue didn't updated, then state should be failure`() = runTest {
+    fun `When a dental is updated, then state should be Success`() = runTest {
         coEvery {
             remoteUpdateDentalIssueUseCase.execute(
                 toothId = 0,
@@ -124,7 +128,7 @@ class RemoteDentalIssueViewModelTest {
                 cause = 0,
                 pain = 0
             )
-        } throws Exception()
+        } returns AddToothToDentalIssueSuccessModel(1)
 
         val viewModel = createViewModel()
         viewModel.remoteUpdateDentalIssue(
@@ -134,7 +138,8 @@ class RemoteDentalIssueViewModelTest {
             cause = 0,
             pain = 0
         )
-        Assert.assertEquals(true, (viewModel.submitStateUpdateDentalIssue.value is Failure))
+        delay(200)
+        Assert.assertEquals(true, viewModel.submitStateUpdateDentalIssue.value is Success)
     }
 
     @Test
@@ -145,6 +150,7 @@ class RemoteDentalIssueViewModelTest {
 
         val viewModel = createViewModel()
         viewModel.remoteDeleteDentalIssue(ToothId)
+        delay(100)
         Assert.assertEquals(true, (viewModel.submitStateDeleteDentalIssue.value is Success))
     }
 
@@ -156,6 +162,7 @@ class RemoteDentalIssueViewModelTest {
 
         val viewModel = createViewModel()
         viewModel.remoteDeleteDentalIssue(ToothId)
+        delay(100)
         Assert.assertEquals(true, (viewModel.submitStateDeleteDentalIssue.value is Failure))
     }
 

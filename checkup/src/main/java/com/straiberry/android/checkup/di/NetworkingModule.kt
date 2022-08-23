@@ -14,9 +14,9 @@ import java.util.concurrent.TimeUnit
 
 private const val BASE_URL = "https://api.dev.straiberry.com/"
 private const val CHECKUP_SDK_BASE_URL = "https://sdk.straiberry.com/"
+const val DEBUG = "DEBUG"
 private const val X_RAY_API = "x-ray"
 private const val CHECKUP_SDK_API = "checkup-sdk"
-const val DEBUG = "DEBUG"
 val networkingModule = module {
     single { GsonConverterFactory.create() as Converter.Factory }
     single {

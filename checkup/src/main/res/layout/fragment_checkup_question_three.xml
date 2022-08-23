@@ -8,9 +8,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:layout_marginTop="25dp"
         android:animateLayoutChanges="true"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <com.google.android.material.card.MaterialCardView
@@ -169,6 +169,39 @@
 
             <TextView
                 android:id="@+id/textViewAnswerFiveTitle"
+                style="@style/TextViewGray500.Body1.Selector"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="63dp"
+                android:fontFamily="@font/regular"
+                android:text="@string/hangs_in_position" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewAnswerSix"
+            style="@style/CardViewUnchecked"
+            android:layout_width="286dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="17dp"
+            app:cardCornerRadius="33dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardViewAnswerFive"
+            app:rippleColor="@android:color/transparent">
+
+            <ImageView
+                android:id="@+id/imageViewAnswerSixCheckbox"
+                android:layout_width="29dp"
+                android:layout_height="29dp"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="30dp"
+                android:background="@android:color/transparent"
+                android:clickable="false"
+                android:src="@drawable/state_question_choice_check_box" />
+
+            <TextView
+                android:id="@+id/textViewAnswerSixTitle"
                 style="@style/TextViewGray500.Body1.Selector"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

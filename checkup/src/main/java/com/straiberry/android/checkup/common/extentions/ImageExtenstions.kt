@@ -1,33 +1,32 @@
 package com.straiberry.android.checkup.common.extentions
 
 import android.annotation.SuppressLint
-import android.content.ContentResolver
-import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.graphics.*
 import android.media.ExifInterface
 import android.media.Image
 import android.net.Uri
-import android.os.Build
-import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.PreviewView
-import com.straiberry.android.checkup.R
+import androidx.palette.graphics.Palette
 import com.straiberry.android.checkup.common.helper.Variance
 import org.opencv.android.Utils
 import org.opencv.core.CvType
 import org.opencv.core.Mat
 import org.opencv.imgproc.Imgproc
-import java.io.*
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.nio.ByteBuffer
 import kotlin.math.abs
 import kotlin.math.min
 
 
-private const val DARKNESS_THRESHOLD = 90
+private const val DARKNESS_THRESHOLD = 50
 
 fun Image.toBitmap(): Bitmap? {
     val planes: Array<Image.Plane> = this.planes
@@ -58,51 +57,6 @@ fun ImageProxy.toBitmap(): Bitmap? {
     return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 }
 
-fun Bitmap.compressBitmap(
-    context: Context,
-    rotation: Int
-): Bitmap {
-    val fos: OutputStream?
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-
-        val resolver: ContentResolver = context.contentResolver
-
-        val contentValues = ContentValues().apply {
-            put(
-                MediaStore.MediaColumns.DISPLAY_NAME,
-                System.currentTimeMillis().toString()
-            )
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            put(
-                MediaStore.MediaColumns.RELATIVE_PATH,
-                "DCIM/${context.getString(R.string.app_name)}"
-            )
-        }
-        val imageUri =
-            resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-        fos = resolver.openOutputStream(imageUri!!)
-    } else {
-        val imageDir = Environment.getExternalStoragePublicDirectory(
-            Environment.DIRECTORY_DCIM
-        ).toString() + File.separator + context.getString(R.string.app_name)
-        val file = File(imageDir)
-        if (!file.exists())
-            file.mkdir()
-        val image = File(imageDir, System.currentTimeMillis().toString() + "jpg")
-        fos = FileOutputStream(image)
-    }
-    val savedBitmap = Bitmap.createBitmap(
-        this.correctRotation(rotation),
-        0,
-        0,
-        this.width,
-        this.height,
-    )
-    savedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-    fos?.flush()
-    fos?.close()
-    return savedBitmap
-}
 
 fun Bitmap.resize(maxWidth: Int, maxHeight: Int): Bitmap? {
     var image = this
@@ -122,6 +76,29 @@ fun Bitmap.resize(maxWidth: Int, maxHeight: Int): Bitmap? {
         image
     } else {
         image
+    }
+}
+
+fun Bitmap.cropFromCenter(): Bitmap {
+    return if (this.width >= this.height) {
+
+        Bitmap.createBitmap(
+            this,
+            this.width / 2 - this.height / 2,
+            0,
+            this.height,
+            this.height
+        )
+
+    } else {
+
+        Bitmap.createBitmap(
+            this,
+            0,
+            this.height / 2 - this.width / 2,
+            this.width,
+            this.width
+        )
     }
 }
 
@@ -150,6 +127,62 @@ fun Bitmap.finalCropOnCapturedJaw(
     )
 }
 
+fun Bitmap.finalCropOnCapturedXrayJaw(
+    normalizerLocation: RectF,
+    resizedBitmap: Bitmap
+): Bitmap {
+    val correctRotation = this
+
+    val mX = (normalizerLocation.left / resizedBitmap.width) * this.width
+    val mY = (normalizerLocation.top / resizedBitmap.height) * this.height
+    val mW = (normalizerLocation.width() / resizedBitmap.width) * this.width
+    val mH = (normalizerLocation.height() / resizedBitmap.height) * this.height
+
+    val croppedJaw = Bitmap.createBitmap(
+        correctRotation,
+        (mX).toInt(),
+        (mY).toInt(),
+        (mW).toInt(),
+        (mH).toInt(),
+    )
+
+    return croppedJaw
+
+}
+
+fun Bitmap.addPaddingForBetterDetection(divisible: Int): Bitmap {
+    val paddingW = (640 - this.width) % divisible
+    val paddingH = (640 - this.height) % divisible
+
+    val bitmapWithPadding = Bitmap.createBitmap(
+        this.width + paddingW / 2,
+        this.height + paddingH / 2,
+        Bitmap.Config.ARGB_8888
+    )
+    Canvas(bitmapWithPadding).drawColor(Color.parseColor("#727272"))
+    val marginLeft = (bitmapWithPadding.width * 0.5 - this.width * 0.5)
+    val marginTop = (bitmapWithPadding.height * 0.5 - this.height * 0.5)
+    Canvas(bitmapWithPadding).drawBitmap(this, marginLeft.toFloat(), marginTop.toFloat(), null)
+
+    return bitmapWithPadding
+}
+
+fun Bitmap.createBackgroundSquare(): Bitmap {
+    val size = (if (this.width > this.height) this.width else this.height)
+
+    val backgroundBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+
+
+    Canvas(backgroundBitmap).drawColor(this.createPaletteSync().getLightMutedColor(Color.GRAY))
+
+    val marginLeft = (backgroundBitmap.width * 0.5 - this.width * 0.5)
+    val marginTop = (backgroundBitmap.height * 0.5 - this.height * 0.5)
+    Canvas(backgroundBitmap).drawBitmap(this, marginLeft.toFloat(), marginTop.toFloat(), null)
+    return backgroundBitmap
+}
+
+// Generate palette synchronously and return it
+fun Bitmap.createPaletteSync(): Palette = Palette.from(this).generate()
 
 fun Bitmap.correctRotation(rotation: Int): Bitmap {
     val matrix = Matrix()
@@ -462,15 +495,22 @@ fun Bitmap.calculateBrightnessEstimate(pixelSpacing: Int): Boolean {
         n++
         i += pixelSpacing
     }
+    Log.e(
+        "Brightness=", abs((R + B + G) / (n * 3)).toString()
+    )
     return abs((R + B + G) / (n * 3)) < DARKNESS_THRESHOLD
 }
 
 fun Bitmap.runBlurDetection(): Boolean {
-    val height = this.height
-    val width = this.width
+    val downSizedBitmap = if (this.width > 500)
+        this.resize(this.width / 3, this.height / 3)
+    else
+        this
+    val height = downSizedBitmap!!.height
+    val width = downSizedBitmap.width
 
     // Make image gray
-    val grayImage = getGrayScaleBitmap(this)
+    val grayImage = getGrayScaleBitmap(downSizedBitmap)
     val gray = IntArray(width * height)
     grayImage.getPixels(gray, 0, width, 0, 0, width, height)
 
@@ -495,7 +535,7 @@ fun Bitmap.runBlurDetection(): Boolean {
     Log.e(
         "VARIANCE=", Variance(pixels).variance.toString()
     )
-    return Variance(pixels).variance < 2
+    return Variance(pixels).variance > 2
 }
 
 fun getGrayScaleBitmap(original: Bitmap): Bitmap {

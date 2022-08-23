@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.straiberry.android.checkup.checkup.domain.model.CheckupResultSuccessModel
 import com.straiberry.android.checkup.checkup.domain.usecase.GetCheckupSdkResultUseCase
-import com.straiberry.android.common.base.*
-import com.straiberry.android.common.network.CoroutineContextProvider
+import com.straiberry.android.core.base.*
+import com.straiberry.android.core.network.CoroutineContextProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 

@@ -1,6 +1,7 @@
 package com.straiberry.android.checkup.checkup.data.networking
 
 import com.straiberry.android.checkup.checkup.data.networking.model.*
+import com.straiberry.android.checkup.checkup.domain.model.UpdateImageInCheckupSuccessModel
 import okhttp3.MultipartBody
 import retrofit2.http.*
 
@@ -38,6 +39,16 @@ interface CheckupSdkApi {
     )
             : AddImageToCheckupSuccessResponse
 
+    @Multipart
+    @PATCH("${API_VERSION}checkup-image/{id}/")
+    suspend fun updateImageInCheckup(
+        @Path("id") imageId: Int,
+        @Part checkupId: MultipartBody.Part,
+        @Part imageType: MultipartBody.Part,
+        @Part image: MultipartBody.Part,
+        @HeaderMap header: Map<String, String?>
+    )
+            : UpdateImageInCheckupSuccessModel
 
     @GET("${API_VERSION}checkup/{id}/")
     suspend fun getCheckup(

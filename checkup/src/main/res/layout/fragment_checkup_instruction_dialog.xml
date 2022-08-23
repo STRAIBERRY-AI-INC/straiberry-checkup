@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/CardViewCheckupInstruction"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_marginStart="52dp"
+    android:layout_marginTop="92dp"
+    android:layout_marginEnd="52dp"
+    android:layout_marginBottom="92dp"
+    android:clipToPadding="true"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="12dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayoutDots"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tabBackground="@drawable/tab_selector_welcome_questions"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp" />
+
+        <ImageButton
+            android:id="@+id/imageButtonClose"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="62dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/circle_secondary"
+            android:elevation="10dp"
+            android:src="@drawable/ic_round_arrow_forward_24"
+            android:translationX="-80dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tabLayoutDots" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

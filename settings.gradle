@@ -16,5 +16,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "CheckupSample"
 include ':app'
+include ':core'
 include ':checkup'
 include ':common'

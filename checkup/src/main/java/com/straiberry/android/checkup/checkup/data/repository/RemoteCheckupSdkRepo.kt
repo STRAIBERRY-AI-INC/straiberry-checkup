@@ -7,10 +7,7 @@ import com.straiberry.android.checkup.checkup.data.networking.model.AddSeveralTe
 import com.straiberry.android.checkup.checkup.data.networking.model.AddToothToCheckupRequest
 import com.straiberry.android.checkup.checkup.data.networking.model.CreateCheckupRequest
 import com.straiberry.android.checkup.checkup.data.networking.model.GetSDKTokenRequest
-import com.straiberry.android.checkup.checkup.domain.model.AddImageToCheckupSuccessModel
-import com.straiberry.android.checkup.checkup.domain.model.CheckupHistorySuccessModel
-import com.straiberry.android.checkup.checkup.domain.model.CheckupResultSuccessModel
-import com.straiberry.android.checkup.checkup.domain.model.CreateCheckupSuccessModel
+import com.straiberry.android.checkup.checkup.domain.model.*
 import com.straiberry.android.checkup.checkup.domain.repository.CheckupSdkRepo
 import com.straiberry.android.checkup.common.helper.SdkAuthorizationHelper
 import com.straiberry.android.checkup.common.helper.StraiberryCheckupSdkInfo
@@ -75,6 +72,24 @@ class RemoteCheckupSdkRepo(
             imageType = imageType,
             image = image,
             lastImage = lastImage,
+            header = authorizationHelper.setHeaders(context)
+        ).toDomainModel()
+
+    /**
+     * Update a specific image in checkup based on checkup id
+     * and uploaded image id.
+     */
+    override suspend fun updateImageInCheckup(
+        checkupId: MultipartBody.Part,
+        image: MultipartBody.Part,
+        imageType: MultipartBody.Part,
+        imageId: Int
+    ): UpdateImageInCheckupSuccessModel =
+        checkupSdkApi.updateImageInCheckup(
+            imageId = imageId,
+            checkupId = checkupId,
+            imageType = imageType,
+            image = image,
             header = authorizationHelper.setHeaders(context)
         ).toDomainModel()
 
