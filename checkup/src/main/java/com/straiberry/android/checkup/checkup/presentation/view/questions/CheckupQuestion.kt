@@ -145,22 +145,24 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
      */
     override fun moveQuestionTitleBox(PagePosition: Int) {
         when (PagePosition) {
-            0 -> checkupQuestionViewModel.submitStateAnswerOneIsSubAnswer.observe(viewLifecycleOwner,
-                {
-                    if (it) {
-                        binding.viewWithSubAnswer.visible()
-                    } else {
-                        binding.viewWithSubAnswer.gone()
-                    }
-                })
-            1 -> checkupQuestionViewModel.submitStateAnswerTwoIsSubAnswer.observe(viewLifecycleOwner,
-                {
-                    if (it) {
-                        binding.viewWithSubAnswer.visible()
-                    } else {
-                        binding.viewWithSubAnswer.gone()
-                    }
-                })
+            0 -> checkupQuestionViewModel.submitStateAnswerOneIsSubAnswer.observe(
+                viewLifecycleOwner
+            ) {
+                if (it) {
+                    binding.viewWithSubAnswer.visible()
+                } else {
+                    binding.viewWithSubAnswer.gone()
+                }
+            }
+            1 -> checkupQuestionViewModel.submitStateAnswerTwoIsSubAnswer.observe(
+                viewLifecycleOwner
+            ) {
+                if (it) {
+                    binding.viewWithSubAnswer.visible()
+                } else {
+                    binding.viewWithSubAnswer.gone()
+                }
+            }
             2 -> {
                 binding.viewWithSubAnswer.gone()
             }
