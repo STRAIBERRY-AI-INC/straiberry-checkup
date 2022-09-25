@@ -53,11 +53,16 @@ class DetectionJawViewModel : ViewModel() {
     private val _submitStateSelectedJaws = MutableLiveData<HashMap<Int, JawPosition>>()
     val submitStateSelectedJaws: LiveData<HashMap<Int, JawPosition>> = _submitStateSelectedJaws
 
+    private val _submitStateCapturedImageIsCorrect = MutableLiveData<CorrectCapturedImage>()
+    val submitStateCapturedImageIsCorrect: LiveData<CorrectCapturedImage> =
+        _submitStateCapturedImageIsCorrect
+
     private val _submitStateDismissCheckupInstruction = MutableLiveData<Boolean>()
     val submitStateDismissCheckupInstruction: LiveData<Boolean> =
         _submitStateDismissCheckupInstruction
 
     init {
+        _submitStateCapturedImageIsCorrect.value = CorrectCapturedImage()
         _submitStateDismissCheckupInstruction.value = false
         _stateListOfUploadedJaws.value = hashMapOf()
         _submitStateSelectedJaws.value = hashMapOf()
@@ -65,12 +70,17 @@ class DetectionJawViewModel : ViewModel() {
         _statePhotosUploaded.value = 0
     }
 
+
     fun isImageBlurry(bitmap: Bitmap): Boolean {
         var isImageBlurry = true
         viewModelScope.launch {
             isImageBlurry = bitmap.isBlurry()
         }
         return isImageBlurry
+    }
+
+    fun capturedImageIsCorrect(correctCapturedImage: CorrectCapturedImage) {
+        _submitStateCapturedImageIsCorrect.postValue(correctCapturedImage)
     }
 
     fun checkupInstructionHasBeenShowing() {
@@ -87,6 +97,7 @@ class DetectionJawViewModel : ViewModel() {
 
     // Resting all selected jaws in case of closing checkup or getting back to main page
     fun resetSelectedJaw() {
+        _submitStateCapturedImageIsCorrect.value = CorrectCapturedImage()
         _submitStateSelectedJaws.value = hashMapOf()
     }
 
@@ -135,10 +146,7 @@ class DetectionJawViewModel : ViewModel() {
     }
 
     fun updateCurrentDetectedJaw(currentDetectedJaw: String, isMainThread: Boolean = false) {
-        if (!isMainThread)
-            _stateCurrentDetectedJaw.postValue(currentDetectedJaw)
-        else
-            _stateCurrentDetectedJaw.value = currentDetectedJaw
+        _stateCurrentDetectedJaw.value = currentDetectedJaw
 
     }
 
@@ -163,6 +171,12 @@ class DetectionJawViewModel : ViewModel() {
         private const val AllJawsAreSelected = 4
     }
 }
+
+data class CorrectCapturedImage(
+    val isCorrect: Boolean = false,
+    val capturedImage: Bitmap? = null,
+    val label: String = ""
+)
 
 /**
  * Simple Data object with three fields for the label, probability and location of

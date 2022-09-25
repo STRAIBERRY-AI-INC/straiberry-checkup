@@ -14,15 +14,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.doOnPreDraw
 import androidx.navigation.fragment.findNavController
-import coil.load
-import com.straiberry.android.checkup.BuildConfig
 import com.straiberry.android.checkup.R
-import com.straiberry.android.checkup.checkup.domain.model.AddImageToCheckupSuccessModel
-import com.straiberry.android.checkup.checkup.domain.model.UpdateImageInCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.presentation.view.help.FragmentCheckupInstructionDialog
-import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.FRONT_JAW
-import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.LOWER_JAW
-import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.UPPER_JAW
 import com.straiberry.android.checkup.common.extentions.getImage
 import com.straiberry.android.checkup.common.extentions.getPath
 import com.straiberry.android.checkup.common.extentions.modifyOrientation
@@ -32,9 +25,10 @@ import com.straiberry.android.checkup.di.StraiberrySdk
 import com.straiberry.android.common.custom.spotlight.*
 import com.straiberry.android.common.custom.spotlight.Target
 import com.straiberry.android.common.custom.spotlight.shape.Circle
-import com.straiberry.android.common.extensions.*
-import com.straiberry.android.common.features.support.BottomSheetOnlineSupport
-import com.straiberry.android.core.base.*
+import com.straiberry.android.common.extensions.dp
+import com.straiberry.android.common.extensions.goneWithAnimation
+import com.straiberry.android.common.extensions.onClick
+import com.straiberry.android.common.extensions.visibleWithAnimation
 
 
 class FragmentCamera : JawDetector(), IsolatedKoinComponent {
@@ -161,30 +155,16 @@ class FragmentCamera : JawDetector(), IsolatedKoinComponent {
                 }
             }
 
-            checkupSubmitImageViewModel.submitStateAddFrontImageToCheckup.observe(viewLifecycleOwner) {
-                handleViewStateAddImageToCheckup(it, FRONT_JAW)
-            }
-            checkupSubmitImageViewModel.submitStateAddUpperImageToCheckup.observe(viewLifecycleOwner) {
-                handleViewStateAddImageToCheckup(it, UPPER_JAW)
-            }
-            checkupSubmitImageViewModel.submitStateAddLowerImageToCheckup.observe(viewLifecycleOwner) {
-                handleViewStateAddImageToCheckup(it, LOWER_JAW)
-            }
-
-            checkupSubmitImageViewModel.submitStateUpdateFrontImageInCheckup.observe(
-                viewLifecycleOwner
-            ) {
-                handleViewStateUpdateImageInCheckup(it, FRONT_JAW)
-            }
-            checkupSubmitImageViewModel.submitStateUpdateUpperImageInCheckup.observe(
-                viewLifecycleOwner
-            ) {
-                handleViewStateUpdateImageInCheckup(it, UPPER_JAW)
-            }
-            checkupSubmitImageViewModel.submitStateUpdateLowerImageInCheckup.observe(
-                viewLifecycleOwner
-            ) {
-                handleViewStateUpdateImageInCheckup(it, LOWER_JAW)
+            jawDetectionViewModel.submitStateCapturedImageIsCorrect.observe(viewLifecycleOwner) { correctCapturedImage ->
+                if (correctCapturedImage.isCorrect) {
+                    setCurrentDetectedJaw(correctCapturedImage.label)
+                    setupNextJaw()
+                    currentCapturedImage = correctCapturedImage.capturedImage
+                    setLastCapturedJaw(correctCapturedImage.capturedImage!!)
+                    saveCapturedJaws(correctCapturedImage.capturedImage)
+                    startCapturedImageTransaction()
+                    addImageToCheckup()
+                }
             }
         }.root
     }
@@ -202,76 +182,6 @@ class FragmentCamera : JawDetector(), IsolatedKoinComponent {
         setNextDetectedJaw(nextJaw)
         startDetectionModel()
         clearView()
-    }
-
-    /** Handel view state for adding front jaw image to checkup */
-    private fun handleViewStateAddImageToCheckup(
-        loadable: Loadable<AddImageToCheckupSuccessModel>,
-        jawType: Int
-    ) {
-        if (loadable != Loading) {
-            currentUploadJawLayout(jawType).enable()
-            getProgressBarRelatedToUploadedJaw(jawType).goneWithAnimation()
-        }
-        when (loadable) {
-            is Success -> {
-                setUploadedImageId(loadable.data.imageId, loadable.data.jawType)
-                getCheckupResult()
-            }
-            is Failure -> {
-                showError(
-                    getString(
-                        R.string.problem_with_uploading_photo,
-                    ),
-                    false
-                )
-                jawDetectionViewModel.photosUploadedFailed(jawType)
-                showHideLoading(false)
-                currentUploadJawLayout(jawType).load(R.drawable.ic_add_another)
-                if (BuildConfig.IS_FARSI)
-                    BottomSheetOnlineSupport().show(childFragmentManager, "")
-            }
-            Loading -> {
-                currentUploadJawLayout(jawType).disable()
-                getProgressBarRelatedToUploadedJaw(jawType).visibleWithAnimation()
-            }
-            NotLoading -> {
-
-            }
-        }
-    }
-
-    /** Handel view state for updating captured image in checkup */
-    private fun handleViewStateUpdateImageInCheckup(
-        loadable: Loadable<UpdateImageInCheckupSuccessModel>,
-        jawType: Int
-    ) {
-        if (loadable != Loading) {
-            currentUploadJawLayout(jawType).enable()
-            getProgressBarRelatedToUploadedJaw(jawType).goneWithAnimation()
-        }
-        when (loadable) {
-            is Success -> {
-                jawDetectionViewModel.photosUploaded(jawType)
-            }
-            is Failure -> {
-                showError(
-                    getString(
-                        R.string.the_selected_picture_is_incorrect,
-                        getCurrentDetectedJaw()
-                    ), false
-                )
-                currentUploadJawLayout(jawType).load(R.drawable.ic_add_another)
-            }
-            Loading -> {
-                jawDetectionViewModel.photosUploadedFailed(jawType)
-                currentUploadJawLayout(jawType).disable()
-                getProgressBarRelatedToUploadedJaw(jawType).visibleWithAnimation()
-            }
-            NotLoading -> {
-
-            }
-        }
     }
 
 

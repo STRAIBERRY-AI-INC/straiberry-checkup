@@ -17,9 +17,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import coil.load
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import com.straiberry.android.checkup.BuildConfig
 import com.straiberry.android.checkup.R
+import com.straiberry.android.checkup.checkup.domain.model.AddImageToCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.domain.model.CheckupResultSuccessModel
+import com.straiberry.android.checkup.checkup.domain.model.UpdateImageInCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.FRONT_JAW
 import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.LOWER_JAW
 import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.UPPER_JAW
@@ -50,7 +54,7 @@ open class JawDetector : Fragment(), Detector, Gallery {
     private var imageCapture: ImageCapture? = null
 
     // View models
-    private val chooseCheckupViewModel by activityViewModels<ChooseCheckupTypeViewModel>()
+    val chooseCheckupViewModel by activityViewModels<ChooseCheckupTypeViewModel>()
     private val checkupResultViewModel by viewModel<CheckupResultViewModel>()
     val checkupQuestionViewModel by activityViewModels<CheckupQuestionViewModel>()
     val jawDetectionViewModel by activityViewModels<DetectionJawViewModel>()
@@ -181,7 +185,7 @@ open class JawDetector : Fragment(), Detector, Gallery {
                 // Attach the preview to preview view, aka View Finder
                 preview.setSurfaceProvider(binding.camera.surfaceProvider)
             } catch (exc: Exception) {
-                //Firebase.crashlytics.recordException(exc)
+                Firebase.crashlytics.recordException(exc)
                 Log.e(TAG, "Use case binding failed", exc)
             }
 
@@ -232,57 +236,61 @@ open class JawDetector : Fragment(), Detector, Gallery {
             // Analyze captured image. When captured image is not
             // one of selected image for checkup then we show an error. If prediction in captured
             // image is not good then show an error. Otherwise add image to checkup.
-            ImageAnalyzer(
-                context = requireContext(),
-                bitmap = capturedImage,
-                checkingFrame = false
-            ) { label, _, imageIsCorrect, _, finalImage ->
-                when {
-                    capturedImage.calculateBrightnessEstimate(5) ->
-                        showError(
-                            getString(R.string.this_image_is_too_dark_please_take_another_one)
+            when {
+                capturedImage.calculateBrightnessEstimate(5) ->
+                    showError(
+                        getString(R.string.this_image_is_too_dark_please_take_another_one)
+                    )
+                capturedImage.isBlurry() ->
+                    showError(
+                        getString(
+                            R.string.this_image_have_a_low_qulity_please_retake_again,
                         )
-                    capturedImage.isBlurry() ->
-                        showError(
-                            getString(
-                                R.string.this_image_have_a_low_qulity_please_retake_again,
+                    )
+                else -> ImageAnalyzer(
+                    context = requireContext(),
+                    bitmap = capturedImage,
+                    checkingFrame = false
+                ) { label, _, imageIsCorrect, _, finalImage ->
+                    when {
+                        // Captured image is not one of selected jaws
+                        !listOfSelectedJaws.contains(label) -> {
+                            showError(
+                                getString(
+                                    R.string.the_selected_picture_is_incorrect,
+                                    getNextDetectedJaw()
+                                )
                             )
-                        )
-                    // Captured image is not one of selected jaws
-                    !listOfSelectedJaws.contains(label) -> {
-                        showError(
-                            getString(
-                                R.string.the_selected_picture_is_incorrect,
-                                getNextDetectedJaw()
+                            if (BuildConfig.IS_FARSI)
+                                BottomSheetOnlineSupport().show(childFragmentManager, "")
+                        }
+                        imageIsCorrect -> try {
+                            jawDetectionViewModel.capturedImageIsCorrect(
+                                CorrectCapturedImage(
+                                    true,
+                                    finalImage,
+                                    label
+                                )
                             )
-                        )
-                        if (BuildConfig.IS_FARSI)
-                            BottomSheetOnlineSupport().show(childFragmentManager, "")
+                        } catch (e: Exception) {
+                            Firebase.crashlytics.recordException(e)
+                            startDetectionModel()
+                            showError(getString(R.string.retake_the_photo))
+                        }
+                        else ->
+                            showError(getString(R.string.retake_the_photo))
                     }
-                    imageIsCorrect -> try {
-                        setupNextJaw()
-                        currentCapturedImage = finalImage
-                        setLastCapturedJaw(finalImage!!)
-                        saveCapturedJaws(finalImage)
-                        startCapturedImageTransaction()
-                        addImageToCheckup()
-                    } catch (e: Exception) {
-//                        Firebase.crashlytics.recordException(e)
-                        startDetectionModel()
-                        showError(getString(R.string.retake_the_photo))
-                    }
-                    else ->
-                        showError(getString(R.string.retake_the_photo))
-                }
 
-            }.analyze()
+                }.analyze()
+            }
         } catch (e: java.lang.Exception) {
-//            Firebase.crashlytics.recordException(e)
+            Firebase.crashlytics.recordException(e)
             startDetectionModel()
             showError(getString(R.string.retake_the_photo))
             if (BuildConfig.IS_FARSI)
                 BottomSheetOnlineSupport().show(childFragmentManager, "")
         }
+
 
     }
 
@@ -306,7 +314,6 @@ open class JawDetector : Fragment(), Detector, Gallery {
     }
 
     override fun addImageToCheckup() {
-        Log.e("CURRENT_JAW_ID", getCurrentJawId().toString())
         // Check if current captured jaw already uploaded by its id.
         // If so then update the image otherwise upload image.
         if (getCurrentJawId() != 0 && getCurrentJawId() != -1)
@@ -487,17 +494,15 @@ open class JawDetector : Fragment(), Detector, Gallery {
                 listOfSelectedJaws.addAll(listOf(Front, Upper, Lower))
                 binding.imageViewFrontSample.visibleWithAnimation()
                 setNextDetectedJaw(Front)
-                setCurrentDetectedJaw(Front)
             }
             CheckupType.Whitening -> {
                 listOfSelectedJaws.add(Front)
                 binding.imageViewFrontSample.visibleWithAnimation()
                 setNextDetectedJaw(Front)
-                setCurrentDetectedJaw(Front)
             }
 
             CheckupType.Sensitivity, CheckupType.Treatments -> {
-                checkupQuestionViewModel.submitStateSelectedJaw.value?.forEach { (i, jawPosition) ->
+                checkupQuestionViewModel.submitStateSelectedJaw.value?.forEach { (_, jawPosition) ->
                     when (jawPosition) {
                         JawPosition.FrontTeeth -> listOfSelectedJaws.add(Front)
                         JawPosition.LowerJaw -> listOfSelectedJaws.add(Lower)
@@ -513,7 +518,6 @@ open class JawDetector : Fragment(), Detector, Gallery {
                 }
 
                 setNextDetectedJaw(listOfSelectedJaws.first())
-                setCurrentDetectedJaw(listOfSelectedJaws.first())
             }
             else -> {}
         }
@@ -681,7 +685,7 @@ open class JawDetector : Fragment(), Detector, Gallery {
                 jawDetectionViewModel.setSelectedJaw(FRONT_JAW)
             }
             CheckupType.Sensitivity, CheckupType.Treatments -> {
-                checkupQuestionViewModel.submitStateSelectedJaw.value?.forEach { (i, jawPosition) ->
+                checkupQuestionViewModel.submitStateSelectedJaw.value?.forEach { (_, jawPosition) ->
                     when (jawPosition) {
                         JawPosition.UpperJaw -> {
                             uploadedUpperJawId = 0
@@ -715,7 +719,7 @@ open class JawDetector : Fragment(), Detector, Gallery {
                 hideCapturedImageForWhiteningCheckup()
             }
             CheckupType.Sensitivity, CheckupType.Treatments -> {
-                checkupQuestionViewModel.submitStateSelectedJaw.value?.forEach { (i, jawPosition) ->
+                checkupQuestionViewModel.submitStateSelectedJaw.value?.forEach { (_, jawPosition) ->
                     when (jawPosition) {
                         JawPosition.FrontTeeth -> binding.layoutInsertImage.layoutFrontTeeth.visible()
                         JawPosition.LowerJaw -> binding.layoutInsertImage.layoutLowerJaw.visible()
@@ -753,7 +757,6 @@ open class JawDetector : Fragment(), Detector, Gallery {
     }
 
     override fun takePhotoFromDetectedJaw(detectedJawLabel: String) {
-        setCurrentDetectedJaw(detectedJawLabel)
         showPulseAnimation(detectedJawLabel)
     }
 
@@ -837,7 +840,7 @@ open class JawDetector : Fragment(), Detector, Gallery {
         }
     }
 
-    private fun checkIfLastImageToUpload() {
+    fun checkIfLastImageToUpload() {
         lastImage =
             if (jawDetectionViewModel.stateListOfUploadedJaws.value?.equals(jawDetectionViewModel.submitStateSelectedJaws.value) == true)
                 LastImage
@@ -851,21 +854,77 @@ open class JawDetector : Fragment(), Detector, Gallery {
         jawDetectionViewModel.photosUploaded(getCurrentDetectedJaw().convertJawToInt())
         checkIfLastImageToUpload()
         when (getCurrentDetectedJaw().convertJawToInt()) {
-            FRONT_JAW -> checkupSubmitImageViewModel.addFrontImageToCheckup(
-                checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
-                image = image.convertToFile(requireContext()),
-                lastImage = lastImage
-            )
-            UPPER_JAW -> checkupSubmitImageViewModel.addUpperImageToCheckup(
-                checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
-                image = image.convertToFile(requireContext()),
-                lastImage = lastImage
-            )
-            LOWER_JAW -> checkupSubmitImageViewModel.addLowerImageToCheckup(
-                checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
-                image = image.convertToFile(requireContext()),
-                lastImage = lastImage
-            )
+            FRONT_JAW -> {
+                checkupSubmitImageViewModel.addFrontImageToCheckup(
+                    checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
+                    image = image.convertToFile(requireContext()),
+                    lastImage = lastImage
+                )
+                checkupSubmitImageViewModel.submitStateAddFrontImageToCheckup.observe(
+                    viewLifecycleOwner
+                ) {
+                    handleViewStateAddImageToCheckup(it, FRONT_JAW)
+                }
+            }
+            UPPER_JAW -> {
+                checkupSubmitImageViewModel.addUpperImageToCheckup(
+                    checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
+                    image = image.convertToFile(requireContext()),
+                    lastImage = lastImage
+                )
+                checkupSubmitImageViewModel.submitStateAddUpperImageToCheckup.observe(
+                    viewLifecycleOwner
+                ) {
+                    handleViewStateAddImageToCheckup(it, UPPER_JAW)
+                }
+            }
+            LOWER_JAW -> {
+                checkupSubmitImageViewModel.addLowerImageToCheckup(
+                    checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
+                    image = image.convertToFile(requireContext()),
+                    lastImage = lastImage
+                )
+                checkupSubmitImageViewModel.submitStateAddLowerImageToCheckup.observe(
+                    viewLifecycleOwner
+                ) {
+                    handleViewStateAddImageToCheckup(it, LOWER_JAW)
+                }
+            }
+        }
+    }
+
+    /** Handel view state for adding front jaw image to checkup */
+    private fun handleViewStateAddImageToCheckup(
+        loadable: Loadable<AddImageToCheckupSuccessModel>,
+        jawType: Int
+    ) {
+        if (loadable != Loading) {
+            currentUploadJawLayout(jawType).enable()
+            getProgressBarRelatedToUploadedJaw(jawType).goneWithAnimation()
+        }
+        when (loadable) {
+            is Success -> {
+                setUploadedImageId(loadable.data.imageId, loadable.data.jawType)
+                getCheckupResult()
+            }
+            is Failure -> {
+                showError(
+                    getString(
+                        R.string.problem_with_uploading_photo,
+                    ),
+                    false
+                )
+                showHideLoading(false)
+                if (BuildConfig.IS_FARSI)
+                    BottomSheetOnlineSupport().show(childFragmentManager, "")
+            }
+            Loading -> {
+                currentUploadJawLayout(jawType).disable()
+                getProgressBarRelatedToUploadedJaw(jawType).visibleWithAnimation()
+            }
+            NotLoading -> {
+
+            }
         }
     }
 
@@ -873,24 +932,75 @@ open class JawDetector : Fragment(), Detector, Gallery {
     override fun updateJaw(image: Bitmap, imageId: Int) {
         checkIfLastImageToUpload()
         when (getCurrentDetectedJaw()) {
-            Front -> checkupSubmitImageViewModel.updateFrontImageInCheckup(
-                checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
-                image = image.convertToFile(requireContext()),
-                imageId = imageId
-            )
-            Upper -> checkupSubmitImageViewModel.updateUpperImageInCheckup(
-                checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
-                image = image.convertToFile(requireContext()),
-                imageId = imageId
-            )
-            Lower -> checkupSubmitImageViewModel.updateLowerImageInCheckup(
-                checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
-                image = image.convertToFile(requireContext()),
-                imageId = imageId
-            )
+            Front -> {
+                checkupSubmitImageViewModel.updateFrontImageInCheckup(
+                    checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
+                    image = image.convertToFile(requireContext()),
+                    imageId = imageId
+                )
+                checkupSubmitImageViewModel.submitStateUpdateFrontImageInCheckup.observe(
+                    viewLifecycleOwner
+                ) {
+                    handleViewStateUpdateImageInCheckup(it, FRONT_JAW)
+                }
+            }
+            Upper -> {
+                checkupSubmitImageViewModel.updateUpperImageInCheckup(
+                    checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
+                    image = image.convertToFile(requireContext()),
+                    imageId = imageId
+                )
+                checkupSubmitImageViewModel.submitStateUpdateUpperImageInCheckup.observe(
+                    viewLifecycleOwner
+                ) {
+                    handleViewStateUpdateImageInCheckup(it, UPPER_JAW)
+                }
+            }
+            Lower -> {
+                checkupSubmitImageViewModel.updateLowerImageInCheckup(
+                    checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
+                    image = image.convertToFile(requireContext()),
+                    imageId = imageId
+                )
+                checkupSubmitImageViewModel.submitStateUpdateLowerImageInCheckup.observe(
+                    viewLifecycleOwner
+                ) {
+                    handleViewStateUpdateImageInCheckup(it, LOWER_JAW)
+                }
+            }
         }
     }
 
+    /** Handel view state for updating captured image in checkup */
+    private fun handleViewStateUpdateImageInCheckup(
+        loadable: Loadable<UpdateImageInCheckupSuccessModel>,
+        jawType: Int
+    ) {
+        if (loadable != Loading) {
+            currentUploadJawLayout(jawType).enable()
+            getProgressBarRelatedToUploadedJaw(jawType).goneWithAnimation()
+        }
+        when (loadable) {
+            is Success -> {
+                jawDetectionViewModel.photosUploaded(jawType)
+            }
+            is Failure -> {
+                showError(
+                    getString(
+                        R.string.problem_with_uploading_photo
+                    ), false
+                )
+            }
+            Loading -> {
+                jawDetectionViewModel.photosUploadedFailed(jawType)
+                currentUploadJawLayout(jawType).disable()
+                getProgressBarRelatedToUploadedJaw(jawType).visibleWithAnimation()
+            }
+            NotLoading -> {
+
+            }
+        }
+    }
 
     override fun setUploadedImageId(imageId: Int, jawType: Int) {
         when (jawType.convertIntToJaw()) {
@@ -999,9 +1109,9 @@ open class JawDetector : Fragment(), Detector, Gallery {
         private const val ZeroScale = 1f
         private const val FullAlpha = 1f
         private const val ZeroAlpha = 0f
-        private const val AnimationDuration = 700L
-        private const val AnimationStartDelayForShowImage = 2000L
-        private const val AnimationStartDelayForMoveImage = 200L
+        private const val AnimationDuration = 500L
+        private const val AnimationStartDelayForShowImage = 1000L
+        private const val AnimationStartDelayForMoveImage = 100L
         private const val DelayForShowError = 5000L
         private const val AllJawsAreSelected = 4
 
