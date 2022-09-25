@@ -5,7 +5,11 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.RectF
 import com.straiberry.android.checkup.common.extentions.finalCropOnCapturedJaw
+import com.straiberry.android.checkup.common.extentions.resize
 import com.straiberry.android.checkup.ml.JawDetection
+import com.straiberry.android.common.tflite.Classifier
+import com.straiberry.android.common.tflite.DetectorFactory
+import com.straiberry.android.common.tflite.YoloV5Classifier
 import org.tensorflow.lite.support.image.TensorImage
 
 class ImageAnalyzer(
@@ -15,6 +19,10 @@ class ImageAnalyzer(
     private val isCheckingImageFromGallery: Boolean = false,
     private val imageAnalyzerListener: ImageAnalyzerListener
 ) : AnalyzeImage {
+    val detector: YoloV5Classifier = DetectorFactory.getDetector(
+        context.assets,
+        MODEL_NAME
+    )
 
     // Init the model
     private val model = JawDetection.newInstance(context)
@@ -24,53 +32,59 @@ class ImageAnalyzer(
         // Creates inputs for reference.
         val image = TensorImage.fromBitmap(bitmap)
 
-        // Runs model inference and gets result.
-        val outputs = model.process(image)
+        val results: ArrayList<Classifier.Recognition?> =
+            detector.recognizeImage(bitmap.resize(detector.inputSize, detector.inputSize))
+        val firstJawDetected =
+            results.firstOrNull { it!!.confidence!! > MinimumConfidence }
 
-        val detectionResult = outputs.detectionResultList.take(MaxResultDisplay)
+//        // Runs model inference and gets result.
+//        val outputs = model.process(image)
+//
+//        val detectionResult = outputs.detectionResultList.take(MaxResultDisplay)
 
-        // Gets result from DetectionResult.
-        val location = detectionResult.first().locationAsRectF
-        val category = detectionResult.first().categoryAsString
-        val score = detectionResult.first().scoreAsFloat
-        val left = location.left / bitmap.width
-        val top = location.top / bitmap.height
-        val right = location.right / bitmap.width
-        val bottom = location.bottom / bitmap.height
+        if (firstJawDetected != null) {
+            // Gets result from DetectionResult.
+            val location = firstJawDetected.getLocation()
+            val category = firstJawDetected.title
+            val score = firstJawDetected.confidence
+            val left = location.left / detector.inputSize
+            val top = location.top / detector.inputSize
+            val right = location.right / detector.inputSize
+            val bottom = location.bottom / detector.inputSize
 
-        if (isCheckingImageFromGallery
-            && score >= MinimumConfidence
-            && (left < MarginThreshold ||
-                    top < MarginThreshold ||
-                    (1 - right) < MarginThreshold ||
-                    (1 - bottom) < MarginThreshold)
-        )
-            imageAnalyzerListener(
-                category,
-                score,
-                true,
-                location,
-                bitmap
+            if (isCheckingImageFromGallery
+                && (left < MarginThreshold ||
+                        top < MarginThreshold ||
+                        (1 - right) < MarginThreshold ||
+                        (1 - bottom) < MarginThreshold)
             )
-        else if (left > MarginThreshold &&
-            top > MarginThreshold &&
-            (1 - right) > MarginThreshold &&
-            (1 - bottom) > MarginThreshold
-        ) {
-            // Early exit: if prediction is not good enough, don't report it
-            // Check for confidence and camera detected label
-            if (score >= MinimumConfidence) {
                 imageAnalyzerListener(
-                    category,
-                    score,
+                    category!!,
+                    score!!,
                     true,
                     location,
-                    if (checkingFrame) null else bitmap.finalCropOnCapturedJaw(location)
+                    bitmap
+                )
+            else if (left > MarginThreshold &&
+                top > MarginThreshold &&
+                (1 - right) > MarginThreshold &&
+                (1 - bottom) > MarginThreshold
+            ) {
+                imageAnalyzerListener(
+                    category!!,
+                    score!!,
+                    true,
+                    location,
+                    if (checkingFrame) null else bitmap.finalCropOnCapturedJaw(
+                        detector.inputSize,
+                        bitmap,
+                        location
+                    )
                 )
             } else
-                imageAnalyzerListener(category, score, false, null, null)
+                imageAnalyzerListener("", 0f, false, null, null)
         } else
-            imageAnalyzerListener(category, score, false, null, null)
+            imageAnalyzerListener("", 0f, false, null, null)
 
 
         // Releases model resources if no longer used.
@@ -78,6 +92,7 @@ class ImageAnalyzer(
     }
 
     companion object {
+        private const val MODEL_NAME = "yolov5n_320sz_jaw_detection_v3.tflite"
         private const val MaxResultDisplay = 1
         private const val MarginThreshold = 0.06
         const val MinimumConfidence = 0.85

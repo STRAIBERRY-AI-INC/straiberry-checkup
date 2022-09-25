@@ -104,14 +104,16 @@ fun Bitmap.cropFromCenter(): Bitmap {
 
 
 fun Bitmap.finalCropOnCapturedJaw(
+    croppedSize: Int,
+    actualBitmap: Bitmap,
     normalizerLocation: RectF
 ): Bitmap {
     val correctRotation = this
 
-    val mX = normalizerLocation.left
-    val mY = normalizerLocation.top
-    val mW = (normalizerLocation.right)
-    val mH = (normalizerLocation.bottom)
+    val mX = (normalizerLocation.left / croppedSize) * actualBitmap.width
+    val mY = (normalizerLocation.top / croppedSize) * actualBitmap.height
+    val mW = (normalizerLocation.right / croppedSize) * actualBitmap.width
+    val mH = (normalizerLocation.bottom / croppedSize) * actualBitmap.height
 
     val size = (if (mW > mH) mW else mH)
     val newX = (mX + mW / 2) - size / 2
