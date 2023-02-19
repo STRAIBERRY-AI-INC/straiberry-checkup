@@ -272,11 +272,11 @@
         android:layout_height="wrap_content"
         android:alpha="0.8"
         android:fontFamily="@font/regular"
-        android:elevation="15dp"
+        android:paddingStart="28dp"
         android:paddingTop="15dp"
         android:paddingEnd="41dp"
         android:paddingBottom="15dp"
-        android:paddingStart="28dp"
+        android:elevation="15dp"
         android:text="@string/back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

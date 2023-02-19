@@ -19,10 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.straiberry.android.checkup.R
 import com.straiberry.android.checkup.checkup.domain.model.AddImageToCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.domain.model.CheckupResultSuccessModel
-import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupResultViewModel
-import com.straiberry.android.checkup.checkup.presentation.viewmodel.ChooseCheckupTypeViewModel
-import com.straiberry.android.checkup.checkup.presentation.viewmodel.DetectionJawViewModel
-import com.straiberry.android.checkup.checkup.presentation.viewmodel.XrayViewModel
+import com.straiberry.android.checkup.checkup.presentation.viewmodel.*
 import com.straiberry.android.checkup.common.extentions.convertToFile
 import com.straiberry.android.checkup.common.extentions.getImage
 import com.straiberry.android.checkup.databinding.FragmentXRayBinding
@@ -31,6 +28,8 @@ import com.straiberry.android.checkup.di.StraiberrySdk
 import com.straiberry.android.common.extensions.*
 import com.straiberry.android.common.helper.ResizeViewWithAnimation
 import com.straiberry.android.common.model.JawPosition
+import com.straiberry.android.common.tflite.DetectorFactory
+import com.straiberry.android.common.tflite.YoloV5Classifier
 import com.straiberry.android.core.base.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -48,6 +47,7 @@ class FragmentXRay : Fragment(), IsolatedKoinComponent {
     private val checkupResultViewModel by viewModel<CheckupResultViewModel>()
     private val chooseCheckupViewModel by activityViewModels<ChooseCheckupTypeViewModel>()
     private val detectionJawViewModel by activityViewModels<DetectionJawViewModel>()
+    private val xrayDetectorViewModel by activityViewModels<XrayDetectorViewModel>()
 
     private var isShowingUploadFile = true
     private var layoutIsOnError = false
@@ -306,12 +306,18 @@ class FragmentXRay : Fragment(), IsolatedKoinComponent {
         super.onCreate(savedInstanceState)
         StraiberrySdk.start(requireContext())
 
+        val detector: YoloV5Classifier = DetectorFactory.getDetector(
+            requireContext().assets,
+            MODEL_NAME
+        )
+
         /** Get selected image from gallery */
         pickImageFromGalleryResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     val image = result.data!!.data!!.getImage(requireContext())
-                    OpgAnalyzer(requireContext(), image) { isOpg, opgImage ->
+
+                    xrayDetectorViewModel.detectXray(detector, image) { isOpg, opgImage ->
                         if (isOpg) {
                             xrayViewModel.uploadXrayImage(
                                 chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
@@ -332,7 +338,7 @@ class FragmentXRay : Fragment(), IsolatedKoinComponent {
                                 isShowingUploadFile = false
                                 layoutIsOnError = true
                             }
-                    }.analyze()
+                    }
                 }
             }
 
@@ -364,6 +370,7 @@ class FragmentXRay : Fragment(), IsolatedKoinComponent {
     }
 
     companion object {
+        private const val MODEL_NAME = "bwDetectionYolov5s-fp16.tflite"
         private var imageButtonGoHeight = 0
         private var imageButtonGoWidth = 0
         private const val AnimationDurationForTranslation = 800L

@@ -1,5 +1,6 @@
 package com.straiberry.android.checkup.checkup.domain.usecase
 
+import com.straiberry.android.checkup.checkup.domain.repository.CheckupRepo
 import com.straiberry.android.checkup.checkup.domain.repository.CheckupSdkRepo
 
 class GetSdkTokenUseCase(

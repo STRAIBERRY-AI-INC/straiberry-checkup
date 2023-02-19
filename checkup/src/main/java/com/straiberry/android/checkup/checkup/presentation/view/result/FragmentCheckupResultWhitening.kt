@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.straiberry.android.checkup.BuildConfig
+import com.straiberry.android.checkup.checkup.data.networking.model.CheckupHistorySuccessResponse
 import com.straiberry.android.checkup.checkup.domain.model.CheckupResultSuccessModel
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupQuestionViewModel
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.ChooseCheckupTypeViewModel
@@ -28,7 +29,7 @@ import com.straiberry.android.common.helper.ShareScreenshotHelper
 
 class FragmentCheckupResultWhitening : Fragment(), IsolatedKoinComponent {
     private lateinit var binding: FragmentCheckupResultWhiteningBinding
-    private lateinit var checkupResult: CheckupResultSuccessModel
+    private var checkupResult = CheckupResultSuccessModel(CheckupHistorySuccessResponse.Data())
 
     private val chooseCheckupViewModel by activityViewModels<ChooseCheckupTypeViewModel>()
     private val checkupQuestionViewModel by activityViewModels<CheckupQuestionViewModel>()
@@ -48,6 +49,9 @@ class FragmentCheckupResultWhitening : Fragment(), IsolatedKoinComponent {
     ): View {
         return FragmentCheckupResultWhiteningBinding.inflate(inflater, container, false).also {
             binding = it
+
+            if (chooseCheckupViewModel.submitStateCheckupResult.value == null)
+                findNavController().popBackStack()
 
             checkupResult = chooseCheckupViewModel.submitStateCheckupResult.value!!
 

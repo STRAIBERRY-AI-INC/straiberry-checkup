@@ -3,6 +3,7 @@ package com.straiberry.android.checkup
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.straiberry.android.checkup.checkup.data.networking.model.CheckupHistorySuccessResponse
 import com.straiberry.android.checkup.checkup.domain.model.CheckupResultSuccessModel
+import com.straiberry.android.checkup.checkup.domain.usecase.GetCheckupResultUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.GetCheckupSdkResultUseCase
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupResultViewModel
 import com.straiberry.android.core.base.Failure

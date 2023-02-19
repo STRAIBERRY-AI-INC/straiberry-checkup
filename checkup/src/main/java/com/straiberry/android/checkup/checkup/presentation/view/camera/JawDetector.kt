@@ -21,6 +21,7 @@ import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import com.straiberry.android.checkup.BuildConfig
 import com.straiberry.android.checkup.R
+import com.straiberry.android.checkup.checkup.data.networking.model.CheckupType
 import com.straiberry.android.checkup.checkup.domain.model.AddImageToCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.domain.model.CheckupResultSuccessModel
 import com.straiberry.android.checkup.checkup.domain.model.UpdateImageInCheckupSuccessModel
@@ -34,10 +35,10 @@ import com.straiberry.android.checkup.databinding.FragmentCameraBinding
 import com.straiberry.android.common.extensions.*
 import com.straiberry.android.common.features.support.BottomSheetOnlineSupport
 import com.straiberry.android.common.model.JawPosition
-import com.straiberry.android.common.tflite.Classifier
 import com.straiberry.android.common.tflite.DetectorFactory
 import com.straiberry.android.core.base.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 import java.util.concurrent.Executors
 
 
@@ -82,10 +83,11 @@ open class JawDetector : Fragment(), Detector, Gallery {
     var lastImage = 0
 
     // List of jaws that user selected for checkup
-    val listOfSelectedJaws = ArrayList<String>()
+    val listOfSelectedJaws = ArrayList<JawPosition>()
     val cameraXTargetResolution = Size(1024, 1024)
 
-    override fun startCamera() {
+    @androidx.camera.core.ExperimentalGetImage
+    override fun  startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         cameraProviderFuture.addListener({
@@ -108,53 +110,14 @@ open class JawDetector : Fragment(), Detector, Gallery {
                 .build()
                 .also { analysisUseCase: ImageAnalysis ->
                     analysisUseCase.setAnalyzer(
-                        cameraExecutor
-                    ) { imageProxy ->
-                        if (getDetectionModelState()) {
-                            val image = imageProxy.image
-
-                            val frameAsBitmap = image!!.toBitmap()!!
-                                .correctRotation(imageProxy.imageInfo.rotationDegrees)
-                                .cropFromCenter()
-                                .resize(detector.inputSize, detector.inputSize)
-
-                            val results: ArrayList<Classifier.Recognition?> =
-                                detector.recognizeImage(frameAsBitmap)
-                            val detectedJaw =
-                                results.firstOrNull { it!!.confidence!! > ImageAnalyzer.MinimumConfidence }
-
-                            // Convert the model location to number between 1 and 0
-                            if (detectedJaw != null) {
-                                val left = detectedJaw.getLocation().left / imageProxy.width
-                                val top = detectedJaw.getLocation().top / imageProxy.height
-                                val right = detectedJaw.getLocation().right / imageProxy.width
-                                val bottom =
-                                    detectedJaw.getLocation().bottom / imageProxy.height
-                                val location = detectedJaw.getLocation()
-
-                                // Check the margin threshold between detected jaw location. This will avoid
-                                // to detect uncompleted jaw.
-                                if (left > MARGIN_THRESHOLD &&
-                                    top > MARGIN_THRESHOLD &&
-                                    (1 - right) > MARGIN_THRESHOLD &&
-                                    (1 - bottom) > MARGIN_THRESHOLD
-                                )
-                                // Early exit: if prediction is not good enough, don't report it
-                                    if (detectedJaw.confidence!! >= MinimumConfidence) {
-                                        jawDetectionViewModel.updateRecognition(
-                                            Recognition(
-                                                detectedJaw.title!!,
-                                                detectedJaw.confidence!!,
-                                                location,
-                                                frameAsBitmap
-                                            )
-                                        )
-                                    }
-                            }
-                            imageProxy.close()
-                        } else
-                            imageProxy.close()
-                    }
+                        cameraExecutor,
+                        { imageProxy ->
+                            if (getDetectionModelState()) {
+                                jawDetectionViewModel.detectFromImageProxy(imageProxy, detector)
+                            } else
+                                imageProxy.close()
+                        }
+                    )
 
                 }
 
@@ -172,6 +135,7 @@ open class JawDetector : Fragment(), Detector, Gallery {
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
+
                 // Unbind use cases before rebinding
                 cameraProvider.unbindAll()
 
@@ -216,8 +180,6 @@ open class JawDetector : Fragment(), Detector, Gallery {
                         imageProxy = image,
                         capturedImage = capturedBitmap
                     )
-                    // Stop model
-                    stopDetectionModel()
                     jawDetectionViewModel.resetRecognition()
                     // Close resource
                     image.close()
@@ -254,7 +216,7 @@ open class JawDetector : Fragment(), Detector, Gallery {
                 ) { label, _, imageIsCorrect, _, finalImage ->
                     when {
                         // Captured image is not one of selected jaws
-                        !listOfSelectedJaws.contains(label) -> {
+                        !listOfSelectedJaws.contains(label.convertLabelToJawType()) -> {
                             showError(
                                 getString(
                                     R.string.the_selected_picture_is_incorrect,
@@ -269,7 +231,7 @@ open class JawDetector : Fragment(), Detector, Gallery {
                                 CorrectCapturedImage(
                                     true,
                                     finalImage,
-                                    label
+                                    label.convertLabelToJawType()
                                 )
                             )
                         } catch (e: Exception) {
@@ -295,21 +257,39 @@ open class JawDetector : Fragment(), Detector, Gallery {
     }
 
 
-    fun getProgressBarRelatedToUploadedJaw(relatedJaw: Int): ProgressBar {
+    fun getProgressBarRelatedToUploadedJaw(relatedJaw: JawPosition): ProgressBar {
         return when (relatedJaw) {
-            FRONT_JAW -> binding.layoutInsertImage.progressBarFrontTeeth
-            LOWER_JAW -> binding.layoutInsertImage.progressBarLowerTeeth
-            UPPER_JAW -> binding.layoutInsertImage.progressBarUpperTeeth
+            JawPosition.FrontTeeth -> binding.layoutInsertImage.progressBarFrontTeeth
+            JawPosition.LowerJaw -> binding.layoutInsertImage.progressBarLowerTeeth
+            JawPosition.UpperJaw -> binding.layoutInsertImage.progressBarUpperTeeth
             else -> binding.layoutInsertImage.progressBarFrontTeeth
         }
     }
 
-    fun currentUploadJawLayout(currentJaw: Int): ImageView {
+    fun currentUploadJawLayout(currentJaw: JawPosition): ImageView {
         return when (currentJaw) {
-            FRONT_JAW -> binding.layoutInsertImage.imageViewFrontTeeth
-            LOWER_JAW -> binding.layoutInsertImage.imageViewLowerJaw
-            UPPER_JAW -> binding.layoutInsertImage.imageViewUpperJaw
+            JawPosition.FrontTeeth -> binding.layoutInsertImage.imageViewFrontTeeth
+            JawPosition.LowerJaw -> binding.layoutInsertImage.imageViewLowerJaw
+            JawPosition.UpperJaw -> binding.layoutInsertImage.imageViewUpperJaw
             else -> binding.layoutInsertImage.imageViewFrontTeeth
+        }
+    }
+
+    fun clearCapturedImage(jawType: JawPosition) {
+        when (jawType) {
+            JawPosition.UpperJaw -> {
+                binding.layoutInsertImage.imageViewUpperJaw.load(com.straiberry.android.common.R.drawable.ic_add_another)
+                binding.layoutInsertImage.cardViewUpper.isSelected = false
+            }
+            JawPosition.LowerJaw -> {
+                binding.layoutInsertImage.imageViewLowerJaw.load(com.straiberry.android.common.R.drawable.ic_add_another)
+                binding.layoutInsertImage.cardViewLower.isSelected = false
+            }
+            JawPosition.FrontTeeth -> {
+                binding.layoutInsertImage.imageViewFrontTeeth.load(com.straiberry.android.common.R.drawable.ic_add_another)
+                binding.layoutInsertImage.cardViewFront.isSelected = false
+            }
+            else -> {}
         }
     }
 
@@ -323,18 +303,18 @@ open class JawDetector : Fragment(), Detector, Gallery {
 
         // Checkout current uploading image
         when (getCurrentDetectedJaw()) {
-            Front -> frontJawIsUploading = true
-            Upper -> upperJawIsUploading = true
-            Lower -> lowerJawIsUploading = true
+            JawPosition.FrontTeeth -> frontJawIsUploading = true
+            JawPosition.UpperJaw -> upperJawIsUploading = true
+            JawPosition.LowerJaw -> lowerJawIsUploading = true
+            else -> frontJawIsUploading = true
         }
     }
 
     override fun getCurrentJawId(): Int {
-        Log.e("CURRENT_DETECTION_JAW", getCurrentDetectedJaw())
         return when (getCurrentDetectedJaw()) {
-            Front -> uploadedFrontJawId
-            Upper -> uploadedUpperJawId
-            Lower -> uploadedLowerJawId
+            JawPosition.FrontTeeth -> uploadedFrontJawId
+            JawPosition.UpperJaw -> uploadedUpperJawId
+            JawPosition.LowerJaw -> uploadedLowerJawId
             else -> 0
         }
     }
@@ -349,8 +329,8 @@ open class JawDetector : Fragment(), Detector, Gallery {
                 textViewError.text = error
                 cardViewError.visibleWithAnimation()
                 cardViewError.goneWithDelay(DelayForShowError) {
-                    startDetectionModel()
                 }
+                startDetectionModel()
             }
             // Apply mirroring to textview
             binding.textViewError.apply {
@@ -373,16 +353,17 @@ open class JawDetector : Fragment(), Detector, Gallery {
 
     override fun setupNextJaw() {
         when (getNextDetectedJaw()) {
-            Front -> {
-                setNextDetectedJaw(Upper)
+            JawPosition.FrontTeeth, JawPosition.FrontTeethLower, JawPosition.FrontTeethUpper -> {
+                setNextDetectedJaw(JawPosition.UpperJaw)
             }
-            Upper -> {
-                setNextDetectedJaw(Lower)
+            JawPosition.UpperJaw -> {
+                setNextDetectedJaw(JawPosition.LowerJaw)
             }
 
-            Lower -> {
-                setNextDetectedJaw(Lower)
+            JawPosition.LowerJaw -> {
+                setNextDetectedJaw(JawPosition.LowerJaw)
             }
+            null -> {}
         }
     }
 
@@ -423,12 +404,12 @@ open class JawDetector : Fragment(), Detector, Gallery {
                                     .y(layoutForNextCapturedJaw.y - binding.cardViewCapturedJaw.height / 2)
                                     .withEndAction {
                                         binding.pulseView.scaleUpAndMoveLogoToCenter {
+                                            startDetectionModel()
                                             if (lastImage == LastImage
                                             ) {
                                                 showHideLoading(true)
                                                 clearView()
-                                            } else
-                                                startDetectionModel()
+                                            }
                                         }
                                     }
                                     .start()
@@ -474,13 +455,13 @@ open class JawDetector : Fragment(), Detector, Gallery {
 
     override fun saveCapturedJaws(savedBitmap: Bitmap) =
         when (getCurrentDetectedJaw()) {
-            Front -> jawDetectionViewModel.updateRecognitionFrontJaw(
+            JawPosition.FrontTeeth -> jawDetectionViewModel.updateRecognitionFrontJaw(
                 savedBitmap
             )
-            Upper -> jawDetectionViewModel.updateRecognitionUpperJaw(
+            JawPosition.UpperJaw -> jawDetectionViewModel.updateRecognitionUpperJaw(
                 savedBitmap
             )
-            Lower -> jawDetectionViewModel.updateRecognitionLowerJaw(
+            JawPosition.LowerJaw -> jawDetectionViewModel.updateRecognitionLowerJaw(
                 savedBitmap
             )
             else -> {
@@ -491,30 +472,36 @@ open class JawDetector : Fragment(), Detector, Gallery {
     override fun setupSelectedJawsBasedOnUserSelection() {
         when (chooseCheckupViewModel.submitStateSelectedCheckupIndex.value) {
             CheckupType.Regular, CheckupType.Others -> {
-                listOfSelectedJaws.addAll(listOf(Front, Upper, Lower))
+                listOfSelectedJaws.addAll(
+                    listOf(
+                        JawPosition.FrontTeeth,
+                        JawPosition.UpperJaw,
+                        JawPosition.LowerJaw
+                    )
+                )
                 binding.imageViewFrontSample.visibleWithAnimation()
-                setNextDetectedJaw(Front)
+                setNextDetectedJaw(JawPosition.FrontTeeth)
             }
             CheckupType.Whitening -> {
-                listOfSelectedJaws.add(Front)
+                listOfSelectedJaws.add(JawPosition.FrontTeeth)
                 binding.imageViewFrontSample.visibleWithAnimation()
-                setNextDetectedJaw(Front)
+                setNextDetectedJaw(JawPosition.FrontTeeth)
             }
 
             CheckupType.Sensitivity, CheckupType.Treatments -> {
                 checkupQuestionViewModel.submitStateSelectedJaw.value?.forEach { (_, jawPosition) ->
                     when (jawPosition) {
-                        JawPosition.FrontTeeth -> listOfSelectedJaws.add(Front)
-                        JawPosition.LowerJaw -> listOfSelectedJaws.add(Lower)
-                        JawPosition.UpperJaw -> listOfSelectedJaws.add(Upper)
-                        else -> listOfSelectedJaws.add(Front)
+                        JawPosition.FrontTeeth -> listOfSelectedJaws.add(JawPosition.FrontTeeth)
+                        JawPosition.LowerJaw -> listOfSelectedJaws.add(JawPosition.LowerJaw)
+                        JawPosition.UpperJaw -> listOfSelectedJaws.add(JawPosition.UpperJaw)
+                        else -> listOfSelectedJaws.add(JawPosition.FrontTeeth)
                     }
                 }
 
                 when (listOfSelectedJaws.first()) {
-                    Front -> binding.imageViewFrontSample.visibleWithAnimation()
-                    Upper -> binding.imageViewUpperSample.visibleWithAnimation()
-                    Lower -> binding.imageViewLowerSample.visibleWithAnimation()
+                    JawPosition.FrontTeeth, JawPosition.FrontTeethUpper, JawPosition.FrontTeethLower -> binding.imageViewFrontSample.visibleWithAnimation()
+                    JawPosition.LowerJaw -> binding.imageViewLowerSample.visibleWithAnimation()
+                    JawPosition.UpperJaw -> binding.imageViewUpperSample.visibleWithAnimation()
                 }
 
                 setNextDetectedJaw(listOfSelectedJaws.first())
@@ -527,14 +514,14 @@ open class JawDetector : Fragment(), Detector, Gallery {
         // Checkout current layout to place jaw image
         val totalSelectedJaw = jawDetectionViewModel.submitStateSelectedJaws.value?.size
         layoutForCurrentCapturedJaw = when (getCurrentDetectedJaw()) {
-            Front -> {
+            JawPosition.FrontTeeth -> {
                 if (totalSelectedJaw == 1)
                     binding.viewUpper
                 else
                     binding.viewFront
             }
-            Upper -> binding.viewUpper
-            Lower -> {
+            JawPosition.UpperJaw -> binding.viewUpper
+            JawPosition.LowerJaw -> {
                 if (totalSelectedJaw == 1)
                     binding.viewUpper
                 else
@@ -546,14 +533,14 @@ open class JawDetector : Fragment(), Detector, Gallery {
 
         // Checkout next layout
         layoutForNextCapturedJaw = when (getNextDetectedJaw()) {
-            Front -> {
+            JawPosition.FrontTeeth, JawPosition.FrontTeethUpper, JawPosition.FrontTeethLower -> {
                 if (totalSelectedJaw == 1)
                     binding.viewUpper
                 else
                     binding.viewFront
             }
-            Upper -> binding.viewUpper
-            Lower -> {
+            JawPosition.UpperJaw -> binding.viewUpper
+            JawPosition.LowerJaw -> {
                 if (totalSelectedJaw == 1)
                     binding.viewUpper
                 else
@@ -564,33 +551,34 @@ open class JawDetector : Fragment(), Detector, Gallery {
 
         // Checkout current image view to place jaw image
         imageViewForCurrentCapturedJaw = when (getCurrentDetectedJaw()) {
-            Front -> binding.layoutInsertImage.imageViewFrontTeeth
-            Upper -> binding.layoutInsertImage.imageViewUpperJaw
-            Lower -> binding.layoutInsertImage.imageViewLowerJaw
+            JawPosition.FrontTeeth -> binding.layoutInsertImage.imageViewFrontTeeth
+            JawPosition.UpperJaw -> binding.layoutInsertImage.imageViewUpperJaw
+            JawPosition.LowerJaw -> binding.layoutInsertImage.imageViewLowerJaw
             else -> binding.layoutInsertImage.imageViewFrontTeeth
         }
 
+
         // Checkout current card view to place jaw image
         cardViewForCurrentCapturedJaw = when (getCurrentDetectedJaw()) {
-            Front -> binding.layoutInsertImage.cardViewFront
-            Upper -> binding.layoutInsertImage.cardViewUpper
-            Lower -> binding.layoutInsertImage.cardViewLower
+            JawPosition.FrontTeeth -> binding.layoutInsertImage.cardViewFront
+            JawPosition.UpperJaw -> binding.layoutInsertImage.cardViewUpper
+            JawPosition.LowerJaw -> binding.layoutInsertImage.cardViewLower
             else -> binding.layoutInsertImage.cardViewFront
         }
 
         // Checkout current text view to place jaw image
         textViewForCurrentCapturedJaw = when (getCurrentDetectedJaw()) {
-            Front -> binding.layoutInsertImage.textViewFrontTeethTitle
-            Upper -> binding.layoutInsertImage.textViewUpperJawTitle
-            Lower -> binding.layoutInsertImage.textViewLowerJawTitle
+            JawPosition.FrontTeeth -> binding.layoutInsertImage.textViewFrontTeethTitle
+            JawPosition.UpperJaw -> binding.layoutInsertImage.textViewUpperJawTitle
+            JawPosition.LowerJaw -> binding.layoutInsertImage.textViewLowerJawTitle
             else -> binding.layoutInsertImage.textViewFrontTeethTitle
         }
     }
 
-    override fun setNextDetectedJaw(nextDetectedJaw: String?) =
+    override fun setNextDetectedJaw(nextDetectedJaw: JawPosition?) =
         jawDetectionViewModel.updateNextDetectedJaw(nextDetectedJaw)
 
-    override fun getNextDetectedJaw(): String? =
+    override fun getNextDetectedJaw(): JawPosition? =
         jawDetectionViewModel.stateNextDetectedJaw.value!!
 
     override fun showLayoutChoosePhoto() =
@@ -608,10 +596,10 @@ open class JawDetector : Fragment(), Detector, Gallery {
     override fun getDetectionModelState(): Boolean =
         jawDetectionViewModel.stateDetectionModel.value!!
 
-    override fun setCurrentDetectedJaw(currentDetectionJaw: String, isMainThread: Boolean) =
+    override fun setCurrentDetectedJaw(currentDetectionJaw: JawPosition, isMainThread: Boolean) =
         jawDetectionViewModel.updateCurrentDetectedJaw(currentDetectionJaw, isMainThread)
 
-    override fun getCurrentDetectedJaw(): String =
+    override fun getCurrentDetectedJaw(): JawPosition =
         jawDetectionViewModel.stateCurrentDetectedJaw.value!!
 
     override fun setLastCapturedJaw(lastCapturedJaw: Bitmap) =
@@ -629,6 +617,7 @@ open class JawDetector : Fragment(), Detector, Gallery {
     }
 
     override fun showPulseAnimation(currentDetectedJaw: String) {
+        clearView()
         hideSample()
         // Stop the model
         stopDetectionModel()
@@ -647,28 +636,28 @@ open class JawDetector : Fragment(), Detector, Gallery {
     }
 
     override fun checkoutNextDetectionJaw() {
-        if (getNextDetectedJaw() == Front)
+        if (getNextDetectedJaw() == JawPosition.FrontTeeth)
             setNextDetectedJaw(
                 if (checkupQuestionViewModel.submitStateSelectedJaw.value?.containsValue(JawPosition.FrontTeeth)!!)
-                    Front
+                    JawPosition.FrontTeeth
                 else
-                    Upper
+                    JawPosition.UpperJaw
             )
 
-        if (getNextDetectedJaw() == Upper)
+        if (getNextDetectedJaw() == JawPosition.UpperJaw)
             setNextDetectedJaw(
                 if (checkupQuestionViewModel.submitStateSelectedJaw.value?.containsValue(JawPosition.UpperJaw)!!)
-                    Upper
+                    JawPosition.UpperJaw
                 else
-                    Lower
+                    JawPosition.LowerJaw
             )
 
-        if (getNextDetectedJaw() == Lower)
+        if (getNextDetectedJaw() == JawPosition.LowerJaw)
             setNextDetectedJaw(
                 if (checkupQuestionViewModel.submitStateSelectedJaw.value?.containsValue(JawPosition.LowerJaw)!!)
-                    Lower
+                    JawPosition.LowerJaw
                 else
-                    Lower
+                    JawPosition.LowerJaw
             )
     }
 
@@ -790,7 +779,7 @@ open class JawDetector : Fragment(), Detector, Gallery {
                 binding.layoutInsertImage.imageViewFrontTeeth.load(currentCapturedImage)
                 binding.layoutInsertImage.cardViewFront.isSelected = true
                 binding.layoutInsertImage.textViewFrontTeethTitle.enable()
-                setNextDetectedJaw(Upper)
+                setNextDetectedJaw(JawPosition.UpperJaw)
                 binding.imageViewFrontSample.goneWithAnimation()
             }
             Upper -> {
@@ -798,14 +787,14 @@ open class JawDetector : Fragment(), Detector, Gallery {
                 binding.imageViewUpperSample.goneWithAnimation()
                 binding.layoutInsertImage.cardViewUpper.isSelected = true
                 binding.layoutInsertImage.textViewUpperJawTitle.enable()
-                setNextDetectedJaw(Lower)
+                setNextDetectedJaw(JawPosition.LowerJaw)
             }
             Lower -> {
                 binding.layoutInsertImage.imageViewLowerJaw.load(currentCapturedImage)
                 binding.layoutInsertImage.cardViewLower.isSelected = true
                 binding.layoutInsertImage.textViewLowerJawTitle.enable()
                 binding.imageViewLowerSample.goneWithAnimation()
-                setNextDetectedJaw(Lower)
+                setNextDetectedJaw(JawPosition.LowerJaw)
             }
             Over -> return
         }
@@ -836,6 +825,7 @@ open class JawDetector : Fragment(), Detector, Gallery {
             if (binding.pulseView.isVisible)
                 binding.pulseView.clearView()
             binding.layoutInsertImage.root.hideWithAnimation()
+            binding.cardViewError.gone()
             hideLayoutChoosePhoto()
         }
     }
@@ -851,10 +841,10 @@ open class JawDetector : Fragment(), Detector, Gallery {
 
     override fun uploadJaw(image: Bitmap) {
         // Check if current uploaded image is last image
-        jawDetectionViewModel.photosUploaded(getCurrentDetectedJaw().convertJawToInt())
+        jawDetectionViewModel.photosUploaded(getCurrentDetectedJaw())
         checkIfLastImageToUpload()
-        when (getCurrentDetectedJaw().convertJawToInt()) {
-            FRONT_JAW -> {
+        when (getCurrentDetectedJaw()) {
+            JawPosition.FrontTeeth, JawPosition.FrontTeethUpper, JawPosition.FrontTeethLower -> {
                 checkupSubmitImageViewModel.addFrontImageToCheckup(
                     checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
                     image = image.convertToFile(requireContext()),
@@ -863,10 +853,16 @@ open class JawDetector : Fragment(), Detector, Gallery {
                 checkupSubmitImageViewModel.submitStateAddFrontImageToCheckup.observe(
                     viewLifecycleOwner
                 ) {
-                    handleViewStateAddImageToCheckup(it, FRONT_JAW)
+                    if (it is Failure) {
+                        uploadedFrontJawId = 0
+                        frontJawIsUploading = false
+                        clearCapturedImage(JawPosition.FrontTeeth)
+                    }
+
+                    handleViewStateAddImageToCheckup(it, JawPosition.FrontTeeth)
                 }
             }
-            UPPER_JAW -> {
+            JawPosition.UpperJaw -> {
                 checkupSubmitImageViewModel.addUpperImageToCheckup(
                     checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
                     image = image.convertToFile(requireContext()),
@@ -875,10 +871,16 @@ open class JawDetector : Fragment(), Detector, Gallery {
                 checkupSubmitImageViewModel.submitStateAddUpperImageToCheckup.observe(
                     viewLifecycleOwner
                 ) {
-                    handleViewStateAddImageToCheckup(it, UPPER_JAW)
+                    if (it is Failure) {
+                        uploadedUpperJawId = 0
+                        upperJawIsUploading = false
+                        clearCapturedImage(JawPosition.UpperJaw)
+                    }
+
+                    handleViewStateAddImageToCheckup(it, JawPosition.UpperJaw)
                 }
             }
-            LOWER_JAW -> {
+            JawPosition.LowerJaw -> {
                 checkupSubmitImageViewModel.addLowerImageToCheckup(
                     checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
                     image = image.convertToFile(requireContext()),
@@ -887,7 +889,13 @@ open class JawDetector : Fragment(), Detector, Gallery {
                 checkupSubmitImageViewModel.submitStateAddLowerImageToCheckup.observe(
                     viewLifecycleOwner
                 ) {
-                    handleViewStateAddImageToCheckup(it, LOWER_JAW)
+                    if (it is Failure) {
+                        uploadedLowerJawId = 0
+                        lowerJawIsUploading = false
+                        clearCapturedImage(JawPosition.LowerJaw)
+                    }
+
+                    handleViewStateAddImageToCheckup(it, JawPosition.LowerJaw)
                 }
             }
         }
@@ -896,7 +904,7 @@ open class JawDetector : Fragment(), Detector, Gallery {
     /** Handel view state for adding front jaw image to checkup */
     private fun handleViewStateAddImageToCheckup(
         loadable: Loadable<AddImageToCheckupSuccessModel>,
-        jawType: Int
+        jawType: JawPosition
     ) {
         if (loadable != Loading) {
             currentUploadJawLayout(jawType).enable()
@@ -932,7 +940,7 @@ open class JawDetector : Fragment(), Detector, Gallery {
     override fun updateJaw(image: Bitmap, imageId: Int) {
         checkIfLastImageToUpload()
         when (getCurrentDetectedJaw()) {
-            Front -> {
+            JawPosition.FrontTeeth, JawPosition.FrontTeethLower, JawPosition.FrontTeethUpper -> {
                 checkupSubmitImageViewModel.updateFrontImageInCheckup(
                     checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
                     image = image.convertToFile(requireContext()),
@@ -941,10 +949,10 @@ open class JawDetector : Fragment(), Detector, Gallery {
                 checkupSubmitImageViewModel.submitStateUpdateFrontImageInCheckup.observe(
                     viewLifecycleOwner
                 ) {
-                    handleViewStateUpdateImageInCheckup(it, FRONT_JAW)
+                    handleViewStateUpdateImageInCheckup(it, JawPosition.FrontTeeth)
                 }
             }
-            Upper -> {
+            JawPosition.UpperJaw -> {
                 checkupSubmitImageViewModel.updateUpperImageInCheckup(
                     checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
                     image = image.convertToFile(requireContext()),
@@ -953,10 +961,10 @@ open class JawDetector : Fragment(), Detector, Gallery {
                 checkupSubmitImageViewModel.submitStateUpdateUpperImageInCheckup.observe(
                     viewLifecycleOwner
                 ) {
-                    handleViewStateUpdateImageInCheckup(it, UPPER_JAW)
+                    handleViewStateUpdateImageInCheckup(it, JawPosition.UpperJaw)
                 }
             }
-            Lower -> {
+            JawPosition.LowerJaw -> {
                 checkupSubmitImageViewModel.updateLowerImageInCheckup(
                     checkupId = chooseCheckupViewModel.submitStateCreateCheckupId.value!!,
                     image = image.convertToFile(requireContext()),
@@ -965,7 +973,7 @@ open class JawDetector : Fragment(), Detector, Gallery {
                 checkupSubmitImageViewModel.submitStateUpdateLowerImageInCheckup.observe(
                     viewLifecycleOwner
                 ) {
-                    handleViewStateUpdateImageInCheckup(it, LOWER_JAW)
+                    handleViewStateUpdateImageInCheckup(it, JawPosition.LowerJaw)
                 }
             }
         }
@@ -974,7 +982,7 @@ open class JawDetector : Fragment(), Detector, Gallery {
     /** Handel view state for updating captured image in checkup */
     private fun handleViewStateUpdateImageInCheckup(
         loadable: Loadable<UpdateImageInCheckupSuccessModel>,
-        jawType: Int
+        jawType: JawPosition
     ) {
         if (loadable != Loading) {
             currentUploadJawLayout(jawType).enable()
@@ -1097,7 +1105,6 @@ open class JawDetector : Fragment(), Detector, Gallery {
 
     companion object {
         const val MODEL_NAME = "yolov5n_320sz_jaw_detection_v3.tflite"
-        private const val MARGIN_THRESHOLD = 0.06
         const val MinimumConfidence = 0.85
         private const val TAG = "TFL Jaw Detection"
         private const val Front = "front"
@@ -1109,8 +1116,8 @@ open class JawDetector : Fragment(), Detector, Gallery {
         private const val ZeroScale = 1f
         private const val FullAlpha = 1f
         private const val ZeroAlpha = 0f
-        private const val AnimationDuration = 500L
-        private const val AnimationStartDelayForShowImage = 1000L
+        private const val AnimationDuration = 300L
+        private const val AnimationStartDelayForShowImage = 100L
         private const val AnimationStartDelayForMoveImage = 100L
         private const val DelayForShowError = 5000L
         private const val AllJawsAreSelected = 4

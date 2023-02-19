@@ -1,6 +1,7 @@
 package com.straiberry.android.checkup.checkup.domain.repository
 
 import com.straiberry.android.checkup.checkup.data.networking.model.AddToothToCheckupRequest
+import com.straiberry.android.checkup.checkup.data.networking.model.CheckupType
 import com.straiberry.android.checkup.checkup.domain.model.*
 import okhttp3.MultipartBody
 
@@ -8,7 +9,7 @@ interface CheckupRepo {
     suspend fun getSDKToken(appId: String, packageName: String): SdkTokenSuccessModel
     suspend fun deleteCheckup(checkupId: String): DeleteCheckupSuccessModel
     suspend fun getCheckup(checkupId: String): CheckupResultSuccessModel
-    suspend fun createCheckup(checkupType: Int): CreateCheckupSuccessModel
+    suspend fun createCheckup(checkupType: CheckupType): CreateCheckupSuccessModel
     suspend fun addImageToCheckup(
         checkupId: MultipartBody.Part,
         image: MultipartBody.Part,

@@ -6,5 +6,5 @@ import org.koin.dsl.module
 
 val libModule = module {
     single { CoroutineContextProvider() }
-    single { SdkAuthorizationHelper }
+    single { SdkAuthorizationHelper(get()) }
 }

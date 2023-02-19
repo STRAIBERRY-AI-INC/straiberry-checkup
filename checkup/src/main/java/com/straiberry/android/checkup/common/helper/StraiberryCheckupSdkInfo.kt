@@ -24,9 +24,9 @@ object StraiberryCheckupSdkInfo {
         Paper.book().write(TOKEN, accessToken)
     }
 
-    fun getToken(): String = Paper.book().read(TOKEN)
+    fun getToken(): String = Paper.book().read(TOKEN)!!
 
-    fun getTokenInfo(): TokenKeys = Paper.book().read(CHECKUP_SDK_INFO)
+    fun getTokenInfo(): TokenKeys = Paper.book().read(CHECKUP_SDK_INFO)!!
 
     fun setUserAvatar(imageUrl: String) {
         Paper.book().write(USER_AVATAR, imageUrl)
@@ -38,11 +38,11 @@ object StraiberryCheckupSdkInfo {
         Paper.book().write(UNIQUE_ID, uniqueId)
     }
 
-    fun getUniqueId(): String = Paper.book().read(UNIQUE_ID)
+    fun getUniqueId(): String = Paper.book().read(UNIQUE_ID)!!
 
     fun setSelectedLanguage(language: String) {
         Paper.book().write(CHECKUP_LANGUAGE, language)
     }
 
-    fun getSelectedLanguage(): String = Paper.book().read(CHECKUP_LANGUAGE, "")
+    fun getSelectedLanguage(): String = Paper.book().read(CHECKUP_LANGUAGE)!!
 }

@@ -1,26 +1,28 @@
 package com.straiberry.android.checkup.common.extentions
 
 import android.annotation.SuppressLint
+import android.content.ContentResolver
+import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.graphics.*
 import android.media.ExifInterface
 import android.media.Image
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import androidx.camera.core.ImageProxy
 import androidx.camera.view.PreviewView
 import androidx.palette.graphics.Palette
+import com.straiberry.android.checkup.R
 import com.straiberry.android.checkup.common.helper.Variance
 import org.opencv.android.Utils
 import org.opencv.core.CvType
 import org.opencv.core.Mat
 import org.opencv.imgproc.Imgproc
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
 import java.nio.ByteBuffer
 import kotlin.math.abs
 import kotlin.math.min
@@ -57,6 +59,51 @@ fun ImageProxy.toBitmap(): Bitmap? {
     return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 }
 
+fun Bitmap.compressBitmap(
+    context: Context,
+    rotation: Int
+): Bitmap {
+    val fos: OutputStream?
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+        val resolver: ContentResolver = context.contentResolver
+
+        val contentValues = ContentValues().apply {
+            put(
+                MediaStore.MediaColumns.DISPLAY_NAME,
+                System.currentTimeMillis().toString()
+            )
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            put(
+                MediaStore.MediaColumns.RELATIVE_PATH,
+                "DCIM/${context.getString(R.string.app_name)}"
+            )
+        }
+        val imageUri =
+            resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+        fos = resolver.openOutputStream(imageUri!!)
+    } else {
+        val imageDir = Environment.getExternalStoragePublicDirectory(
+            Environment.DIRECTORY_DCIM
+        ).toString() + File.separator + context.getString(R.string.app_name)
+        val file = File(imageDir)
+        if (!file.exists())
+            file.mkdir()
+        val image = File(imageDir, System.currentTimeMillis().toString() + "jpg")
+        fos = FileOutputStream(image)
+    }
+    val savedBitmap = Bitmap.createBitmap(
+        this.correctRotation(rotation),
+        0,
+        0,
+        this.width,
+        this.height,
+    )
+    savedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+    fos?.flush()
+    fos?.close()
+    return savedBitmap
+}
 
 fun Bitmap.resize(maxWidth: Int, maxHeight: Int): Bitmap? {
     var image = this
@@ -105,15 +152,15 @@ fun Bitmap.cropFromCenter(): Bitmap {
 
 fun Bitmap.finalCropOnCapturedJaw(
     croppedSize: Int,
-    actualBitmap: Bitmap,
     normalizerLocation: RectF
 ): Bitmap {
-    val correctRotation = this
 
-    val mX = (normalizerLocation.left / croppedSize) * actualBitmap.width
-    val mY = (normalizerLocation.top / croppedSize) * actualBitmap.height
-    val mW = (normalizerLocation.right / croppedSize) * actualBitmap.width
-    val mH = (normalizerLocation.bottom / croppedSize) * actualBitmap.height
+    val correctRotation = this.createBackgroundSquare()
+
+    val mX = (normalizerLocation.left / (croppedSize)) * (correctRotation.width)
+    val mY = (normalizerLocation.top / (croppedSize)) * (correctRotation.height)
+    val mW = (normalizerLocation.right / (croppedSize)) * (correctRotation.width)
+    val mH = (normalizerLocation.bottom / (croppedSize)) * (correctRotation.height)
 
     val size = (if (mW > mH) mW else mH)
     val newX = (mX + mW / 2) - size / 2
@@ -159,6 +206,38 @@ fun Bitmap.addPaddingForBetterDetection(divisible: Int): Bitmap {
     val bitmapWithPadding = Bitmap.createBitmap(
         this.width + paddingW / 2,
         this.height + paddingH / 2,
+        Bitmap.Config.ARGB_8888
+    )
+    Canvas(bitmapWithPadding).drawColor(Color.parseColor("#727272"))
+    val marginLeft = (bitmapWithPadding.width * 0.5 - this.width * 0.5)
+    val marginTop = (bitmapWithPadding.height * 0.5 - this.height * 0.5)
+    Canvas(bitmapWithPadding).drawBitmap(this, marginLeft.toFloat(), marginTop.toFloat(), null)
+
+    return bitmapWithPadding
+}
+
+fun Bitmap.addPaddingForBetterDetection(): Bitmap {
+    val paddingW = (320 - this.width)
+    val paddingH = (320 - this.height)
+
+    val bitmapWithPadding = Bitmap.createBitmap(
+        this.width + paddingW,
+        this.height + paddingH,
+        Bitmap.Config.ARGB_8888
+    )
+    Canvas(bitmapWithPadding).drawColor(Color.parseColor("#727272"))
+    val marginLeft = (bitmapWithPadding.width * 0.5 - this.width * 0.5)
+    val marginTop = (bitmapWithPadding.height * 0.5 - this.height * 0.5)
+    Canvas(bitmapWithPadding).drawBitmap(this, marginLeft.toFloat(), marginTop.toFloat(), null)
+
+    return bitmapWithPadding
+}
+
+fun Bitmap.addPadding(paddingWidth: Int, paddingHeight: Int): Bitmap {
+
+    val bitmapWithPadding = Bitmap.createBitmap(
+        this.width + paddingWidth,
+        this.height + paddingHeight,
         Bitmap.Config.ARGB_8888
     )
     Canvas(bitmapWithPadding).drawColor(Color.parseColor("#727272"))
@@ -470,7 +549,7 @@ fun Bitmap.isBlurry(): Boolean {
     for (pixel: Int in pixels) {
         if (pixel > maxLap) maxLap = pixel
     }
-    val soglia = -6776680
+    val soglia = -8776680
     if (maxLap <= soglia) {
         println("is blur image")
     }

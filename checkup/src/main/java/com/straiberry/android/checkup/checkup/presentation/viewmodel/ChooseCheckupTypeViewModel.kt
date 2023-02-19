@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.straiberry.android.checkup.checkup.data.networking.model.CheckupHistorySuccessResponse
+import com.straiberry.android.checkup.checkup.data.networking.model.CheckupType
 import com.straiberry.android.checkup.checkup.domain.model.CheckupResultSuccessModel
 
-enum class CheckupType { Regular, Whitening, Sensitivity, Treatments, Others, XRays }
 class ChooseCheckupTypeViewModel : ViewModel() {
 
     private val _submitStateSelectedCheckup = MutableLiveData<String>()

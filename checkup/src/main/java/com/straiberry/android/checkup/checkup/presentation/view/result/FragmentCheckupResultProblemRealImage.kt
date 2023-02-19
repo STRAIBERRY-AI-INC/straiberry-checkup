@@ -11,15 +11,17 @@ import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.palette.graphics.Palette
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import coil.load
 import com.google.android.material.card.MaterialCardView
 import com.straiberry.android.checkup.R
-import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.FRONT_JAW
-import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.LOWER_JAW
-import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.UPPER_JAW
-import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.X_RAY_JAW
-import com.straiberry.android.checkup.checkup.presentation.viewmodel.*
+import com.straiberry.android.checkup.checkup.data.networking.model.CheckupImageType
+import com.straiberry.android.checkup.checkup.data.networking.model.CheckupType
+import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupResultProblemIllustrationViewModel
+import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupResultProblemRealImageViewModel
+import com.straiberry.android.checkup.checkup.presentation.viewmodel.ChooseCheckupTypeViewModel
+import com.straiberry.android.checkup.checkup.presentation.viewmodel.XrayViewModel
 import com.straiberry.android.checkup.common.extentions.createPaletteSync
 import com.straiberry.android.checkup.databinding.FragmentCheckupProblemRealImageBinding
 import com.straiberry.android.checkup.di.IsolatedKoinComponent
@@ -63,68 +65,72 @@ class FragmentCheckupResultProblemRealImage : Fragment(), IsolatedKoinComponent 
             selectedCheckup = chooseCheckupViewModel.submitStateSelectedCheckupIndex.value!!
 
             checkupResultProblemIllustrationViewModel.submitStateToothCurrentPosition.observe(
-                viewLifecycleOwner,
-                { jawPosition ->
-                    binding.layoutRealImage.removeAllViews()
-                    binding.layoutRealImage.addView(binding.imageViewRealImage)
-                    when (jawPosition) {
-                        JawPosition.FrontTeeth, JawPosition.FrontTeethLower, JawPosition.FrontTeethUpper -> {
-                            val jawImageUrl =
-                                chooseCheckupViewModel.submitStateCheckupResult.value?.data?.images?.first { it.imageType.toInt() == FRONT_JAW || it.imageType.toInt() == X_RAY_JAW }?.image
+                viewLifecycleOwner
+            ) { jawPosition ->
+                binding.layoutRealImage.removeAllViews()
+                binding.layoutRealImage.addView(binding.imageViewRealImage)
+                when (jawPosition) {
+                    JawPosition.FrontTeeth, JawPosition.FrontTeethLower, JawPosition.FrontTeethUpper -> {
+                        val jawImageUrl =
+                            chooseCheckupViewModel.submitStateCheckupResult.value?.data?.images?.first { it.imageType == CheckupImageType.FrontJaw || it.imageType == CheckupImageType.XrayJaw }?.image
 
-                            // If checkup is x-ray then get image as bitmap and create a square background
-                            if (selectedCheckup == CheckupType.XRays) {
-                                binding.imageViewRealImage.gone()
-                                xrayViewModel.getUrlImageBitmap(requireContext(), jawImageUrl!!)
-                                xrayViewModel.submitStateUrlImageBitmap.observe(viewLifecycleOwner) { jawBitmap ->
-                                    binding.imageViewRealImageXray.load(jawBitmap)
-                                    jawBitmap?.createPaletteSync()?.getDominantColor(Color.GRAY)
-                                        ?.let { it1 ->
-                                            binding.cardViewBackground.setCardBackgroundColor(
-                                                it1
-                                            )
-                                        }
+                        // If checkup is x-ray then get image as bitmap and create a square background
+                        if (selectedCheckup == CheckupType.XRays) {
+                            binding.imageViewRealImage.gone()
+                            xrayViewModel.getUrlImageBitmap(requireContext(), jawImageUrl!!)
+                            xrayViewModel.submitStateUrlImageBitmap.observe(viewLifecycleOwner) { jawBitmap ->
+                                binding.imageViewRealImageXray.load(jawBitmap)
+                                Palette.Builder(jawBitmap!!).generate {
+                                    it?.let { palette ->
+                                        val dominantColor = palette.getDominantColor(Color.GRAY)
+
+                                        binding.cardViewBackground.setCardBackgroundColor(
+                                            dominantColor
+                                        )
+
+                                    }
                                 }
                             }
+                        }
 
-                            binding.imageViewRealImage.load(jawImageUrl) {
-                                placeholder(circularProgressDrawable)
-                            }
+                        binding.imageViewRealImage.load(jawImageUrl) {
+                            placeholder(circularProgressDrawable)
+                        }
 
-                            checkupResultProblemRealImageViewModel.submitStateToothWithProblemFrontTeeth.observe(
-                                viewLifecycleOwner,
-                                {
-                                    checkoutToothWithProblems(it)
-                                })
-                        }
-                        JawPosition.LowerJaw -> {
-                            binding.imageViewRealImage.load(
-                                chooseCheckupViewModel.submitStateCheckupResult.value?.data?.images?.first { it.imageType.toInt() == LOWER_JAW }?.image
-                            ) {
-                                placeholder(circularProgressDrawable)
-                            }
-                            checkupResultProblemRealImageViewModel.submitStateToothWithProblemLowerJaw.observe(
-                                viewLifecycleOwner,
-                                {
-                                    checkoutToothWithProblems(it)
-                                })
-                        }
-                        JawPosition.UpperJaw -> {
-                            binding.imageViewRealImage.load(
-                                chooseCheckupViewModel.submitStateCheckupResult.value?.data?.images?.first { it.imageType.toInt() == UPPER_JAW }?.image
-                            ) {
-                                placeholder(circularProgressDrawable)
-                            }
-                            checkupResultProblemRealImageViewModel.submitStateToothWithProblemUpperJaw.observe(
-                                viewLifecycleOwner,
-                                {
-                                    checkoutToothWithProblems(it)
-                                })
-                        }
-                        else -> {
+                        checkupResultProblemRealImageViewModel.submitStateToothWithProblemFrontTeeth.observe(
+                            viewLifecycleOwner
+                        ) {
+                            checkoutToothWithProblems(it)
                         }
                     }
-                })
+                    JawPosition.LowerJaw -> {
+                        binding.imageViewRealImage.load(
+                            chooseCheckupViewModel.submitStateCheckupResult.value?.data?.images?.first { it.imageType == CheckupImageType.LowerJaw }?.image
+                        ) {
+                            placeholder(circularProgressDrawable)
+                        }
+                        checkupResultProblemRealImageViewModel.submitStateToothWithProblemLowerJaw.observe(
+                            viewLifecycleOwner
+                        ) {
+                            checkoutToothWithProblems(it)
+                        }
+                    }
+                    JawPosition.UpperJaw -> {
+                        binding.imageViewRealImage.load(
+                            chooseCheckupViewModel.submitStateCheckupResult.value?.data?.images?.first { it.imageType == CheckupImageType.UpperJaw }?.image
+                        ) {
+                            placeholder(circularProgressDrawable)
+                        }
+                        checkupResultProblemRealImageViewModel.submitStateToothWithProblemUpperJaw.observe(
+                            viewLifecycleOwner,
+                            {
+                                checkoutToothWithProblems(it)
+                            })
+                    }
+                    else -> {
+                    }
+                }
+            }
         }.root
     }
 
@@ -146,12 +152,15 @@ class FragmentCheckupResultProblemRealImage : Fragment(), IsolatedKoinComponent 
                 ).apply {
                     showedImageView.viewTreeObserver.addOnGlobalLayoutListener {
                         x = it.first.toImageXPosition(showedImageView.width)
-                            .toFloat() - resources.getDimension(R.dimen.problem_indicator_size)
+                            .toFloat() - resources.getDimension(com.straiberry.android.common.R.dimen.problem_indicator_size)
                         y = it.second.toImageYPosition(showedImageView.height)
-                            .toFloat() - resources.getDimension(R.dimen.problem_indicator_size)
+                            .toFloat() - resources.getDimension(com.straiberry.android.common.R.dimen.problem_indicator_size)
                         visibleWithAnimation()
                         this.findViewById<MaterialCardView>(R.id.indicatorLower).apply {
-                            strokeColor = ContextCompat.getColor(context, R.color.secondaryLight)
+                            strokeColor = ContextCompat.getColor(
+                                context,
+                                com.straiberry.android.common.R.color.secondaryLight
+                            )
                             ObjectAnimator.ofPropertyValuesHolder(
                                 this,
                                 PropertyValuesHolder.ofFloat(

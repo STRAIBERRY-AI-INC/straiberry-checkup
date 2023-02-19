@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">StrAIberry</string>
-    <string name="application_id">com.straiberry.android</string>
     <string name="ai_powered_dental_care">Sweet Taste of AI in Oral Hygiene</string>
     <string name="create_an_account">ثبت نام</string>
     <string name="i_have_an_account">قبلا ثبت نام کردم</string>

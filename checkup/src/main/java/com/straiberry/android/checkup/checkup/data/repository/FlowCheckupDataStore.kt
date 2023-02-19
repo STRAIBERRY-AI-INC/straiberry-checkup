@@ -11,7 +11,7 @@ class FlowCheckupDataStore(val context: Context) : CheckupDataStore {
 
     override fun getGuideTourStatus(): GuideTourStatusModel =
         if (Paper.book().contains(GUIDE_TOUR))
-            Paper.book().read(GUIDE_TOUR)
+            Paper.book().read(GUIDE_TOUR)!!
         else
             GuideTourStatusModel()
 
@@ -23,7 +23,7 @@ class FlowCheckupDataStore(val context: Context) : CheckupDataStore {
         var answers = ArrayList<DentalIssueQuestionsModel>()
         var remoteToothId = -1
         if (Paper.book().contains(DentalIssueQuestions)) {
-            answers = Paper.book().read(DentalIssueQuestions)
+            answers = Paper.book().read(DentalIssueQuestions)!!
             // Update the answer if it exist
             var isUpdated = false
             answers.forEachIndexed { index, dentalIssueQuestion ->
@@ -42,7 +42,8 @@ class FlowCheckupDataStore(val context: Context) : CheckupDataStore {
     }
 
     override fun deleteDentalIssue(toothId: Int): Int {
-        val answers: ArrayList<DentalIssueQuestionsModel> = Paper.book().read(DentalIssueQuestions)
+        val answers: ArrayList<DentalIssueQuestionsModel> =
+            Paper.book().read(DentalIssueQuestions)!!
         val remoteToothId: Int = answers.first { it.teethId == toothId }.remoteTeethId
         answers.removeAll { it.teethId == toothId }
         Paper.book().write(DentalIssueQuestions, answers)
@@ -50,7 +51,7 @@ class FlowCheckupDataStore(val context: Context) : CheckupDataStore {
     }
 
     override fun observeDentalQuestions(): ArrayList<DentalIssueQuestionsModel> =
-        Paper.book().read(DentalIssueQuestions) as ArrayList<DentalIssueQuestionsModel>
+        Paper.book().read(DentalIssueQuestions)!!
 
     override fun shouldShowCheckupHelp(): Boolean {
         return Prefs.getInteger(context, TIPS_COUNTER) <= 2

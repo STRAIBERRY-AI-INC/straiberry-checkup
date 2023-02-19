@@ -1,8 +1,10 @@
 package com.straiberry.android.checkup
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.straiberry.android.checkup.checkup.data.networking.model.CheckupType
 import com.straiberry.android.checkup.checkup.domain.model.CreateCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.domain.usecase.CreateCheckupSdkUseCase
+import com.straiberry.android.checkup.checkup.domain.usecase.CreateCheckupUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.GetSdkTokenUseCase
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.CreateCheckupViewModel
 import com.straiberry.android.core.base.Failure
@@ -60,14 +62,14 @@ class CreateCheckupViewModelTest {
     @Test
     fun `When checkup type is not listed , then state should not be loading`() {
         val viewModel = createViewModel()
-        viewModel.createCheckup(-2)
+        viewModel.createCheckup(CheckupType.Regular)
         assertEquals(NotLoading, viewModel.submitStateCreateCheckup.value)
     }
 
     @Test
     fun `When checkup type is correct, then state should be loading`() {
         val viewModel = createViewModel()
-        viewModel.createCheckup(-1)
+        viewModel.createCheckup(CheckupType.Whitening)
         assertEquals(Loading, viewModel.submitStateCreateCheckup.value)
     }
 
@@ -78,7 +80,7 @@ class CreateCheckupViewModelTest {
         } returns CreateCheckupSuccessModel("")
 
         val viewModel = createViewModel()
-        viewModel.createCheckup(-1)
+        viewModel.createCheckup(CheckupType.Whitening)
         delay(100)
         assertEquals(true, (viewModel.submitStateCreateCheckup.value is Success))
     }
@@ -90,7 +92,7 @@ class CreateCheckupViewModelTest {
         } throws Exception()
 
         val viewModel = createViewModel()
-        viewModel.createCheckup(-1)
+        viewModel.createCheckup(CheckupType.Whitening)
         delay(100)
         assertEquals(true, (viewModel.submitStateCreateCheckup.value is Failure))
     }

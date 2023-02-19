@@ -13,8 +13,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.straiberry.android.checkup.R
+import com.straiberry.android.checkup.checkup.data.networking.model.CheckupHistorySuccessResponse
+import com.straiberry.android.checkup.checkup.data.networking.model.CheckupImageType
+import com.straiberry.android.checkup.checkup.data.networking.model.CheckupType
 import com.straiberry.android.checkup.checkup.domain.model.CheckupResultSuccessModel
-import com.straiberry.android.checkup.checkup.presentation.viewmodel.*
+import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupQuestionViewModel
+import com.straiberry.android.checkup.checkup.presentation.viewmodel.ChooseCheckupTypeViewModel
+import com.straiberry.android.checkup.checkup.presentation.viewmodel.DetectionJawViewModel
+import com.straiberry.android.checkup.checkup.presentation.viewmodel.UserInfoViewModel
 import com.straiberry.android.checkup.databinding.FragmentCheckupResultBasicBinding
 import com.straiberry.android.checkup.di.IsolatedKoinComponent
 import com.straiberry.android.checkup.di.StraiberrySdk
@@ -25,7 +31,7 @@ import com.straiberry.android.common.model.JawPosition
 
 class FragmentCheckupResultBasic : Fragment(), IsolatedKoinComponent {
     private lateinit var binding: FragmentCheckupResultBasicBinding
-    private lateinit var checkupResult: CheckupResultSuccessModel
+    private var checkupResult = CheckupResultSuccessModel(CheckupHistorySuccessResponse.Data())
 
     private val chooseCheckupViewModel by activityViewModels<ChooseCheckupTypeViewModel>()
     private val checkupQuestionViewModel by activityViewModels<CheckupQuestionViewModel>()
@@ -45,6 +51,9 @@ class FragmentCheckupResultBasic : Fragment(), IsolatedKoinComponent {
     ): View {
         return FragmentCheckupResultBasicBinding.inflate(inflater, container, false).also {
             binding = it
+
+            if (chooseCheckupViewModel.submitStateCheckupResult.value == null)
+                findNavController().popBackStack()
 
             checkupResult = chooseCheckupViewModel.submitStateCheckupResult.value!!
             // Set the type of checkup based on selected choose
@@ -102,7 +111,7 @@ class FragmentCheckupResultBasic : Fragment(), IsolatedKoinComponent {
                 binding.textViewCheckupCountProblem.text = SpannableStringBuilder()
                     .append(getString(R.string.in_this_checkup))
                     .append(" ")
-                    .color(ContextCompat.getColor(requireContext(), R.color.primary)) {
+                    .color(ContextCompat.getColor(requireContext(), com.straiberry.android.common.R.color.primary)) {
                         append(
                             totalProblemCount.toString()
                         )
@@ -114,23 +123,24 @@ class FragmentCheckupResultBasic : Fragment(), IsolatedKoinComponent {
                     jawDetectionViewModel.resetSelectedJaw()
                     // Save witch jaw has been selected by user
                     checkupResult.data.images.forEach {
-                        when {
-                            it.imageType.toInt() == FragmentCheckupResultDetails.FRONT_JAW -> jawDetectionViewModel.setSelectedJaw(
+                        when (it.imageType) {
+                            CheckupImageType.FrontJaw -> jawDetectionViewModel.setSelectedJaw(
                                 0,
                                 JawPosition.FrontTeeth
                             )
-                            it.imageType.toInt() == FragmentCheckupResultDetails.X_RAY_JAW -> jawDetectionViewModel.setSelectedJaw(
+                            CheckupImageType.XrayJaw -> jawDetectionViewModel.setSelectedJaw(
                                 0,
                                 JawPosition.FrontTeeth
                             )
-                            it.imageType.toInt() == FragmentCheckupResultDetails.UPPER_JAW -> jawDetectionViewModel.setSelectedJaw(
+                            CheckupImageType.UpperJaw -> jawDetectionViewModel.setSelectedJaw(
                                 1,
                                 JawPosition.UpperJaw
                             )
-                            it.imageType.toInt() == FragmentCheckupResultDetails.LOWER_JAW -> jawDetectionViewModel.setSelectedJaw(
+                            CheckupImageType.LowerJaw -> jawDetectionViewModel.setSelectedJaw(
                                 2,
                                 JawPosition.LowerJaw
                             )
+                            else -> {}
                         }
                     }
                     findNavController().navigate(R.id.action_fragmentCheckupResultBasic_to_fragmentCheckupResultDetails)

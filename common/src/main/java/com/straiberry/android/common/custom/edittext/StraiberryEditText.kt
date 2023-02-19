@@ -151,13 +151,14 @@ class StraiberryEditText @JvmOverloads constructor(
                         context,
                         R.drawable.ic_enter_code_focused
                     )
-                }else
-                linearLayout.background = ContextCompat.getDrawable(
-                    context,
-                    R.drawable.custom_edit_text_focused
-                )
-                _focusChange.value = true
-                cardElevation = CardElevationFocus
+                }else {
+                    linearLayout.background = ContextCompat.getDrawable(
+                        context,
+                        R.drawable.custom_edit_text_focused
+                    )
+                    _focusChange.value = true
+                    cardElevation = CardElevationFocus
+                }
             } else {
                 if (isCode)
                     if (textInputEditText.text.toString()=="") {
@@ -224,21 +225,12 @@ class StraiberryEditText @JvmOverloads constructor(
         // Max Length
         val filterArray = arrayOfNulls<InputFilter>(1)
         filterArray[0] =
-            InputFilter.LengthFilter(
-                straiberryEditText.getInt(
-                    R.styleable.StraiberryEditText_maxLength,
-                    0
-                )
-            )
+            InputFilter.LengthFilter(straiberryEditText.getInt(R.styleable.StraiberryEditText_maxLength, 0))
         if (straiberryEditText.getInt(R.styleable.StraiberryEditText_maxLength, 0) > 0)
             textInputEditText.apply { filters = filterArray }
 
         // Text Alignment
-        if (straiberryEditText.getBoolean(
-                R.styleable.StraiberryEditText_isTextAlignmentCenter,
-                false
-            )
-        )
+        if (straiberryEditText.getBoolean(R.styleable.StraiberryEditText_isTextAlignmentCenter, false))
             textInputEditText.apply {
                 setPadding(0, 0, 0, 0)
                 textAlignment = View.TEXT_ALIGNMENT_CENTER

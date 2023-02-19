@@ -17,13 +17,13 @@ class RemoteCheckupRepo(
 ) : CheckupRepo {
 
     override suspend fun createCheckup(
-        checkupType: Int
+        checkupType: CheckupType
     ): CreateCheckupSuccessModel =
         checkupApi.createCheckup(
             createCheckupRequest = CreateCheckupRequest(
                 checkupType = checkupType
             ),
-            header = authorizationHelper.setHeaders(context)
+            header = authorizationHelper.setHeaders()
         ).toDomainModel()
 
     override suspend fun getSDKToken(appId: String, packageName: String) =
@@ -36,11 +36,11 @@ class RemoteCheckupRepo(
      * Delete a specific checkup based on checkup id
      */
     override suspend fun deleteCheckup(checkupId: String): DeleteCheckupSuccessModel =
-        checkupApi.deleteCheckup(checkupId, authorizationHelper.setHeaders(context)).toDomainModel()
+        checkupApi.deleteCheckup(checkupId, authorizationHelper.setHeaders()).toDomainModel()
 
     /** Get a specific checkup result */
     override suspend fun getCheckup(checkupId: String): CheckupResultSuccessModel =
-        checkupApi.getCheckup(checkupId, authorizationHelper.setHeaders(context)).toDomainModel()
+        checkupApi.getCheckup(checkupId, authorizationHelper.setHeaders()).toDomainModel()
 
     /**
      * Adding image's of selected jaw to checkup. user can upload
@@ -57,7 +57,7 @@ class RemoteCheckupRepo(
             imageType = imageType,
             image = image,
             lastImage = lastImage,
-            header = authorizationHelper.setHeaders(context)
+            header = authorizationHelper.setHeaders()
         ).toDomainModel()
 
     /**
@@ -75,7 +75,7 @@ class RemoteCheckupRepo(
             checkupId = checkupId,
             imageType = imageType,
             image = image,
-            header = authorizationHelper.setHeaders(context)
+            header = authorizationHelper.setHeaders()
         ).toDomainModel()
 
     /**
@@ -95,7 +95,7 @@ class RemoteCheckupRepo(
                 cause = cause,
                 pain = pain,
                 checkupId = checkupId
-            ), header = authorizationHelper.setHeaders(context)
+            ), header = authorizationHelper.setHeaders()
         ).toDomainModel()
 
     /**
@@ -108,7 +108,7 @@ class RemoteCheckupRepo(
         addSeveralTeethToCheckup = AddSeveralTeethToCheckup(
             uniqueId = StraiberryCheckupSdkInfo.getUniqueId(),
             checkupId = checkupId, data = data
-        ), header = authorizationHelper.setHeaders(context)
+        ), header = authorizationHelper.setHeaders()
     ).toDomainModel()
 
     /**
@@ -131,21 +131,21 @@ class RemoteCheckupRepo(
                 pain = pain,
                 checkupId = checkupId
             ),
-            header = authorizationHelper.setHeaders(context)
+            header = authorizationHelper.setHeaders()
         ).toDomainModel()
 
     /**
      * Delete a tooth from checkup.
      */
     override suspend fun deleteToothInCheckup(toothId: Int): DeleteToothInCheckupSuccessModel =
-        checkupApi.deleteToothInCheckup(toothId, authorizationHelper.setHeaders(context))
+        checkupApi.deleteToothInCheckup(toothId, authorizationHelper.setHeaders())
             .toDomainModel()
 
     /**
      * Getting all created checkups
      */
     override suspend fun checkupHistory(page: Int): CheckupHistorySuccessModel =
-        checkupApi.checkupHistory(page, authorizationHelper.setHeaders(context)).toDomainModel()
+        checkupApi.checkupHistory(page, authorizationHelper.setHeaders()).toDomainModel()
 
     override suspend fun addDentalIssue(
         toothNumber: String,
@@ -154,11 +154,11 @@ class RemoteCheckupRepo(
         pain: Int
     ): AddToothToDentalIssueSuccessModel = checkupApi.addDentalIssue(
         AddDentalIssueRequest(toothNumber, duration, cause, pain),
-        authorizationHelper.setHeaders(context)
+        authorizationHelper.setHeaders()
     ).toDomainModel()
 
     override suspend fun deleteDentalIssue(dentalId: Int): AddToothToCheckupSuccessModel =
-        checkupApi.deleteDentalIssue(dentalId, authorizationHelper.setHeaders(context))
+        checkupApi.deleteDentalIssue(dentalId, authorizationHelper.setHeaders())
             .toDomainModel()
 
     override suspend fun updateDentalIssue(
@@ -170,6 +170,6 @@ class RemoteCheckupRepo(
     ): AddToothToDentalIssueSuccessModel = checkupApi.updateDentalIssue(
         toothId,
         AddDentalIssueRequest(toothNumber, duration, cause, pain),
-        authorizationHelper.setHeaders(context)
+        authorizationHelper.setHeaders()
     ).toDomainModel()
 }

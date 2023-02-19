@@ -6,7 +6,8 @@ import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import com.straiberry.android.checkup.R
-import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupType
+import com.straiberry.android.checkup.checkup.data.networking.model.CheckupImageType
+import com.straiberry.android.checkup.checkup.data.networking.model.CheckupType
 
 import com.straiberry.android.common.model.JawPosition
 import kotlin.math.roundToInt
@@ -46,13 +47,13 @@ fun Double.toImageYPosition(height: Int): Int {
 }
 
 
-fun Int.convertToCheckupName(context: Context): String {
+fun CheckupType.convertToCheckupName(context: Context): String {
     return when (this) {
-        -1 -> context.getString(R.string.regular_checkup)
-        0 -> context.getString(R.string.teeth_whitening)
-        1 -> context.getString(R.string.toothache_amp_tooth_sensitivity)
-        2 -> context.getString(R.string.problems_with_previous_treatment)
-        3 -> context.getString(R.string.others)
+        CheckupType.Regular -> context.getString(R.string.regular_checkup)
+        CheckupType.Whitening -> context.getString(R.string.teeth_whitening)
+        CheckupType.Sensitivity -> context.getString(R.string.toothache_amp_tooth_sensitivity)
+        CheckupType.Treatments -> context.getString(R.string.problems_with_previous_treatment)
+        CheckupType.Others -> context.getString(R.string.others)
         else -> context.getString(R.string.regular_checkup)
     }
 }
@@ -60,24 +61,24 @@ fun Int.convertToCheckupName(context: Context): String {
 fun Int.convertCavityClassToDrawable(checkupType: CheckupType, context: Context): Drawable {
     return if (checkupType == CheckupType.XRays)
         return when (this) {
-            0 -> ContextCompat.getDrawable(context, R.drawable.ic_amalgam_restoration_overhang)!!
-            1 -> ContextCompat.getDrawable(context, R.drawable.ic_bone_loss)!!
-            2 -> ContextCompat.getDrawable(context, R.drawable.ic_calcules)!!
-            3 -> ContextCompat.getDrawable(context, R.drawable.ic_dental_implant)!!
-            4 -> ContextCompat.getDrawable(context, R.drawable.ic_carries)!!
-            5 -> ContextCompat.getDrawable(context, R.drawable.ic_infectious_apical_lesion)!!
-            6 -> ContextCompat.getDrawable(context, R.drawable.ic_malposed_wisdom_tooth)!!
-            7 -> ContextCompat.getDrawable(context, R.drawable.ic_remained_dental_root)!!
-            8 -> ContextCompat.getDrawable(context, R.drawable.ic_tooth_with_missing_counterpart)!!
-            else -> ContextCompat.getDrawable(context, R.drawable.ic_amalgam_restoration_overhang)!!
+            0 -> ContextCompat.getDrawable(context, com.straiberry.android.common.R.drawable.ic_amalgam_restoration_overhang)!!
+            1 -> ContextCompat.getDrawable(context, com.straiberry.android.common.R.drawable.ic_bone_loss)!!
+            2 -> ContextCompat.getDrawable(context, com.straiberry.android.common.R.drawable.ic_calcules)!!
+            3 -> ContextCompat.getDrawable(context, com.straiberry.android.common.R.drawable.ic_dental_implant)!!
+            4 -> ContextCompat.getDrawable(context, com.straiberry.android.common.R.drawable.ic_carries)!!
+            5 -> ContextCompat.getDrawable(context, com.straiberry.android.common.R.drawable.ic_infectious_apical_lesion)!!
+            6 -> ContextCompat.getDrawable(context, com.straiberry.android.common.R.drawable.ic_malposed_wisdom_tooth)!!
+            7 -> ContextCompat.getDrawable(context, com.straiberry.android.common.R.drawable.ic_remained_dental_root)!!
+            8 -> ContextCompat.getDrawable(context, com.straiberry.android.common.R.drawable.ic_tooth_with_missing_counterpart)!!
+            else -> ContextCompat.getDrawable(context, com.straiberry.android.common.R.drawable.ic_amalgam_restoration_overhang)!!
         }
     else
         when (this) {
-            0 -> ContextCompat.getDrawable(context, R.drawable.ic_amalgam_filling)!!
-            1 -> ContextCompat.getDrawable(context, R.drawable.ic_calcules)!!
-            2 -> ContextCompat.getDrawable(context, R.drawable.ic_carries)!!
-            3 -> ContextCompat.getDrawable(context, R.drawable.ic_white_spot)!!
-            else -> ContextCompat.getDrawable(context, R.drawable.ic_amalgam_filling)!!
+            0 -> ContextCompat.getDrawable(context, com.straiberry.android.common.R.drawable.ic_amalgam_filling)!!
+            1 -> ContextCompat.getDrawable(context, com.straiberry.android.common.R.drawable.ic_calcules)!!
+            2 -> ContextCompat.getDrawable(context, com.straiberry.android.common.R.drawable.ic_carries)!!
+            3 -> ContextCompat.getDrawable(context, com.straiberry.android.common.R.drawable.ic_white_spot)!!
+            else -> ContextCompat.getDrawable(context, com.straiberry.android.common.R.drawable.ic_amalgam_filling)!!
         }
 
 }
@@ -100,9 +101,9 @@ fun Int.convertCavityClassToString(checkupType: CheckupType, context: Context): 
         return when (this) {
             0 -> context.getString(R.string.amalgam_restoration_overhang)
             1 -> context.getString(R.string.bone_loss)
-            2 -> context.getString(R.string.calculus)
+            2 -> context.getString(com.straiberry.android.common.R.string.calculus)
             3 -> context.getString(R.string.dental_implant)
-            4 -> context.getString(R.string.carries)
+            4 -> context.getString(com.straiberry.android.common.R.string.carries)
             5 -> context.getString(R.string.infectious_apical_lesion)
             6 -> context.getString(R.string.malposed_wisdom_tooth)
             7 -> context.getString(R.string.remained_dental_root)
@@ -111,20 +112,20 @@ fun Int.convertCavityClassToString(checkupType: CheckupType, context: Context): 
         }
     else
         when (this) {
-            0 -> context.getString(R.string.amalgam_filling)
-            1 -> context.getString(R.string.calculus)
-            2 -> context.getString(R.string.carries)
-            3 -> context.getString(R.string.white_spot)
-            else -> context.getString(R.string.amalgam_filling)
+            0 -> context.getString(com.straiberry.android.common.R.string.amalgam_filling)
+            1 -> context.getString(com.straiberry.android.common.R.string.calculus)
+            2 -> context.getString(com.straiberry.android.common.R.string.carries)
+            3 -> context.getString(com.straiberry.android.common.R.string.white_spot)
+            else -> context.getString(com.straiberry.android.common.R.string.amalgam_filling)
         }
 }
 
 fun String.convertCavityClassToIntPosition(context: Context): Int {
     return when (this) {
-        context.getString(R.string.amalgam_filling) -> 0
-        context.getString(R.string.calculus) -> 1
-        context.getString(R.string.carries) -> 2
-        context.getString(R.string.white_spot) -> 3
+        context.getString(com.straiberry.android.common.R.string.amalgam_filling) -> 0
+        context.getString(com.straiberry.android.common.R.string.calculus) -> 1
+        context.getString(com.straiberry.android.common.R.string.carries) -> 2
+        context.getString(com.straiberry.android.common.R.string.white_spot) -> 3
         context.getString(R.string.amalgam_restoration_overhang) -> 4
         context.getString(R.string.bone_loss) -> 5
         context.getString(R.string.dental_implant) -> 6
@@ -141,6 +142,24 @@ fun String.convertJawToInt(): Int {
         "front" -> 1
         "upper" -> -1
         "lower" -> 0
+        else -> 1
+    }
+}
+
+fun String.convertLabelToJawType(): JawPosition {
+    return when (this) {
+        "front" -> JawPosition.FrontTeeth
+        "upper" -> JawPosition.UpperJaw
+        "lower" -> JawPosition.LowerJaw
+        else -> JawPosition.FrontTeeth
+    }
+}
+
+fun JawPosition.convertJawToInt(): Int {
+    return when (this) {
+        JawPosition.FrontTeeth -> 1
+        JawPosition.UpperJaw -> -1
+        JawPosition.LowerJaw -> 0
         else -> 1
     }
 }
@@ -257,12 +276,29 @@ fun Int.convertToothClassToFrontJawPosition(): JawPosition {
         JawPosition.FrontTeethLower
 }
 
-fun Int.convertToJawPosition(): JawPosition {
+fun CheckupImageType.convertToJawPosition(): JawPosition {
     return when (this) {
-        1 -> JawPosition.FrontTeeth
-        -1 -> JawPosition.UpperJaw
-        0 -> JawPosition.LowerJaw
-        2 -> JawPosition.FrontTeeth
-        else -> JawPosition.FrontTeeth
+        CheckupImageType.LowerJaw -> JawPosition.FrontTeeth
+        CheckupImageType.FrontJaw -> JawPosition.UpperJaw
+        CheckupImageType.UpperJaw -> JawPosition.LowerJaw
+        CheckupImageType.XrayJaw -> JawPosition.FrontTeeth
+    }
+}
+
+fun CheckupImageType.convertSelectedJawToString(context: Context): String {
+    return when (this) {
+        CheckupImageType.LowerJaw -> context.getString(R.string.lower_jaw)
+        CheckupImageType.FrontJaw -> context.getString(R.string.front_teeth)
+        CheckupImageType.UpperJaw -> context.getString(R.string.upper_jaw)
+        CheckupImageType.XrayJaw -> context.getString(R.string.front_teeth)
+    }
+}
+
+fun JawPosition.convertSelectedJawToString(context: Context): String {
+    return when (this) {
+        JawPosition.FrontTeeth -> context.getString(R.string.front_teeth)
+        JawPosition.UpperJaw -> context.getString(R.string.upper_jaw)
+        JawPosition.LowerJaw -> context.getString(R.string.lower_jaw)
+        else -> context.getString(R.string.front_teeth)
     }
 }

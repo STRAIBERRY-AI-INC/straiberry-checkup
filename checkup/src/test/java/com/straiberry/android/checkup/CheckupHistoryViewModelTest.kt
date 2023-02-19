@@ -2,6 +2,7 @@ package com.straiberry.android.checkup
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.straiberry.android.checkup.checkup.domain.model.CheckupHistorySuccessModel
+import com.straiberry.android.checkup.checkup.domain.usecase.CheckupHistoryUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.CheckupSdkHistoryUseCase
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupHistoryViewModel
 import com.straiberry.android.core.base.Failure

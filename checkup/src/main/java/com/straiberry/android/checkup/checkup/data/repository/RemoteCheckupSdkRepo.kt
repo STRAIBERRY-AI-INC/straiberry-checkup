@@ -3,10 +3,7 @@ package com.straiberry.android.checkup.checkup.data.repository
 import android.content.Context
 import com.straiberry.android.checkup.checkup.data.mapper.toDomainModel
 import com.straiberry.android.checkup.checkup.data.networking.CheckupSdkApi
-import com.straiberry.android.checkup.checkup.data.networking.model.AddSeveralTeethToCheckup
-import com.straiberry.android.checkup.checkup.data.networking.model.AddToothToCheckupRequest
-import com.straiberry.android.checkup.checkup.data.networking.model.CreateCheckupRequest
-import com.straiberry.android.checkup.checkup.data.networking.model.GetSDKTokenRequest
+import com.straiberry.android.checkup.checkup.data.networking.model.*
 import com.straiberry.android.checkup.checkup.domain.model.*
 import com.straiberry.android.checkup.checkup.domain.repository.CheckupSdkRepo
 import com.straiberry.android.checkup.common.helper.SdkAuthorizationHelper
@@ -20,7 +17,7 @@ class RemoteCheckupSdkRepo(
 ) : CheckupSdkRepo {
 
     override suspend fun createCheckup(
-        checkupType: Int
+        checkupType: CheckupType
     ): CreateCheckupSuccessModel =
         checkupSdkApi.createCheckup(
             createCheckupRequest = CreateCheckupRequest(
@@ -28,7 +25,7 @@ class RemoteCheckupSdkRepo(
                 displayName = StraiberryCheckupSdkInfo.getDisplayName(),
                 uniqueId = StraiberryCheckupSdkInfo.getUniqueId()
             ),
-            header = authorizationHelper.setHeaders(context)
+            header = authorizationHelper.setHeaders()
         ).toDomainModel()
 
     override suspend fun getSDKToken(appId: String, packageName: String) =
@@ -41,7 +38,7 @@ class RemoteCheckupSdkRepo(
         checkupSdkApi.getCheckup(
             checkupId = checkupId,
             uniqueId = StraiberryCheckupSdkInfo.getUniqueId(),
-            header = authorizationHelper.setHeaders(context)
+            header = authorizationHelper.setHeaders()
         ).toDomainModel()
 
     /**
@@ -54,7 +51,7 @@ class RemoteCheckupSdkRepo(
         addSeveralTeethToCheckup = AddSeveralTeethToCheckup(
             uniqueId = StraiberryCheckupSdkInfo.getUniqueId(),
             checkupId = checkupId, data = data
-        ), header = authorizationHelper.setHeaders(context)
+        ), header = authorizationHelper.setHeaders()
     ).toDomainModel()
 
     /**
@@ -72,7 +69,7 @@ class RemoteCheckupSdkRepo(
             imageType = imageType,
             image = image,
             lastImage = lastImage,
-            header = authorizationHelper.setHeaders(context)
+            header = authorizationHelper.setHeaders()
         ).toDomainModel()
 
     /**
@@ -90,7 +87,7 @@ class RemoteCheckupSdkRepo(
             checkupId = checkupId,
             imageType = imageType,
             image = image,
-            header = authorizationHelper.setHeaders(context)
+            header = authorizationHelper.setHeaders()
         ).toDomainModel()
 
     /**
@@ -100,6 +97,6 @@ class RemoteCheckupSdkRepo(
         checkupSdkApi.checkupHistory(
             page = page,
             uniqueId = StraiberryCheckupSdkInfo.getUniqueId(),
-            header = authorizationHelper.setHeaders(context)
+            header = authorizationHelper.setHeaders()
         ).toDomainModel()
 }

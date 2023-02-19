@@ -1,11 +1,8 @@
 package com.straiberry.android.common.extensions
 
 import android.content.Context
-import android.content.res.Configuration
 import android.content.res.Resources
 import com.straiberry.android.common.R
-import com.straiberry.android.common.model.EventColor
-import com.straiberry.android.common.model.EventRepetition
 import com.straiberry.android.common.model.JawPosition
 import kotlin.math.roundToInt
 
@@ -120,74 +117,6 @@ fun String.convertToBoolean(): Boolean {
     return this == "0"
 }
 
-fun EventRepetition.convertToInt(): Int {
-    return when (this) {
-        EventRepetition.None -> 0
-        EventRepetition.Daily -> 1
-        EventRepetition.Weekly -> 2
-        EventRepetition.Biweekly -> 3
-        EventRepetition.Monthly -> 4
-        EventRepetition.EveryThreeMonth -> 5
-        EventRepetition.EverySixMonth -> 6
-        EventRepetition.Yearly -> 7
-    }
-}
-
-fun EventColor.convertToInt(): Int {
-    return when (this) {
-        EventColor.Green -> 0
-        EventColor.Blue -> 1
-        EventColor.BlueGray -> 2
-        EventColor.GrayBlack -> 3
-        EventColor.Orange -> 4
-        EventColor.Yellow -> 5
-        else -> 0
-    }
-}
-
-fun String.convertToEventColor(): EventColor {
-    return when (this) {
-        "0" -> EventColor.Green
-        "1" -> EventColor.Blue
-        "2" -> EventColor.BlueGray
-        "3" -> EventColor.GrayBlack
-        "4" -> EventColor.Orange
-        "5" -> EventColor.Yellow
-        else -> EventColor.Empty
-    }
-}
-
-fun String.convertToRepetition(): EventRepetition {
-    return when (this) {
-        "0" -> EventRepetition.None
-        "1" -> EventRepetition.Daily
-        "2" -> EventRepetition.Weekly
-        "3" -> EventRepetition.Biweekly
-        "4" -> EventRepetition.Monthly
-        "5" -> EventRepetition.EveryThreeMonth
-        "6" -> EventRepetition.EverySixMonth
-        "7" -> EventRepetition.Yearly
-        else -> EventRepetition.None
-    }
-}
-
-fun EventColor.convertToResourceColor(context: Context): Int {
-    val nightModeFlags: Int = context.resources.configuration.uiMode and
-            Configuration.UI_MODE_NIGHT_MASK
-    return when (this) {
-        EventColor.Blue -> R.color.green700
-        EventColor.Green -> R.color.green200
-        EventColor.BlueGray -> R.color.primaryLight200
-        EventColor.Orange -> R.color.orange500
-        EventColor.Yellow -> R.color.yellow200
-        EventColor.Empty ->
-            if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES)
-                R.color.secondaryDark
-            else
-                R.color.secondaryLight
-        EventColor.GrayBlack -> R.color.bodyText500
-    }
-}
 
 @Throws(NullPointerException::class)
 fun Int.convertToothIdToDental(): String {

@@ -24,7 +24,7 @@ fun String.toDate(tehranIsTimeZone: Boolean = false): Date? {
     return Date()
 }
 
-fun Calendar.getWeekCountOfMonth() {
+fun Calendar.getWeekCountOfMonth(){
     val cal = this
     for (i in 0..10) {
         cal[Calendar.YEAR] = 2010

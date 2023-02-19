@@ -10,9 +10,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.straiberry.android.checkup.checkup.data.networking.model.CheckupHistorySuccessResponse
+import com.straiberry.android.checkup.checkup.data.networking.model.CheckupType
 import com.straiberry.android.checkup.checkup.domain.model.CheckupHistorySuccessModel
-import com.straiberry.android.checkup.checkup.presentation.viewmodel.*
-import com.straiberry.android.checkup.common.extentions.convertToCheckupType
+import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupHistorySharedViewModel
+import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupHistoryViewModel
+import com.straiberry.android.checkup.checkup.presentation.viewmodel.ChooseCheckupTypeViewModel
+import com.straiberry.android.checkup.common.extentions.convertToCheckupName
 import com.straiberry.android.checkup.databinding.FragmentCheckupHistoryBinding
 import com.straiberry.android.checkup.di.IsolatedKoinComponent
 import com.straiberry.android.checkup.di.StraiberrySdk
@@ -30,7 +33,6 @@ class FragmentCheckupHistory : Fragment(), IsolatedKoinComponent {
     private val chooseCheckupViewModel by activityViewModels<ChooseCheckupTypeViewModel>()
     private val checkupHistoryViewModel by viewModel<CheckupHistoryViewModel>()
     private val checkupHistorySharedViewModel by activityViewModels<CheckupHistorySharedViewModel>()
-    val jawDetectionViewModel by activityViewModels<DetectionJawViewModel>()
 
     // Pagination
     private var isLoading = true
@@ -82,7 +84,6 @@ class FragmentCheckupHistory : Fragment(), IsolatedKoinComponent {
     private fun handleViewStateCheckupHistory(loadable: Loadable<CheckupHistorySuccessModel>?) {
         if (loadable != Loading) binding.apply {
             progressBar.goneWithAnimation()
-//            if (currentPage != 1)
             checkupHistoryAdapter.removeLoadingFooter()
             isLoading = false
         }
@@ -117,14 +118,13 @@ class FragmentCheckupHistory : Fragment(), IsolatedKoinComponent {
         checkupHistoryAdapter = CheckupHistoryAdapter(requireContext()) { clickedCheckup ->
             chooseCheckupViewModel.setCheckupResult(clickedCheckup)
             chooseCheckupViewModel.setSelectedCheckup(
-                clickedCheckup.data.checkupType.toInt().convertToCheckupName(requireContext())
+                clickedCheckup.data.checkupType.convertToCheckupName(requireContext())
             )
             chooseCheckupViewModel.setSelectedCheckupIndex(
-                clickedCheckup.data.checkupType.toInt().convertToCheckupType()
+                clickedCheckup.data.checkupType
             )
             // Setup navigation
-            if (clickedCheckup.data.checkupType.toInt()
-                    .convertToCheckupType() == CheckupType.Whitening
+            if (clickedCheckup.data.checkupType == CheckupType.Whitening
             )
                 findNavController().navigate(Uri.parse(GoToCheckupResultWhitening))
             else
@@ -140,9 +140,7 @@ class FragmentCheckupHistory : Fragment(), IsolatedKoinComponent {
 
     private fun setupLoadData(dataList: List<CheckupHistorySuccessResponse.Data?>?) {
         if (dataList?.size!! < TotalItemCount) isLastPage = true
-        listOfItems.clear()
-        listOfItems.addAll(dataList)
-        checkupHistoryAdapter.add(listOfItems)
+        checkupHistoryAdapter.add(dataList)
         binding.recyclerViewCheckupHistory.addOnScrollListener(object :
             PaginationScrollListener(layoutManagerCheckupHistory) {
             override fun loadMoreItems() {
@@ -170,6 +168,5 @@ class FragmentCheckupHistory : Fragment(), IsolatedKoinComponent {
         private const val GoToCheckupResultWhitening =
             "android-app://com.straiberry.app.features.checkup.presentation.view.result.FragmentCheckupResultWhitening"
         private const val TotalItemCount = 10
-        private val listOfItems: ArrayList<CheckupHistorySuccessResponse.Data?> = arrayListOf()
     }
 }

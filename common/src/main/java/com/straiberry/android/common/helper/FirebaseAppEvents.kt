@@ -17,51 +17,51 @@ object FirebaseAppEvents {
     private const val DoneEventFirebaseEventName = "done_event"
     private const val SaveEventFirebaseLogKey = "create_event"
 
-    fun onSelectedCheckup(checkupType: String) {
-        Firebase.analytics.logEvent(checkupType) {}
+    fun onSelectedCheckup(checkupType:String){
+        Firebase.analytics.logEvent(checkupType){}
     }
 
-    fun onShareCheckupResult() {
-        Firebase.analytics.logEvent(ShareCheckupResultFirebaseEventLog) {}
+    fun onShareCheckupResult(){
+        Firebase.analytics.logEvent(ShareCheckupResultFirebaseEventLog){}
     }
 
-    fun onCreatedDentalIssue() {
-        Firebase.analytics.logEvent(CreateDentalIssueFirebaseEventLog) {}
+    fun onCreatedDentalIssue(){
+        Firebase.analytics.logEvent(CreateDentalIssueFirebaseEventLog){}
     }
 
-    fun onSelectedMoreInBrushingChart() {
-        Firebase.analytics.logEvent(BrushingChartMoreSectionFirebaseEventLog) {}
+    fun onSelectedMoreInBrushingChart(){
+        Firebase.analytics.logEvent(BrushingChartMoreSectionFirebaseEventLog){}
     }
 
-    fun onSelectedMoreInOralHygieneChart() {
-        Firebase.analytics.logEvent(OralHygieneChartMoreSectionFirebaseEventLog) {}
+    fun onSelectedMoreInOralHygieneChart(){
+        Firebase.analytics.logEvent(OralHygieneChartMoreSectionFirebaseEventLog){}
     }
 
-    fun onSelectedMoreInWhiteningChart() {
-        Firebase.analytics.logEvent(WhiteningChartMoreSectionFirebaseEventLog) {}
+    fun onSelectedMoreInWhiteningChart(){
+        Firebase.analytics.logEvent(WhiteningChartMoreSectionFirebaseEventLog){}
     }
 
-    fun onSuggestionClicked() {
-        Firebase.analytics.logEvent(SuggestionClickFirebaseEventLog) {}
+    fun onSuggestionClicked(){
+        Firebase.analytics.logEvent(SuggestionClickFirebaseEventLog){}
     }
 
-    fun onPersonalDataFilled() {
-        Firebase.analytics.logEvent(AnswersPersonalDataFirebaseEventLog) {}
+    fun onPersonalDataFilled(){
+        Firebase.analytics.logEvent(AnswersPersonalDataFirebaseEventLog){}
     }
 
-    fun onYesNoQuestionAnswered() {
-        Firebase.analytics.logEvent(AnswerYesNoQuestionFirebaseLogEvent) {}
+    fun onYesNoQuestionAnswered(){
+        Firebase.analytics.logEvent(AnswerYesNoQuestionFirebaseLogEvent){}
     }
 
-    fun onWelcomeQuestionAnswered() {
-        Firebase.analytics.logEvent(AnswerWelcomeQuestionFirebaseLogEvent) {}
+    fun onWelcomeQuestionAnswered(){
+        Firebase.analytics.logEvent(AnswerWelcomeQuestionFirebaseLogEvent){}
     }
 
-    fun onDoneCalendarEvent() {
-        Firebase.analytics.logEvent(DoneEventFirebaseEventName) {}
+    fun onDoneCalendarEvent(){
+        Firebase.analytics.logEvent(DoneEventFirebaseEventName){}
     }
 
-    fun onCreateCalendarEvent() {
-        Firebase.analytics.logEvent(SaveEventFirebaseLogKey) {}
+    fun onCreateCalendarEvent(){
+        Firebase.analytics.logEvent(SaveEventFirebaseLogKey){}
     }
 }

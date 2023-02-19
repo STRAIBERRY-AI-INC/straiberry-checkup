@@ -16,13 +16,12 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.straiberry.android.checkup.R
+import com.straiberry.android.checkup.checkup.data.networking.model.CheckupImageType
+import com.straiberry.android.checkup.checkup.data.networking.model.CheckupType
 import com.straiberry.android.checkup.checkup.domain.model.CheckupResultSuccessModel
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.*
-import com.straiberry.android.checkup.common.extentions.convertCavityClassToDrawable
-import com.straiberry.android.checkup.common.extentions.convertCavityClassToIntPosition
-import com.straiberry.android.checkup.common.extentions.convertCavityClassToString
+import com.straiberry.android.checkup.common.extentions.*
 import com.straiberry.android.checkup.common.extentions.convertDentalToToothId
-import com.straiberry.android.checkup.common.extentions.convertToJawPosition
 import com.straiberry.android.checkup.common.extentions.convertToToothId
 import com.straiberry.android.checkup.common.extentions.convertToothClassToFrontJawPosition
 import com.straiberry.android.checkup.common.extentions.dp
@@ -43,9 +42,9 @@ class FragmentCheckupResultDetails : Fragment(), ToothProblemClick, IsolatedKoin
     private val userInfoViewModel: UserInfoViewModel by activityViewModels()
     private lateinit var adapterProblems: AdapterCheckupProblems
     private lateinit var checkupResult: CheckupResultSuccessModel
-    val listOfFrontProblems = arrayListOf<CheckupProblemsModel>()
-    val listOfUpperProblems = arrayListOf<CheckupProblemsModel>()
-    val listOfLowerProblems = arrayListOf<CheckupProblemsModel>()
+    private val listOfFrontProblems = arrayListOf<CheckupProblemsModel>()
+    private val listOfUpperProblems = arrayListOf<CheckupProblemsModel>()
+    private val listOfLowerProblems = arrayListOf<CheckupProblemsModel>()
 
     private var oralHygieneForUpperJaw = -1
     private var oralHygieneForLowerJaw = -1
@@ -85,13 +84,13 @@ class FragmentCheckupResultDetails : Fragment(), ToothProblemClick, IsolatedKoin
             // Getting the oral hygiene score and whitening score from result
             checkupResult.data.images.forEachIndexed { _, image ->
                 when {
-                    image.imageType.toInt() == X_RAY_JAW -> oralHygieneForFrontJaw =
+                    image.imageType == CheckupImageType.XrayJaw -> oralHygieneForFrontJaw =
                         image.result.first().oralHygienScore
-                    image.imageType.toInt() == UPPER_JAW -> oralHygieneForUpperJaw =
+                    image.imageType == CheckupImageType.UpperJaw -> oralHygieneForUpperJaw =
                         image.result.first().oralHygienScore
-                    image.imageType.toInt() == LOWER_JAW -> oralHygieneForLowerJaw =
+                    image.imageType == CheckupImageType.LowerJaw -> oralHygieneForLowerJaw =
                         image.result.first().oralHygienScore
-                    image.imageType.toInt() == FRONT_JAW -> {
+                    image.imageType == CheckupImageType.FrontJaw -> {
                         oralHygieneForFrontJaw = image.result.first().oralHygienScore
                         whiteningScore = image.result.first().whiteningScore
                     }
@@ -132,15 +131,17 @@ class FragmentCheckupResultDetails : Fragment(), ToothProblemClick, IsolatedKoin
                 if (listOfFrontProblems.isNotEmpty())
                     listOfFrontProblems.first().jawType
                 else
-                    checkupResult.data.images.first().imageType.toInt().convertToJawPosition()
+                    checkupResult.data.images.first().imageType!!.convertToJawPosition()
 
             // Check if first jaw is one of front teeth jaws
             currentFrontPositionIsUpper =
                 firstJawPosition == JawPosition.FrontTeethUpper || firstJawPosition == JawPosition.UpperJaw
 
-            binding.textViewJawType.text = convertSelectedJawToString(
-                checkupResult.data.images.first().imageType.toInt().convertToJawPosition()
-            )
+            binding.textViewJawType.text =
+                checkupResult.data.images.first().imageType!!.convertSelectedJawToString(
+                    requireContext()
+                )
+
 
             checkForEmptyList(firstJawPosition)
             setupViewPager()
@@ -180,7 +181,7 @@ class FragmentCheckupResultDetails : Fragment(), ToothProblemClick, IsolatedKoin
 
         checkupResult.data.images.forEach { checkupImages ->
 
-            if (checkupImages.imageType.toInt() == FRONT_JAW || checkupImages.imageType.toInt() == X_RAY_JAW) {
+            if (checkupImages.imageType == CheckupImageType.FrontJaw || checkupImages.imageType == CheckupImageType.XrayJaw) {
                 checkupImages.result.first().problems.forEach { problems ->
                     val filterFront = if (listOfFrontProblems.isNotEmpty())
                         listOfFrontProblems.filter {
@@ -230,7 +231,7 @@ class FragmentCheckupResultDetails : Fragment(), ToothProblemClick, IsolatedKoin
                         )
 
                 }
-            } else if (checkupImages.imageType.toInt() == UPPER_JAW)
+            } else if (checkupImages.imageType == CheckupImageType.UpperJaw)
                 checkupImages.result.first().problems.forEach { problems ->
                     val filterFront = if (listOfUpperProblems.isNotEmpty())
                         listOfUpperProblems.filter {
@@ -278,7 +279,7 @@ class FragmentCheckupResultDetails : Fragment(), ToothProblemClick, IsolatedKoin
                         )
 
                 }
-            else if (checkupImages.imageType.toInt() == LOWER_JAW)
+            else if (checkupImages.imageType == CheckupImageType.LowerJaw)
                 checkupImages.result.first().problems.forEach { problems ->
                     val filterFront = if (listOfLowerProblems.isNotEmpty())
                         listOfLowerProblems.filter {
@@ -470,14 +471,6 @@ class FragmentCheckupResultDetails : Fragment(), ToothProblemClick, IsolatedKoin
         }
     }
 
-    private fun convertSelectedJawToString(jawType: JawPosition): String {
-        return when (jawType) {
-            JawPosition.LowerJaw -> getString(R.string.lower_jaw)
-            JawPosition.FrontTeeth -> getString(R.string.front_teeth)
-            JawPosition.UpperJaw -> getString(R.string.upper_jaw)
-            else -> getString(R.string.lower_jaw)
-        }
-    }
 
     private fun setupViewPager() {
         // Set the adapter based on *isShowIllustration*
@@ -523,7 +516,9 @@ class FragmentCheckupResultDetails : Fragment(), ToothProblemClick, IsolatedKoin
                 // Change title with animation based on page position
                 binding.textViewJawType.apply {
                     changeTextWithAnimation()
-                    text = convertSelectedJawToString(currentSelectedJawBasedOnPosition!!)
+                    text = currentSelectedJawBasedOnPosition!!.convertSelectedJawToString(
+                        requireContext()
+                    )
                 }
 
                 // Setting oral hygiene score based on selected jaw

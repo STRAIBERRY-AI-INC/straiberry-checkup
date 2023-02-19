@@ -38,7 +38,7 @@ class CircleView(
         }
         // Setup paint for circle border
         mBorderPaint = Paint().apply {
-            color = ContextCompat.getColor(context, R.color.whiteOpacity)
+            color = ContextCompat.getColor(context, com.straiberry.android.common.R.color.whiteOpacity)
             strokeWidth = StrokeWidth
             style = Paint.Style.STROKE
         }
@@ -80,9 +80,9 @@ class CircleView(
         canvas.clipPath(mPath)
         canvas.drawColor(
             if (isJawDetected)
-                ContextCompat.getColor(context, R.color.secondaryLightWithOpacity30)
+                ContextCompat.getColor(context, com.straiberry.android.common.R.color.secondaryLightWithOpacity30)
             else
-                ContextCompat.getColor(context, R.color.gray200Opacity60)
+                ContextCompat.getColor(context, com.straiberry.android.common.R.color.gray200Opacity60)
         )
         canvas.clipPath(mPath)
     }

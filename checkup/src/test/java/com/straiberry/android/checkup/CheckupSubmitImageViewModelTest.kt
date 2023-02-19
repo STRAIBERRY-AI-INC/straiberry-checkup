@@ -4,7 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.straiberry.android.checkup.checkup.domain.model.AddImageToCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.domain.model.UpdateImageInCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.domain.usecase.AddImageToCheckupSdkUseCase
+import com.straiberry.android.checkup.checkup.domain.usecase.AddImageToCheckupUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.UpdateImageInCheckupSdkUseCase
+import com.straiberry.android.checkup.checkup.domain.usecase.UpdateImageInCheckupUseCase
 import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupSubmitImageViewModel
 import com.straiberry.android.core.base.Failure
 import com.straiberry.android.core.base.Loading

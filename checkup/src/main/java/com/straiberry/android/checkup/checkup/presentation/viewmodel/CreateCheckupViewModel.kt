@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.straiberry.android.checkup.checkup.data.networking.model.CheckupType
 import com.straiberry.android.checkup.checkup.domain.model.CreateCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.domain.model.SdkTokenSuccessModel
 import com.straiberry.android.checkup.checkup.domain.usecase.CreateCheckupSdkUseCase
+import com.straiberry.android.checkup.checkup.domain.usecase.CreateCheckupUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.GetSdkTokenUseCase
 import com.straiberry.android.core.base.*
 import com.straiberry.android.core.network.CoroutineContextProvider
@@ -22,10 +24,9 @@ class CreateCheckupViewModel(
     val submitStateCreateCheckup: LiveData<Loadable<CreateCheckupSuccessModel>> =
         _submitStateCreateCheckup
 
-    fun createCheckup(checkupType: Int) {
+    fun createCheckup(checkupType: CheckupType) {
         _submitStateCreateCheckup.value = NotLoading
-        if (checkupType == -2)
-            return
+
         _submitStateCreateCheckup.value = Loading
         viewModelScope.launch {
             kotlin.runCatching {

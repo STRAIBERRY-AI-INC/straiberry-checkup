@@ -10,6 +10,7 @@
         android:name="com.straiberry.android.checkup.checkup.presentation.view.camera.FragmentCamera"
         android:label="FragmentCamera"
         tools:layout="@layout/fragment_camera">
+        <deepLink app:uri="android-app://goToCamera" />
         <action
             android:id="@+id/action_fragmentCamera_to_fragmentCheckupResultBasic"
             app:destination="@id/fragmentCheckupResultBasic"
@@ -58,9 +59,7 @@
             app:destination="@id/fragmentCheckupQuestion" />
         <action
             android:id="@+id/action_fragmentCheckup_to_fragmentCamera"
-            app:destination="@id/fragmentCamera"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/fragmentCheckup" />
+            app:destination="@id/fragmentCamera" />
         <action
             android:id="@+id/action_fragmentCheckup_to_fragmentXRay"
             app:destination="@id/fragmentXRay" />
@@ -70,6 +69,7 @@
         android:name="com.straiberry.android.checkup.checkup.presentation.view.questions.FragmentCheckupQuestion"
         android:label="FragmentCheckupQuestion"
         tools:layout="@layout/fragment_checkup_question">
+        <deepLink app:uri="android-app://goToCheckupQuestions" />
         <action
             android:id="@+id/action_fragmentCheckupQuestion_to_fragmentCamera"
             app:destination="@id/fragmentCamera"
@@ -82,6 +82,7 @@
         android:name="com.straiberry.android.checkup.checkup.presentation.view.xray.FragmentXRay"
         android:label="FragmentXRay"
         tools:layout="@layout/fragment_x_ray">
+        <deepLink app:uri="android-app://goToXrays" />
         <action
             android:id="@+id/action_fragmentXRay_to_fragmentCheckupResultBasic"
             app:destination="@id/fragmentCheckupResultBasic" />

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.straiberry.android.common.R
 import com.straiberry.android.common.databinding.BottomSheetOnlineSupportBinding
 import com.straiberry.android.common.extensions.launchUrl
 import com.straiberry.android.common.extensions.onClick
@@ -26,6 +27,7 @@ class BottomSheetOnlineSupport : BottomSheetDialogFragment() {
         }.root
     }
 
+    override fun getTheme(): Int = R.style.CustomBottomSheetDialogTheme
     companion object {
         private const val RAY_CHAT_URL = "https://widget.raychat.io/626cf5c291829a8307f80541"
     }

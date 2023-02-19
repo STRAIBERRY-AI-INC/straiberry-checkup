@@ -2,6 +2,7 @@ package com.straiberry.android.checkup.checkup.presentation.view.camera
 
 import android.graphics.Bitmap
 import androidx.camera.core.ImageProxy
+import com.straiberry.android.common.model.JawPosition
 
 interface Detector {
     fun startCamera()
@@ -83,10 +84,10 @@ interface Detector {
      * be upper jaw.
      * @param nextDetectedJaw a string of next jaw.(front,upper,lower)
      */
-    fun setNextDetectedJaw(nextDetectedJaw: String?)
+    fun setNextDetectedJaw(nextDetectedJaw: JawPosition?)
 
     /** @return a string of next jaw **/
-    fun getNextDetectedJaw(): String?
+    fun getNextDetectedJaw(): JawPosition?
 
     /** Show the dialog box of choose/capture image **/
     fun showLayoutChoosePhoto()
@@ -107,10 +108,10 @@ interface Detector {
      * @param currentDetectionJaw a string of current jaw.(front,upper,lower)
      * @param isMainThread if current function is called in a main thread
      */
-    fun setCurrentDetectedJaw(currentDetectionJaw: String, isMainThread: Boolean = false)
+    fun setCurrentDetectedJaw(currentDetectionJaw: JawPosition, isMainThread: Boolean = false)
 
     /** @return a string of current detected jaw **/
-    fun getCurrentDetectedJaw(): String
+    fun getCurrentDetectedJaw(): JawPosition
 
     fun enableCapturedJaw()
 

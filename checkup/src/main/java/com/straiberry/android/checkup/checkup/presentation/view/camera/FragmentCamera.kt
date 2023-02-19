@@ -12,23 +12,19 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.view.doOnPreDraw
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import com.straiberry.android.checkup.R
 import com.straiberry.android.checkup.checkup.presentation.view.help.FragmentCheckupInstructionDialog
-import com.straiberry.android.checkup.common.extentions.getImage
-import com.straiberry.android.checkup.common.extentions.getPath
-import com.straiberry.android.checkup.common.extentions.modifyOrientation
+import com.straiberry.android.checkup.common.extentions.*
 import com.straiberry.android.checkup.databinding.FragmentCameraBinding
-import com.straiberry.android.checkup.di.IsolatedKoinComponent
-import com.straiberry.android.checkup.di.StraiberrySdk
+import com.straiberry.android.checkup.di.*
 import com.straiberry.android.common.custom.spotlight.*
-import com.straiberry.android.common.custom.spotlight.Target
-import com.straiberry.android.common.custom.spotlight.shape.Circle
-import com.straiberry.android.common.extensions.dp
-import com.straiberry.android.common.extensions.goneWithAnimation
-import com.straiberry.android.common.extensions.onClick
-import com.straiberry.android.common.extensions.visibleWithAnimation
+import com.straiberry.android.common.extensions.*
+import com.straiberry.android.common.model.JawPosition
+import com.straiberry.android.core.base.*
+import java.lang.Exception
 
 
 class FragmentCamera : JawDetector(), IsolatedKoinComponent {
@@ -60,7 +56,13 @@ class FragmentCamera : JawDetector(), IsolatedKoinComponent {
             else {
                 showLayoutChoosePhoto()
                 if (guideTourViewModel.getGuideTourStatus().cameraGuideTour.not())
-                    setupGuideTour()
+                    CameraSpotLights(
+                        binding,
+                        requireContext(),
+                        spotLight,
+                        requireActivity(),
+                        guideTourViewModel
+                    ).setSpotLights()
             }
 
             // Observe dismissing checkup instruction
@@ -68,7 +70,13 @@ class FragmentCamera : JawDetector(), IsolatedKoinComponent {
                 if (it) {
                     showLayoutChoosePhoto()
                     if (guideTourViewModel.getGuideTourStatus().cameraGuideTour.not())
-                        setupGuideTour()
+                        CameraSpotLights(
+                            binding,
+                            requireContext(),
+                            spotLight,
+                            requireActivity(),
+                            guideTourViewModel
+                        ).setSpotLights()
                 }
             }
 
@@ -111,19 +119,19 @@ class FragmentCamera : JawDetector(), IsolatedKoinComponent {
             binding.layoutInsertImage.imageViewFrontTeeth.onClick {
                 hideAllGuide()
                 binding.imageViewFrontSample.visibleWithAnimation()
-                setupNextJaw(Front)
+                setupNextJaw(JawPosition.FrontTeeth)
             }
 
             binding.layoutInsertImage.imageViewUpperJaw.onClick {
                 hideAllGuide()
                 binding.imageViewUpperSample.visibleWithAnimation()
-                setupNextJaw(Upper)
+                setupNextJaw(JawPosition.UpperJaw)
             }
 
             binding.layoutInsertImage.imageViewLowerJaw.onClick {
                 hideAllGuide()
                 binding.imageViewLowerSample.visibleWithAnimation()
-                setupNextJaw(Lower)
+                setupNextJaw(JawPosition.LowerJaw)
             }
 
             checkoutNecessaryUploadedImage()
@@ -135,25 +143,25 @@ class FragmentCamera : JawDetector(), IsolatedKoinComponent {
              *  - Measure the cropped image base on model rect output
              *  - Take picture and do the transaction
              */
-            jawDetectionViewModel.recognitionPosition.observe(
-                viewLifecycleOwner
-            ) { jawRecognition ->
-                // Check if current detected image is not uploading and
-                // its one of selected jaws by user.
-                if (getDetectionModelState()
-                    && !when {
-                        jawRecognition.label == Front && frontJawIsUploading -> true
-                        jawRecognition.label == Lower && lowerJawIsUploading -> true
-                        jawRecognition.label == Upper && upperJawIsUploading -> true
-                        else -> false
+            jawDetectionViewModel.recognitionPosition.observe(viewLifecycleOwner,
+                { jawRecognition ->
+                    // Check if current detected image is not uploading and
+                    // its one of selected jaws by user.
+                    if (getDetectionModelState()
+                        && !when {
+                            jawRecognition.label == Front && frontJawIsUploading -> true
+                            jawRecognition.label == Lower && lowerJawIsUploading -> true
+                            jawRecognition.label == Upper && upperJawIsUploading -> true
+                            else -> false
+                        }
+                        && listOfSelectedJaws.contains(jawRecognition.label.convertLabelToJawType())
+                        && jawRecognition.confidence >= MinimumConfidence
+                    ) {
+
+                        showImagesThatUserMustCapture()
+                        takePhotoFromDetectedJaw(jawRecognition.label)
                     }
-                    && listOfSelectedJaws.contains(jawRecognition.label)
-                    && jawRecognition.confidence >= MinimumConfidence
-                ) {
-                    showImagesThatUserMustCapture()
-                    takePhotoFromDetectedJaw(jawRecognition.label)
-                }
-            }
+                })
 
             jawDetectionViewModel.submitStateCapturedImageIsCorrect.observe(viewLifecycleOwner) { correctCapturedImage ->
                 if (correctCapturedImage.isCorrect) {
@@ -177,15 +185,15 @@ class FragmentCamera : JawDetector(), IsolatedKoinComponent {
         }
     }
 
-    private fun setupNextJaw(nextJaw: String) {
+    private fun setupNextJaw(nextJaw: JawPosition) {
         setCurrentDetectedJaw(nextJaw)
         setNextDetectedJaw(nextJaw)
         startDetectionModel()
         clearView()
     }
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
+    @androidx.camera.core.ExperimentalGetImage
+    override fun  onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         StraiberrySdk.start(requireContext())
         /** Get selected image from gallery */
@@ -209,7 +217,7 @@ class FragmentCamera : JawDetector(), IsolatedKoinComponent {
                             isCheckingImageFromGallery = true,
                             checkingFrame = false
                         ) { label, score, _, _, finalImage ->
-                            if (!listOfSelectedJaws.contains(label) || score < MinimumConfidence) {
+                            if (!listOfSelectedJaws.contains(label.convertLabelToJawType()) || score < MinimumConfidence) {
                                 showError(
                                     getString(
                                         R.string.the_selected_picture_is_incorrect,
@@ -219,19 +227,20 @@ class FragmentCamera : JawDetector(), IsolatedKoinComponent {
                                 )
                             } else {
                                 // Update current captured jaw
-                                setCurrentDetectedJaw(label, true)
+                                setCurrentDetectedJaw(label.convertLabelToJawType(), true)
                                 // Insert current captured image
                                 setLastCapturedJaw(finalImage!!)
                                 saveCapturedJaws(finalImage)
                                 currentCapturedImage = finalImage
-                                showInsertedImageBasedOnSelectedJaws()
-                                insertImageFromGalleryBasedOnJaw(label)
                                 // Upload or update image in checkup
                                 addImageToCheckup()
+                                showInsertedImageBasedOnSelectedJaws()
+                                insertImageFromGalleryBasedOnJaw(label)
+
                             }
                         }.analyze()
-                    } catch (e: java.lang.Exception) {
-//                        Firebase.crashlytics.recordException(e)
+                    } catch (e: Exception) {
+                        Firebase.crashlytics.recordException(e)
                         showError(
                             getString(
                                 R.string.the_selected_picture_is_incorrect,
@@ -275,7 +284,8 @@ class FragmentCamera : JawDetector(), IsolatedKoinComponent {
         else
             openGalleryForPickImage()
 
-    override fun onResume() {
+    @androidx.camera.core.ExperimentalGetImage
+    override fun  onResume() {
         super.onResume()
         // Request permissions each time the app resumes, since they can be revoked at any time
         if (!hasCameraPermissions(requireActivity())) {
@@ -293,61 +303,6 @@ class FragmentCamera : JawDetector(), IsolatedKoinComponent {
     /** Convenience method used to check if all permissions required for read storage are granted */
     private fun hasReadStoragePermissions(context: Context) = readStoragePermissions.all {
         ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun setupGuideTour() {
-
-        binding.root.doOnPreDraw {
-            val uploadPhotosTarget = Target.Builder()
-                .setAnchor(binding.imageButtonUpload)
-                .setShape(Circle((20).dp(requireContext()).toFloat()))
-                .setDescription(getString(R.string.tap_here_to_upload_tooth_photos))
-                .notClickable(false)
-                .setOnTargetListener(object : OnTargetListener {
-                    override fun onClick() {
-                        spotLight.show(1)
-                    }
-
-                })
-                .showCasePosition(ShowCasePosition.BottomCenter)
-                .build()
-
-            val takePhotosTarget = Target.Builder()
-                .setAnchor(binding.takePhotoSpotlightTarget)
-                .setShape(Circle((20).dp(requireContext()).toFloat()))
-                .setDescription(getString(R.string.you_should_put_your_main_camera_in_front_of_your_mouth_to_detect_and_take_a_photo))
-                .notClickable(false)
-                .setOnTargetListener(object : OnTargetListener {
-                    override fun onClick() {
-                        spotLight.finish()
-                        guideTourViewModel.cameraGuideTourIsFinished()
-                    }
-                })
-                .showCasePosition(ShowCasePosition.BottomCenter)
-                .build()
-
-            spotLight = Spotlight.Builder(requireActivity())
-                .setTargets(
-                    arrayListOf(
-                        uploadPhotosTarget,
-                        takePhotosTarget
-                    )
-                )
-                .setBackgroundColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.primaryOpacity95
-                    )
-                )
-                .setOnSpotlightListener(object : OnSpotlightListener {
-                    override fun onSkip() {
-                        spotLight.finish()
-                        guideTourViewModel.cameraGuideTourIsFinished()
-                    }
-                })
-                .build()
-            spotLight.start()
-        }
     }
 
     companion object {

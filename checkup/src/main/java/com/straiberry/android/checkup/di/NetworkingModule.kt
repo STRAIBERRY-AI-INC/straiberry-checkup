@@ -1,5 +1,7 @@
 package com.straiberry.android.checkup.di
 
+import com.google.gson.GsonBuilder
+import com.straiberry.android.checkup.BuildConfig
 import com.straiberry.android.checkup.checkup.data.networking.CheckupApi
 import com.straiberry.android.checkup.checkup.data.networking.CheckupSdkApi
 import com.straiberry.android.checkup.checkup.data.networking.XRayApi
@@ -18,7 +20,11 @@ const val DEBUG = "DEBUG"
 private const val X_RAY_API = "x-ray"
 private const val CHECKUP_SDK_API = "checkup-sdk"
 val networkingModule = module {
-    single { GsonConverterFactory.create() as Converter.Factory }
+    single {
+        GsonConverterFactory.create(
+            GsonBuilder().disableHtmlEscaping().create()
+        ) as Converter.Factory
+    }
     single {
         OkHttpClient.Builder().apply {
 //            if (androidContext().getBuildConfigValue(DEBUG) as Boolean)
@@ -31,6 +37,7 @@ val networkingModule = module {
 //            addInterceptor(HttpErrorInterceptor())
         }.build()
     }
+
     single {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -54,6 +61,7 @@ val networkingModule = module {
             .addConverterFactory(get())
             .build()
     }
+
 
     single { get<Retrofit>().create(CheckupApi::class.java) }
     single { get<Retrofit>(named(CHECKUP_SDK_API)).create(CheckupSdkApi::class.java) }

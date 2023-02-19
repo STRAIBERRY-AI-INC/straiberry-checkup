@@ -7,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.straiberry.android.checkup.checkup.domain.model.AddImageToCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.domain.model.UpdateImageInCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.domain.usecase.AddImageToCheckupSdkUseCase
+import com.straiberry.android.checkup.checkup.domain.usecase.AddImageToCheckupUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.UpdateImageInCheckupSdkUseCase
+import com.straiberry.android.checkup.checkup.domain.usecase.UpdateImageInCheckupUseCase
 import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.FRONT_JAW
 import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.LOWER_JAW
 import com.straiberry.android.checkup.checkup.presentation.view.result.FragmentCheckupResultDetails.Companion.UPPER_JAW

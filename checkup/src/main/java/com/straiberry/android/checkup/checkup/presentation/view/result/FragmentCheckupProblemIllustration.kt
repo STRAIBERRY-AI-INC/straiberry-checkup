@@ -77,7 +77,7 @@ class FragmentCheckupProblemIllustration : Fragment(), IsolatedKoinComponent {
                 binding.layoutLowerJaw.indicatorThirtyThree.root
             ).onEach { indicator ->
                 indicator.strokeColor =
-                    ContextCompat.getColor(requireContext(), R.color.secondaryLight)
+                    ContextCompat.getColor(requireContext(), com.straiberry.android.common.R.color.secondaryLight)
             }
 
             // Scale up the jaws
@@ -117,21 +117,29 @@ class FragmentCheckupProblemIllustration : Fragment(), IsolatedKoinComponent {
                 viewLifecycleOwner,
                 { listOfTeeth ->
                     checkoutToothWithProblems(listOfTeeth)
+                    binding.layoutLowerJaw.root.goneWithAnimation()
+                    binding.layoutUpperJaw.root.visibleWithAnimation()
                 })
             checkupResultProblemIllustrationViewModel.submitStateToothWithProblemLowerJaw.observe(
                 viewLifecycleOwner,
                 { listOfTeeth ->
                     checkoutToothWithProblems(listOfTeeth)
+                    binding.layoutLowerJaw.root.visibleWithAnimation()
+                    binding.layoutUpperJaw.root.goneWithAnimation()
                 })
             checkupResultProblemIllustrationViewModel.submitStateToothWithProblemFrontTeethLower.observe(
                 viewLifecycleOwner,
                 { listOfTeeth ->
                     checkoutToothWithProblems(listOfTeeth)
+                    binding.layoutLowerJaw.root.visibleWithAnimation()
+                    binding.layoutUpperJaw.root.goneWithAnimation()
                 })
             checkupResultProblemIllustrationViewModel.submitStateToothWithProblemUpperJaw.observe(
                 viewLifecycleOwner,
                 { listOfTeeth ->
                     checkoutToothWithProblems(listOfTeeth)
+                    binding.layoutLowerJaw.root.goneWithAnimation()
+                    binding.layoutUpperJaw.root.visibleWithAnimation()
                 })
         }.root
     }

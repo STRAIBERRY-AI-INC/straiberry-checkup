@@ -11,6 +11,8 @@
     <color name="gray500">#8D8D8D</color>
     <color name="gray200">#A1A1A1</color>
     <color name="gray800">#B2B2B2</color>
+    <color name="gray900">#393939</color>
+    <color name="gray950">#535353</color>
     <color name="gray200Opacity60">#9AA1A1A1</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="blue100">#FFDCFFFC</color>
@@ -90,6 +92,7 @@
     <color name="error">#FF4B4B</color>
     <color name="warning">#F5C85C</color>
     Chart
+    <color name="orange300">#FFA852</color>
     <color name="orange500">#FF6A44</color>
     <color name="orange">#FF7551</color>
     <color name="green200">#5CE5CE</color>

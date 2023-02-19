@@ -49,9 +49,9 @@
             android:id="@+id/imageViewRealImageXray"
             android:layout_width="262dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:scaleType="fitXY"
             android:maxHeight="262dp"
-            android:scaleType="fitXY" />
+            android:layout_centerInParent="true" />
 
         <ImageView
             android:id="@+id/imageViewRealImage"

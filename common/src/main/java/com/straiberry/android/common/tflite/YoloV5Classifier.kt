@@ -360,9 +360,12 @@ object YoloV5Classifier : Classifier {
                 }
             }
             for (c in labels.indices) {
-                if (classes[c] > maxClass) {
-                    detectedClass = c
-                    maxClass = classes[c]
+                try {
+                    if (classes[c] > maxClass) {
+                        detectedClass = c
+                        maxClass = classes[c]
+                    }
+                } catch (e: Exception) {
                 }
             }
             val confidenceInClass = maxClass * confidence

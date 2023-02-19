@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.straiberry.android.checkup.checkup.domain.model.CheckupHistorySuccessModel
+import com.straiberry.android.checkup.checkup.domain.usecase.CheckupHistoryUseCase
 import com.straiberry.android.checkup.checkup.domain.usecase.CheckupSdkHistoryUseCase
 import com.straiberry.android.core.base.*
 import com.straiberry.android.core.network.CoroutineContextProvider

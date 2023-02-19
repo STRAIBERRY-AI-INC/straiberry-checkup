@@ -143,10 +143,6 @@
     <string name="dental_implant">ایمپلنت دندانی</string>
     <string name="bone_loss">تحلیل استخوان</string>
     <string name="amalgam_restoration_overhang">بیرون زدگی ترمیم آمالگام</string>
-    <string name="white_spot">لکه سفید روی دندان</string>
-    <string name="amalgam_filling">ترمیم آمالگام</string>
-    <string name="calculus">جرم دندان</string>
-    <string name="carries">پوسیدگی دندان</string>
     <string name="infectious_apical_lesion">ضایعه عفونی انتهای ریشه</string>
     <string name="remained_dental_root">ریشه دندان باقیمانده</string>
     <string name="malposed_wisdom_tooth">موقعیت نامناسب دندان عقل</string>

@@ -5,6 +5,7 @@ import com.straiberry.android.checkup.checkup.data.mapper.toDomainModel
 import com.straiberry.android.checkup.checkup.data.networking.XRayApi
 import com.straiberry.android.checkup.checkup.data.networking.model.AddXrayImageRequest
 import com.straiberry.android.checkup.checkup.data.networking.model.CheckXrayUrlRequest
+import com.straiberry.android.checkup.checkup.data.networking.model.CheckupType
 import com.straiberry.android.checkup.checkup.data.networking.model.CreateCheckupRequest
 import com.straiberry.android.checkup.checkup.domain.model.AddImageToCheckupSuccessModel
 import com.straiberry.android.checkup.checkup.domain.model.CreateCheckupSuccessModel
@@ -17,10 +18,10 @@ class RemoteXrayRepo(
     private val context: Context,
     private val authorizationHelper: SdkAuthorizationHelper
 ) : XRayRepo {
-    override suspend fun createCheckup(checkupType: Int): CreateCheckupSuccessModel =
+    override suspend fun createCheckup(checkupType: CheckupType): CreateCheckupSuccessModel =
         xRayApi.createCheckup(
             CreateCheckupRequest(checkupType),
-            authorizationHelper.setHeaders(context)
+            authorizationHelper.setHeaders()
         ).toDomainModel()
 
     override suspend fun addImageToCheckup(
@@ -34,12 +35,12 @@ class RemoteXrayRepo(
             image,
             imageType,
             lastImage,
-            authorizationHelper.setHeaders(context)
+            authorizationHelper.setHeaders()
         )
             .toDomainModel()
 
     override suspend fun checkXrayUrl(xrayUrl: String) {
-        xRayApi.checkXrayUrl(CheckXrayUrlRequest(xrayUrl), authorizationHelper.setHeaders(context))
+        xRayApi.checkXrayUrl(CheckXrayUrlRequest(xrayUrl), authorizationHelper.setHeaders())
     }
 
     override suspend fun addXrayImage(
@@ -48,7 +49,7 @@ class RemoteXrayRepo(
     ): AddImageToCheckupSuccessModel =
         xRayApi.addXrayImage(
             AddXrayImageRequest(checkupId, imageUrl),
-            authorizationHelper.setHeaders(context)
+            authorizationHelper.setHeaders()
         ).toDomainModel()
 
 }

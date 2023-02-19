@@ -12,7 +12,7 @@ data class CheckupHistorySuccessResponse(
 ) {
     data class Data(
         @SerializedName("checkup_type")
-        val checkupType: String = "",
+        val checkupType: CheckupType = CheckupType.Regular,
         @SerializedName("complete")
         val complete: Boolean = false,
         @SerializedName("created_at")
@@ -51,7 +51,7 @@ data class CheckupHistorySuccessResponse(
             @SerializedName("image")
             val image: String = "",
             @SerializedName("image_type")
-            val imageType: String = "",
+            val imageType: CheckupImageType? = null,
             @SerializedName("result")
             val result: List<Result> = listOf(),
             @SerializedName("updated_at")
@@ -94,4 +94,18 @@ data class CheckupHistorySuccessResponse(
 
         class Teeth
     }
+}
+
+enum class CheckupImageType {
+    @SerializedName("-1")
+    UpperJaw,
+
+    @SerializedName("1")
+    FrontJaw,
+
+    @SerializedName("0")
+    LowerJaw,
+
+    @SerializedName("2")
+    XrayJaw
 }

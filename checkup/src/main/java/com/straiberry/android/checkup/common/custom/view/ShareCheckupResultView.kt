@@ -79,7 +79,7 @@ class ShareCheckupResultView @JvmOverloads constructor(
     ) {
 
         imageViewUserAvatar.load(userAvatar) {
-            error(R.drawable.ic_empty_avatar)
+            error(com.straiberry.android.common.R.drawable.ic_empty_avatar)
             transformations(CircleCropTransformation())
         }
 

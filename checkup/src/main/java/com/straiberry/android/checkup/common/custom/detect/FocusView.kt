@@ -44,8 +44,8 @@ class FocusView @JvmOverloads constructor(
         // Setup card view logo
         addView(cardViewLogo.apply {
             layoutParams = LayoutParams(CardViewLogoStartWidth, CardViewLogoStartHeight)
-            elevation = CardViewLogoElevation
-            radius = CardViewLogoRadius
+            elevation = CARD_VIEW_LOGO_ELEVATION
+            radius = CARD_VIEW_LOGO_RADIUS
             scaleX = 1f
             scaleY = 1f
             alpha = 1f
@@ -68,8 +68,8 @@ class FocusView @JvmOverloads constructor(
         // Setup card view jaw detect type
         addView(cardViewDetectJawType.apply {
             layoutParams = LayoutParams(0, CardViewJawTypeHeight)
-            radius = CardViewJawTypeRadius
-            alpha = CardViewJawTypeAlpha
+            radius = CARD_VIEW_JAW_TYPE_RADIUS
+            alpha = CARD_VIEW_JAW_TYPE_ALPHA
             x = (circleView.width / 2).toFloat() + cardViewLogo.width / 2
             y = (circleView.height / 2).toFloat() - cardViewLogo.width * 6
             animateDetectedJaw()
@@ -79,14 +79,14 @@ class FocusView @JvmOverloads constructor(
             visible()
             gravity = Gravity.CENTER
             text = jawDetectedType
-            setTextColor(ContextCompat.getColor(context, R.color.primary))
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, TextViewJawTypeTextSize)
+            setTextColor(ContextCompat.getColor(context, com.straiberry.android.common.R.color.primary))
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, TEXT_VIEW_JAW_TYPE_TEXT_SIZE)
         })
     }
 
     private fun animateDetectedJaw() {
         val widthAnimator = ValueAnimator.ofInt(0, CardViewJawTypeWidth)
-        widthAnimator.duration = AnimationDuration
+        widthAnimator.duration = ANIMATION_DURATION
         widthAnimator.interpolator = DecelerateInterpolator()
         widthAnimator.addUpdateListener { animation ->
             cardViewDetectJawType.layoutParams.width = animation.animatedValue as Int
@@ -102,18 +102,18 @@ class FocusView @JvmOverloads constructor(
             .scaleY(1.8f)
             .translationX((width / 2).toFloat() - cardViewLogo.width / 2)
             .translationY((height / 2).toFloat() - cardViewLogo.width * 6)
-            .setDuration(AnimationDuration)
+            .setDuration(ANIMATION_DURATION)
             .withEndAction {
                 if (!isClear)
                     showJawDetectedType()
             }
-            .setStartDelay(ProgressOnSecondInterval)
+            .setStartDelay(ONE_SECOND_PROGRESS_INTERVAL)
             .start()
         imageViewLogo.animate()
             .scaleX(1.1f)
             .scaleY(1.1f)
-            .setStartDelay(ProgressOnSecondInterval)
-            .setDuration(AnimationDuration)
+            .setStartDelay(ONE_SECOND_PROGRESS_INTERVAL)
+            .setDuration(ANIMATION_DURATION)
             .start()
     }
 
@@ -125,15 +125,15 @@ class FocusView @JvmOverloads constructor(
             .scaleY(2.3f)
             .translationX((width / 2).toFloat() - cardViewLogo.width / 2)
             .translationY((height / 2).toFloat() - cardViewLogo.height)
-            .setDuration(AnimationDuration)
+            .setDuration(ANIMATION_DURATION)
             .start()
         imageViewLogo.animate()
             .scaleX(1.2f)
             .scaleY(1.2f)
-            .setDuration(AnimationDuration)
+            .setDuration(ANIMATION_DURATION)
             .start()
         cardViewLogo.animate().alpha(0f)
-            .setStartDelay(2000)
+            .setStartDelay(500)
             .withEndAction {
                 clearView()
                 endOfPulseAnimation()
@@ -152,8 +152,8 @@ class FocusView @JvmOverloads constructor(
             PropertyValuesHolder.ofFloat("scaleX", 1.2f),
             PropertyValuesHolder.ofFloat("scaleY", 1.2f)
         ).apply {
-            duration = AnimationDuration
-            repeatCount = PulseAnimationRepeatCount
+            duration = ANIMATION_DURATION
+            repeatCount = PULSE_ANIMATION_REPEAT_COUT
             repeatMode = ObjectAnimator.REVERSE
             start()
             doOnEnd {
@@ -189,7 +189,7 @@ class FocusView @JvmOverloads constructor(
                     ColorStateList.valueOf(
                         ContextCompat.getColor(
                             context,
-                            R.color.primary
+                            com.straiberry.android.common.R.color.primary
                         )
                     )
                 )
@@ -200,8 +200,8 @@ class FocusView @JvmOverloads constructor(
         circleView.detectJawComplete()
         // Start one second progress
         ObjectAnimator.ofInt(circularProgressIndicator, "progress", 0, 100).apply {
-            duration = ProgressOnSecondInterval
-            startDelay = StartProgressDelay
+            duration = ONE_SECOND_PROGRESS_INTERVAL
+            startDelay = START_PROGRESS_DELAY
             start()
             doOnEnd {
                 waitForASecond(true)
@@ -219,7 +219,7 @@ class FocusView @JvmOverloads constructor(
             PropertyValuesHolder.ofFloat("scaleX", 1f),
             PropertyValuesHolder.ofFloat("scaleY", 1f)
         ).apply {
-            duration = StopPulseInterval
+            duration = STOP_PULSE_INTERVAL
             start()
         }
     }
@@ -237,10 +237,10 @@ class FocusView @JvmOverloads constructor(
 
     fun setJawDetectedType(jawDetectedType: String) {
         this.jawDetectedType = when (jawDetectedType) {
-            Front -> FrontTeeth
-            Upper -> UpperJaw
-            Lower -> LowerJaw
-            else -> FrontTeeth
+            FRONT -> FRONT_TEETH_TEXT
+            UPPER -> UPPER_JAW_TEXT
+            LOWER -> LOWER_JAW_TEXT
+            else -> FRONT_TEETH_TEXT
         }
     }
 
@@ -259,32 +259,32 @@ class FocusView @JvmOverloads constructor(
     }
 
     companion object {
-        private const val StopPulseInterval = 200L
-        private const val AnimationDuration = 700L
-        private const val CardViewJawTypeRadius = 13f
+        private const val STOP_PULSE_INTERVAL = 100L
+        private const val ANIMATION_DURATION = 300L
+        private const val CARD_VIEW_JAW_TYPE_RADIUS = 13f
         private val CardViewJawTypeWidth = 100.dp
         private val CardViewJawTypeHeight = 30.dp
-        private const val TextViewJawTypeTextSize = 13f
-        private const val CardViewJawTypeAlpha = 0.7f
-        private const val ProgressOnSecondInterval = 1000L
-        private const val StartProgressDelay = 300L
-        private const val CardViewLogoElevation = 10f
-        private const val CardViewLogoRadius = 45f
+        private const val TEXT_VIEW_JAW_TYPE_TEXT_SIZE = 13f
+        private const val CARD_VIEW_JAW_TYPE_ALPHA = 0.7f
+        private const val ONE_SECOND_PROGRESS_INTERVAL = 1000L
+        private const val START_PROGRESS_DELAY = 100L
+        private const val CARD_VIEW_LOGO_ELEVATION = 10f
+        private const val CARD_VIEW_LOGO_RADIUS = 45f
 
         private val CardViewLogoStartWidth = 32.dp
         private val CardViewLogoStartHeight = 32.dp
         private val ImageViewCapturedJawStartHeight = 200.dp
 
         private val TrackerCornerRadios = 10.dp
-        private const val PulseAnimationRepeatCount = 2
+        private const val PULSE_ANIMATION_REPEAT_COUT = 2
 
-        private const val Front = "front"
-        private const val Upper = "upper"
-        private const val Lower = "lower"
+        private const val FRONT = "front"
+        private const val UPPER = "upper"
+        private const val LOWER = "lower"
 
-        private const val FrontTeeth = "Front Teeth"
-        private const val UpperJaw = "Upper Jaw"
-        private const val LowerJaw = "Lower Jaw"
+        private const val FRONT_TEETH_TEXT = "Front Teeth"
+        private const val UPPER_JAW_TEXT = "Upper Jaw"
+        private const val LOWER_JAW_TEXT = "Lower Jaw"
     }
 }
 

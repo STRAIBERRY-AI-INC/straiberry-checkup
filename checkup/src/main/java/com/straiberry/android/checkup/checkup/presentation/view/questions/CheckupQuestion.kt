@@ -1,6 +1,5 @@
 package com.straiberry.android.checkup.checkup.presentation.view.questions
 
-import android.util.LayoutDirection
 import android.util.TypedValue
 import android.view.ViewTreeObserver
 import android.widget.ImageButton
@@ -145,24 +144,22 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
      */
     override fun moveQuestionTitleBox(PagePosition: Int) {
         when (PagePosition) {
-            0 -> checkupQuestionViewModel.submitStateAnswerOneIsSubAnswer.observe(
-                viewLifecycleOwner
-            ) {
-                if (it) {
-                    binding.viewWithSubAnswer.visible()
-                } else {
-                    binding.viewWithSubAnswer.gone()
-                }
-            }
-            1 -> checkupQuestionViewModel.submitStateAnswerTwoIsSubAnswer.observe(
-                viewLifecycleOwner
-            ) {
-                if (it) {
-                    binding.viewWithSubAnswer.visible()
-                } else {
-                    binding.viewWithSubAnswer.gone()
-                }
-            }
+            0 -> checkupQuestionViewModel.submitStateAnswerOneIsSubAnswer.observe(viewLifecycleOwner,
+                {
+                    if (it) {
+                        binding.viewWithSubAnswer.visible()
+                    } else {
+                        binding.viewWithSubAnswer.gone()
+                    }
+                })
+            1 -> checkupQuestionViewModel.submitStateAnswerTwoIsSubAnswer.observe(viewLifecycleOwner,
+                {
+                    if (it) {
+                        binding.viewWithSubAnswer.visible()
+                    } else {
+                        binding.viewWithSubAnswer.gone()
+                    }
+                })
             2 -> {
                 binding.viewWithSubAnswer.gone()
             }
@@ -182,8 +179,8 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
                         val posXY = IntArray(NUMBER_OF_INT_ARRAY)
                         getLocationInWindow(posXY)
                         // Move indicator
-                        var indicatorHeight = 0
-                        var indicatorWidth = 0
+                        val indicatorHeight: Int
+                        val indicatorWidth: Int
                         if (isUpperJawSelected) {
                             indicatorHeight = binding.indicator.height
                             indicatorWidth = binding.indicator.width / 2
@@ -211,10 +208,11 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
         // Check for device direction and calculate the x for indicator
         // If layout direction is rtl then indicator must be in start of question box
         // otherwise indicator must be at the end of question box
-        val measureX = if (ViewCompat.getLayoutDirection(binding.root) == LayoutDirection.LTR)
-            (binding.indicator.width / 2)
-        else
-            -(binding.cardViewQuestionTitle.width - binding.indicator.width / 2)
+        val measureX =
+            if (ViewCompat.getLayoutDirection(binding.root) == ViewCompat.LAYOUT_DIRECTION_LTR)
+                (binding.indicator.width / 2)
+            else
+                -(binding.cardViewQuestionTitle.width - binding.indicator.width / 2)
 
 
         binding.cardViewQuestionTitle.viewTreeObserver
@@ -237,10 +235,11 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
         // Check for device direction and calculate the x for indicator
         // If layout direction is rtl then indicator must be in start of question box
         // otherwise indicator must be at the end of question box
-        val measureX = if (ViewCompat.getLayoutDirection(binding.root) == LayoutDirection.LTR)
-            (binding.indicator.width / 2)
-        else
-            -(binding.cardViewQuestionTitle.width - binding.indicator.width / 2)
+        val measureX =
+            if (ViewCompat.getLayoutDirection(binding.root) == ViewCompat.LAYOUT_DIRECTION_LTR)
+                (binding.indicator.width / 2)
+            else
+                -(binding.cardViewQuestionTitle.width - binding.indicator.width / 2)
 
         binding.cardViewQuestionTitle.viewTreeObserver
             .addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -388,9 +387,9 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
                         ANIMATION_DURATION
                     // Change size of text
                     if (position == 1)
-                        setTextSize(TypedValue.COMPLEX_UNIT_SP, 15F)
+                        setTextSize(TypedValue.COMPLEX_UNIT_SP, QUESTION_TITLE_SMALL_TEXT_SIZE)
                     else
-                        setTextSize(TypedValue.COMPLEX_UNIT_SP, 17F)
+                        setTextSize(TypedValue.COMPLEX_UNIT_SP, QUESTION_TITLE_BIGGER_TEXT_SIZE)
                     text = titleList[position]
                 }
             }
@@ -896,6 +895,8 @@ open class CheckupQuestion : Fragment(), CheckupQuestionContract {
     }
 
     companion object {
+        private const val QUESTION_TITLE_SMALL_TEXT_SIZE = 15F
+        private const val QUESTION_TITLE_BIGGER_TEXT_SIZE = 17F
         private const val ANIMATION_DURATION = 800L
         private const val ANIMATION_DELAY_800 = 800L
         private const val ANIMATION_DELAY_100 = 100L
