@@ -106,7 +106,6 @@ class RemoteCheckupRepo(
         data: ArrayList<AddToothToCheckupRequest>
     ) = checkupApi.addSeveralToothToCheckup(
         addSeveralTeethToCheckup = AddSeveralTeethToCheckup(
-            uniqueId = StraiberryCheckupSdkInfo.getUniqueId(),
             checkupId = checkupId, data = data
         ), header = authorizationHelper.setHeaders()
     ).toDomainModel()

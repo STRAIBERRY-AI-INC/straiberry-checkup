@@ -26,6 +26,7 @@ import com.straiberry.android.checkup.databinding.FragmentCheckupBinding
 import com.straiberry.android.checkup.di.IsolatedKoinComponent
 import com.straiberry.android.checkup.di.StraiberrySdk
 import com.straiberry.android.common.custom.spotlight.OnSpotlightListener
+import com.straiberry.android.common.custom.spotlight.OnTargetListener
 import com.straiberry.android.common.custom.spotlight.ShowCasePosition
 import com.straiberry.android.common.custom.spotlight.Spotlight
 import com.straiberry.android.common.custom.spotlight.Target
@@ -41,8 +42,7 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
 
 
     private lateinit var binding: FragmentCheckupBinding
-    private lateinit var spotLight: Spotlight
-
+    private lateinit var spotLight:Spotlight
     private val chooseCheckupViewModel by activityViewModels<ChooseCheckupTypeViewModel>()
     private val createCheckupViewModel by viewModel<CreateCheckupViewModel>()
     private val guideTourViewModel by viewModel<CheckupGuideTourViewModel>()
@@ -118,6 +118,11 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
                 }
             }
 
+            if (guideTourViewModel.getGuideTourStatus().checkupGuideTour.not()) {
+                setupGuideTour()
+                isSpotlightShowing = true
+            }
+
         }.root
     }
 
@@ -130,13 +135,7 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
         super.onHiddenChanged(hidden)
         if (hidden.not())
             if (guideTourViewModel.getGuideTourStatus().checkupGuideTour.not()) {
-                CheckupSpotLights(
-                    binding,
-                    requireContext(),
-                    spotLight,
-                    requireActivity(),
-                    guideTourViewModel
-                ).setSpotLights()
+                setupGuideTour()
                 isSpotlightShowing = true
             }
         setupView()
@@ -271,8 +270,9 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
                 isClickable = true
             }.startAnimation(this)
         }
-        if (isSpotlightShowing)
+        if (isSpotlightShowing) {
             spotLight.next()
+        }
     }
 
     private fun resetImageButtonGo() {
@@ -283,6 +283,43 @@ class FragmentCheckup : Fragment(), IsolatedKoinComponent {
             alpha = 0f
             isClickable = false
         }
+    }
+
+    private fun setupGuideTour() {
+        binding.root.doOnPreDraw {
+            isSpotlightShowing = true
+            val selectCheckupTarget = Target.Builder()
+                .setAnchor(binding.radioGroup)
+                .setShape(Circle((180).dp(requireContext()).toFloat()))
+                .setDescription(getString(R.string.tap_here_and_select_a_checkup))
+                .showCasePosition(ShowCasePosition.TopCenter)
+                .build()
+
+            val doCheckupTarget = Target.Builder()
+                .setAnchor(binding.targetDoCheckup)
+                .setShape(Circle((30).dp(requireContext()).toFloat()))
+                .setDescription(getString(R.string.tap_here_and_run_checkup))
+                .showCasePosition(ShowCasePosition.TopLeft)
+                .build()
+
+            spotLight = Spotlight.Builder(requireActivity())
+                .setTargets(arrayListOf(selectCheckupTarget, doCheckupTarget))
+                .setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        com.straiberry.android.common.R.color.primaryOpacity95
+                    )
+                )
+                .setOnSpotlightListener(object : OnSpotlightListener {
+                    override fun onSkip() {
+                        spotLight.finish()
+                        guideTourViewModel.checkupGuideTourIsFinished()
+                    }
+                })
+                .build()
+            spotLight.start()
+        }
+
     }
 
     companion object {

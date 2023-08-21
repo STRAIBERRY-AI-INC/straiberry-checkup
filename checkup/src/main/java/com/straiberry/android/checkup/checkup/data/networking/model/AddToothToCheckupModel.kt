@@ -34,7 +34,7 @@ data class AddXrayImageRequest(
 data class GetSDKTokenRequest(
     @SerializedName("app_id")
     val appId: String? = null,
-    @SerializedName("package_name")
+    @SerializedName("identifier")
     val packageName: String? = null
 )
 
@@ -50,8 +50,6 @@ data class AddDentalIssueRequest(
 )
 
 data class AddSeveralTeethToCheckup(
-    @SerializedName("unique_field")
-    val uniqueId: String? = null,
     @SerializedName("checkup")
     val checkupId: String? = null,
     @SerializedName("data")

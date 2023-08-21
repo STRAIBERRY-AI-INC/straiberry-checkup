@@ -15,10 +15,10 @@ import com.straiberry.android.common.extensions.dp
 class CameraSpotLights(
     val binding: FragmentCameraBinding,
     val context: Context,
-    var spotLight: Spotlight,
     val activity: Activity,
     val guideTourViewModel: CheckupGuideTourViewModel
 ) {
+    private lateinit var spotLight:Spotlight
     fun setSpotLights() {
 
         binding.root.doOnPreDraw {

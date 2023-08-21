@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.view.doOnPreDraw
 import androidx.navigation.fragment.findNavController
 import com.straiberry.android.checkup.R
 import com.straiberry.android.checkup.checkup.data.networking.model.AddToothToCheckupRequest
@@ -12,7 +14,14 @@ import com.straiberry.android.checkup.checkup.presentation.viewmodel.CheckupQues
 import com.straiberry.android.checkup.databinding.FragmentCheckupQuestionBinding
 import com.straiberry.android.checkup.di.IsolatedKoinComponent
 import com.straiberry.android.checkup.di.StraiberrySdk
+import com.straiberry.android.common.custom.spotlight.OnSpotlightListener
+import com.straiberry.android.common.custom.spotlight.ShowCasePosition
+import com.straiberry.android.common.custom.spotlight.Spotlight
+import com.straiberry.android.common.custom.spotlight.Target
+import com.straiberry.android.common.custom.spotlight.shape.Circle
+import com.straiberry.android.common.custom.spotlight.shape.Oval
 import com.straiberry.android.common.extensions.convertToothIdToDental
+import com.straiberry.android.common.extensions.dp
 import com.straiberry.android.common.extensions.onClick
 import com.straiberry.android.common.extensions.subscribe
 import com.straiberry.android.core.base.*
@@ -33,32 +42,26 @@ class FragmentCheckupQuestion : CheckupQuestion(), IsolatedKoinComponent {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return FragmentCheckupQuestionBinding.inflate(inflater, container, false).also {
+        return FragmentCheckupQuestionBinding.inflate(inflater, container, false).also { it ->
             binding = it
 
             if (checkupGuideTourViewModel.getGuideTourStatus().questionGuideTour.not()) {
-                CheckupQuestionsSpotLights(
-                    binding,
-                    requireContext(),
-                    spotLight,
-                    requireActivity(),
-                    checkupGuideTourViewModel
-                ).setSpotLights()
+                setupGuideTour()
 
                 isSpotlightShowing = true
 
-                checkupQuestionViewModel.submitStateIsAllThreeAnswer.observe(viewLifecycleOwner, {
+                checkupQuestionViewModel.submitStateIsAllThreeAnswer.observe(viewLifecycleOwner) {
                     if (it == 1)
                         spotLight.hide()
-                })
+                }
 
 
-                checkupQuestionViewModel.submitStateIsAllThreeAnswer.observe(viewLifecycleOwner, {
+                checkupQuestionViewModel.submitStateIsAllThreeAnswer.observe(viewLifecycleOwner) {
                     if (it == 3) {
                         spotLight.visible()
                         spotLight.show(3)
                     }
-                })
+                }
             }
 
 
@@ -266,6 +269,89 @@ class FragmentCheckupQuestion : CheckupQuestion(), IsolatedKoinComponent {
             viewLifecycleOwner,
             ::handleViewStateAddToothToCheckup
         )
+    }
+
+    private fun setupGuideTour() {
+        binding.root.doOnPreDraw {
+            isSpotlightShowing = true
+
+            val selectToothTarget = Target.Builder()
+                .setAnchor(binding.selectTeethGuideTour)
+                .setShape(
+                    Oval(
+                        (220).dp(requireContext()).toFloat(),
+                        (400).dp(requireContext()).toFloat(),
+                        (200).dp(requireContext()).toFloat()
+                    )
+                )
+                .setDescription(getString(R.string.tap_here_and_select_a_painful_teeth))
+                .showCasePosition(ShowCasePosition.TopCenter)
+                .build()
+
+
+            val answerQuestionsTarget = Target.Builder()
+                .setAnchor(binding.spotlightButtonGoTarget)
+                .setShape(Circle((20).dp(requireContext()).toFloat()))
+                .setDescription(getString(R.string.tap_here_to_go_to_the_questions))
+                .showCasePosition(ShowCasePosition.TopLeft)
+                .build()
+
+            val selectAnswerTarget = Target.Builder()
+                .setAnchor(binding.spotlightSelectAnswerTarget)
+                .setShape(Circle((15).dp(requireContext()).toFloat()))
+                .setDescription(getString(R.string.tap_here_and_select_an_answer))
+                .showCasePosition(ShowCasePosition.TopRight)
+                .build()
+            checkupQuestionViewModel.submitStateIsAllThreeAnswer.observe(viewLifecycleOwner, {
+                if (it == 1)
+                    spotLight.hide()
+            })
+
+
+            checkupQuestionViewModel.submitStateIsAllThreeAnswer.observe(viewLifecycleOwner, {
+                if (it == 3) {
+                    spotLight.visible()
+                    spotLight.show(3)
+                }
+            })
+
+            val doTheCheckupTarget = Target.Builder()
+                .setAnchor(binding.spotlightDoTheCheckupTarget)
+                .setShape(
+                    Oval(
+                        (300).dp(requireContext()).toFloat(),
+                        (90).dp(requireContext()).toFloat(),
+                        (30).dp(requireContext()).toFloat()
+                    )
+                )
+                .setDescription(getString(R.string.tap_here_to_continue_checkup_process))
+                .showCasePosition(ShowCasePosition.TopCenter)
+                .build()
+
+            spotLight = Spotlight.Builder(requireActivity())
+                .setTargets(
+                    arrayListOf(
+                        selectToothTarget,
+                        answerQuestionsTarget,
+                        selectAnswerTarget,
+                        doTheCheckupTarget
+                    )
+                )
+                .setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        com.straiberry.android.common.R.color.primaryOpacity95
+                    )
+                )
+                .setOnSpotlightListener(object : OnSpotlightListener {
+                    override fun onSkip() {
+                        spotLight.finish()
+                        checkupGuideTourViewModel.questionGuideTourIsFinished()
+                    }
+                })
+                .build()
+            spotLight.start()
+        }
     }
 
     companion object {

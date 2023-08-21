@@ -34,4 +34,5 @@ val interactionModule = module {
     single { UpdateImageInCheckupSdkUseCase(get()) }
     single { CheckupSdkHistoryUseCase(get()) }
     single { AddImageToXrayCheckupUseCase(get()) }
+    single { AddSeveralTeethToCheckupSDKUseCase(get()) }
 }

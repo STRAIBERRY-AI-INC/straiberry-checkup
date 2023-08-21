@@ -49,9 +49,9 @@ class RemoteCheckupSdkRepo(
         data: ArrayList<AddToothToCheckupRequest>
     ) = checkupSdkApi.addSeveralToothToCheckup(
         addSeveralTeethToCheckup = AddSeveralTeethToCheckup(
-            uniqueId = StraiberryCheckupSdkInfo.getUniqueId(),
             checkupId = checkupId, data = data
-        ), header = authorizationHelper.setHeaders()
+        ), uniqueId = StraiberryCheckupSdkInfo.getUniqueId(),
+         header = authorizationHelper.setHeaders()
     ).toDomainModel()
 
     /**
@@ -69,6 +69,7 @@ class RemoteCheckupSdkRepo(
             imageType = imageType,
             image = image,
             lastImage = lastImage,
+            uniqueId = StraiberryCheckupSdkInfo.getUniqueId(),
             header = authorizationHelper.setHeaders()
         ).toDomainModel()
 
@@ -87,6 +88,7 @@ class RemoteCheckupSdkRepo(
             checkupId = checkupId,
             imageType = imageType,
             image = image,
+            uniqueId = StraiberryCheckupSdkInfo.getUniqueId(),
             header = authorizationHelper.setHeaders()
         ).toDomainModel()
 

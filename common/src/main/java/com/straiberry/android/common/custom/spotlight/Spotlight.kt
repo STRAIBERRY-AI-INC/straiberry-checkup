@@ -249,7 +249,7 @@ class Spotlight private constructor(
         fun build(): Spotlight {
 
             val spotlight = SpotlightView(activity, null, 0, backgroundColor)
-            val targets = requireNotNull(targets) { "targets should not be null. " }
+            val targets = targets ?: arrayListOf()
             val container = container ?: activity.window.decorView as ViewGroup
             spotlight.setListener(listener!!)
             return Spotlight(

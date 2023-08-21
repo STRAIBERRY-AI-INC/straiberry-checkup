@@ -59,7 +59,6 @@ class FragmentCamera : JawDetector(), IsolatedKoinComponent {
                     CameraSpotLights(
                         binding,
                         requireContext(),
-                        spotLight,
                         requireActivity(),
                         guideTourViewModel
                     ).setSpotLights()
@@ -73,7 +72,6 @@ class FragmentCamera : JawDetector(), IsolatedKoinComponent {
                         CameraSpotLights(
                             binding,
                             requireContext(),
-                            spotLight,
                             requireActivity(),
                             guideTourViewModel
                         ).setSpotLights()

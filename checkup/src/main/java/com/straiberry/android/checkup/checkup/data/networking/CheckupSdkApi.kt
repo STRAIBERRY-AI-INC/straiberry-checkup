@@ -35,6 +35,7 @@ interface CheckupSdkApi {
         @Part imageType: MultipartBody.Part,
         @Part image: MultipartBody.Part,
         @Part lastImage: MultipartBody.Part,
+        @Query("unique_field") uniqueId: String,
         @HeaderMap header: Map<String, String?>
     )
             : AddImageToCheckupSuccessResponse
@@ -46,6 +47,7 @@ interface CheckupSdkApi {
         @Part checkupId: MultipartBody.Part,
         @Part imageType: MultipartBody.Part,
         @Part image: MultipartBody.Part,
+        @Query("unique_field") uniqueId: String,
         @HeaderMap header: Map<String, String?>
     )
             : UpdateImageInCheckupSuccessModel
@@ -61,6 +63,7 @@ interface CheckupSdkApi {
     @POST("${API_VERSION}bulk-tooth/")
     suspend fun addSeveralToothToCheckup(
         @Body addSeveralTeethToCheckup: AddSeveralTeethToCheckup,
+        @Query("unique_field") uniqueId: String,
         @HeaderMap header: Map<String, String?>
     )
             : AddToothToCheckupSuccessResponse
