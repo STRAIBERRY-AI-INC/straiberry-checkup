@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="image/Github-1.png" alt="Straiberry">
+    <img src="3.png" alt="Straiberry">
   </a>
 
   <h1 align="center">Straiberry Checkup</h1>
